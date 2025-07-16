@@ -6,6 +6,9 @@ import logoUM6P from "./assets/logo_um6p.png";
 import robotIA from "./assets/robot_ia.png";
 
 function App() {
+  // 1. Variable d'environnement pour l'URL du backend
+  const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:5001";
+
   const [question, setQuestion] = useState("");
   const [reponse, setReponse] = useState("Bonjour 👋 ! Pose-moi une question.");
   const [quiz, setQuiz] = useState([]);
@@ -40,7 +43,7 @@ function App() {
     setQuizResult(null);
     animateRobot();
     try {
-      const res = await fetch("http://127.0.0.1:5001/repondre", {
+      const res = await fetch(`${API_URL}/repondre`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question }),
@@ -48,7 +51,7 @@ function App() {
       const data = await res.json();
       setReponse(data.reponse);
     } catch (err) {
-      setReponse("Erreur de connexion au serveur Professeur IA. Vérifie que le backend Python est bien lancé sur le port 5001.");
+      setReponse("Erreur de connexion au serveur Professeur IA. Vérifie que le backend Python est bien lancé.");
     }
     setChargement(false);
   };
@@ -58,7 +61,7 @@ function App() {
     setChargement(true);
     animateRobot();
     try {
-      const res = await fetch("http://127.0.0.1:5001/repondre", {
+      const res = await fetch(`${API_URL}/repondre`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: question + " Reformule ou explique autrement.", previous: reponse })
@@ -78,7 +81,7 @@ function App() {
     setQuizResult(null);
     animateRobot();
     try {
-      const res = await fetch("http://127.0.0.1:5001/quiz", {
+      const res = await fetch(`${API_URL}/quiz`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question }),
