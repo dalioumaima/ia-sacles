@@ -2,4 +2,4 @@ flask
 fuzzywuzzy
 python-Levenshtein
 flask_cors
-gunicorn==21.2.0
+gunicorn
