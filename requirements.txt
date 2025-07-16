@@ -1,3 +1,5 @@
 flask
 fuzzywuzzy
 python-Levenshtein
+flask_cors
+
