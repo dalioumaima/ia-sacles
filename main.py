@@ -736,6 +736,96 @@ base = [
     "theme": "entretien",
     "type": "definition"
   },
+    {
+    "question": "Comment rédiger un CV efficace ?",
+    "reponse": "Un CV efficace doit être clair, concis, structuré : commence par l’état civil, la formation, l’expérience, les compétences et les centres d’intérêt, en adaptant à chaque poste visé.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles sont les erreurs à éviter dans un CV ?",
+    "reponse": "Éviter les fautes d’orthographe, les informations inutiles, les expériences trop anciennes, et ne jamais mentir sur ses compétences ou son parcours.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment valoriser ses expériences dans un CV ?",
+    "reponse": "Décris chaque expérience avec des verbes d’action, mets en avant les réalisations concrètes, chiffres et résultats obtenus.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Que mettre dans la rubrique compétences d’un CV ?",
+    "reponse": "Liste les compétences techniques (logiciels, langues, outils) et les soft skills (travail en équipe, communication, organisation…).",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment rédiger une lettre de motivation ?",
+    "reponse": "Présente-toi brièvement, explique pourquoi tu postules, en quoi ton profil correspond, et termine par une formule de politesse et une demande d’entretien.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment rédiger un rapport académique ?",
+    "reponse": "Respecte une structure claire : introduction, méthodologie, résultats, analyse/discussion, conclusion. Utilise un style formel, des titres et des références.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment choisir le plan d’un rapport ?",
+    "reponse": "Analyse l’objectif du rapport et organise tes idées en grandes parties logiques : contexte, problématique, analyse, solutions, conclusion.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce qu’une bibliographie dans un rapport ?",
+    "reponse": "C’est la liste des sources utilisées : livres, articles, sites web. Elle doit respecter les normes académiques (APA, Chicago…).",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment éviter le plagiat dans un rapport ?",
+    "reponse": "Il faut toujours citer ses sources, paraphraser correctement, et utiliser un logiciel anti-plagiat si possible.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment rédiger un article scientifique ?",
+    "reponse": "Structure l’article en : résumé, introduction, méthodes, résultats, discussion, conclusion, références. Sois précis, objectif et cite toutes les sources.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelle est la différence entre un rapport et un article ?",
+    "reponse": "Le rapport présente une analyse approfondie sur un sujet ou projet, l’article vise à partager des résultats scientifiques avec la communauté.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles sont les qualités d’un bon rapport écrit ?",
+    "reponse": "Clarté, logique, concision, pertinence, respect des consignes et bonne présentation visuelle.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment faire un sommaire dans un rapport ?",
+    "reponse": "Insère après la page de garde une liste des parties et sous-parties avec numéros de page pour faciliter la lecture.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment structurer l’introduction d’un rapport ?",
+    "reponse": "Présente le contexte, l’objectif, la problématique et annonce la structure du document.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Faut-il mettre une conclusion dans un rapport ou un article ?",
+    "reponse": "Oui, elle récapitule les résultats, apporte une réponse à la problématique et ouvre sur des perspectives.",
+    "theme": "scales",
+    "type": "definition"
+  },
   {
     "question": "Quels sont les types de questions posées en entretien ?",
     "reponse": "Questions sur le parcours, les compétences techniques, les qualités humaines (soft skills), la motivation, la gestion de situations difficiles et la connaissance de l’entreprise.",
@@ -875,6 +965,402 @@ base = [
     "La course à pied"
   ]
 },
+     {
+    "question": "À quoi sert SCALES à l’UM6P ?",
+    "reponse": "Développer les compétences transversales des étudiants",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Développer les compétences transversales des étudiants",
+      "Donner des notes de sport",
+      "Organiser des sorties scolaires uniquement"
+    ]
+  },
+  {
+    "question": "Quel module n’est pas inclus dans Study Skills ?",
+    "reponse": "Biologie moléculaire",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Biologie moléculaire",
+      "Writing & Oratory Skills",
+      "Media & Information Literacy"
+    ]
+  },
+  {
+    "question": "Comment valider une unité Study Skills ?",
+    "reponse": "Participer, réaliser les tâches et réussir l’évaluation",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Participer, réaliser les tâches et réussir l’évaluation",
+      "Ne pas assister et rendre une feuille blanche",
+      "Faire un exposé sur le sport"
+    ]
+  },
+  {
+    "question": "Que développe-t-on dans l’unité WORC ?",
+    "reponse": "Écriture et expression orale",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Écriture et expression orale",
+      "Peinture sur soie",
+      "Cuisine marocaine"
+    ]
+  },
+  {
+    "question": "Quelle activité est propre à l’unité MILL ?",
+    "reponse": "Ciné-débat et production média",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Ciné-débat et production média",
+      "Simulation d’attaque informatique",
+      "Cours de natation"
+    ]
+  },
+  {
+    "question": "Quel est l’objectif principal de CAP ?",
+    "reponse": "Préparer à l’insertion professionnelle",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Préparer à l’insertion professionnelle",
+      "Créer une pièce de théâtre",
+      "Apprendre à cuisiner"
+    ]
+  },
+  {
+    "question": "Que faut-il faire pour valider Civic Engagement (CS) ?",
+    "reponse": "Réaliser un service citoyen et un feedback écrit",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Réaliser un service citoyen et un feedback écrit",
+      "Participer à une compétition sportive",
+      "Ne rien rendre"
+    ]
+  },
+  {
+    "question": "Quel outil est utilisé dans STADAC ?",
+    "reponse": "Python",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Python",
+      "Photoshop",
+      "WordPress"
+    ]
+  },
+  {
+    "question": "Qu’est-ce qu’un projet média dans MILL ?",
+    "reponse": "Créer un podcast, vidéo ou interview",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Créer un podcast, vidéo ou interview",
+      "Faire un exposé sur le sport",
+      "Écrire un roman"
+    ]
+  },
+  {
+    "question": "Combien d’ECTS vaut une unité Study Skills ?",
+    "reponse": "0,5 ECTS",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "0,5 ECTS",
+      "10 ECTS",
+      "3 ECTS"
+    ]
+  },
+  {
+    "question": "Quelle absence n’est pas justifiée pour Study Skills ?",
+    "reponse": "Oubli de réveil",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Oubli de réveil",
+      "Raison médicale documentée",
+      "Convocation officielle"
+    ]
+  },
+  {
+    "question": "Qu’est-ce que le Skills Portfolio ?",
+    "reponse": "Un dossier récapitulant les compétences acquises",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Un dossier récapitulant les compétences acquises",
+      "Un album photo",
+      "Un rapport de stage"
+    ]
+  },
+  {
+    "question": "Quel niveau de langue valide la diplomation à la FGSES ?",
+    "reponse": "C1 dans deux langues",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "C1 dans deux langues",
+      "A1 dans toutes les langues",
+      "B2 uniquement en anglais"
+    ]
+  },
+  {
+    "question": "Que veut dire la mention LRS sur le relevé de notes ?",
+    "reponse": "Exigences linguistiques satisfaites",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Exigences linguistiques satisfaites",
+      "Langue réformée spéciale",
+      "Liste des résultats scolaires"
+    ]
+  },
+  {
+    "question": "Quelle compétence est un soft skill ?",
+    "reponse": "La gestion du temps",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "La gestion du temps",
+      "La multiplication",
+      "La conjugaison"
+    ]
+  },
+  {
+    "question": "Quel format d’apprentissage existe pour Study Skills ?",
+    "reponse": "Présentiel, e-learning ou hybride",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Présentiel, e-learning ou hybride",
+      "Uniquement à distance",
+      "Sans inscription"
+    ]
+  },
+  {
+    "question": "Comment s’appelle l’unité d’analyse de données dans Study Skills ?",
+    "reponse": "STADAC",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "STADAC",
+      "MILL",
+      "CAP"
+    ]
+  },
+  {
+    "question": "Quel module développe la citoyenneté à la FGSES ?",
+    "reponse": "Civic Engagement (CS)",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Civic Engagement (CS)",
+      "Statistics",
+      "Media Literacy"
+    ]
+  },
+  {
+    "question": "Qu’est-ce que LAPEX ?",
+    "reponse": "Programme pour progresser en langues et s’ouvrir à l’international",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Programme pour progresser en langues et s’ouvrir à l’international",
+      "Une méthode de calcul",
+      "Un festival musical"
+    ]
+  },
+  {
+    "question": "Quelles langues peut-on apprendre à la FGSES ?",
+    "reponse": "Anglais, français, arabe, espagnol, allemand, mandarin",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Anglais, français, arabe, espagnol, allemand, mandarin",
+      "Latin et grec ancien",
+      "Uniquement l’arabe"
+    ]
+  },
+  {
+    "question": "Comment valider l’unité MILL ?",
+    "reponse": "Réaliser une activité média ou participer à un ciné-débat",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Réaliser une activité média ou participer à un ciné-débat",
+      "Faire un exposé sur la chimie",
+      "Organiser une fête"
+    ]
+  },
+  {
+    "question": "Quel format d’activité n’est pas accepté pour valider Civic Engagement ?",
+    "reponse": "Créer un groupe WhatsApp",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Créer un groupe WhatsApp",
+      "Library Assistant",
+      "Writing & Language Tutor"
+    ]
+  },
+  {
+    "question": "Quelle note minimale pour valider un module Study Skills ?",
+    "reponse": "10/20",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "10/20",
+      "15/20",
+      "5/20"
+    ]
+  },
+  {
+    "question": "Quel outil de programmation apprend-on dans STADAC ?",
+    "reponse": "Python",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Python",
+      "Java",
+      "Dreamweaver"
+    ]
+  },
+  {
+    "question": "Quelle est la conséquence d’un plagiat chez SCALES ?",
+    "reponse": "Sanction disciplinaire",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Sanction disciplinaire",
+      "Un bonus de points",
+      "Un passage automatique"
+    ]
+  },
+  {
+    "question": "Quel service contacter en cas de problème avec Study Skills ?",
+    "reponse": "L’équipe SCALES",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "L’équipe SCALES",
+      "Le club de sport",
+      "Le service restauration"
+    ]
+  },
+  {
+    "question": "Comment valider un atelier WORC ?",
+    "reponse": "Participer à 5h de rédaction et 5h d’oral",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Participer à 5h de rédaction et 5h d’oral",
+      "Rédiger un poème",
+      "Suivre une série TV"
+    ]
+  },
+  {
+    "question": "Quelle activité n’est pas proposée dans MILL ?",
+    "reponse": "Atelier pâtisserie",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Atelier pâtisserie",
+      "Ciné-débat",
+      "Podcast"
+    ]
+  },
+  {
+    "question": "Quel est le rôle d’un Library Assistant en Civic Engagement ?",
+    "reponse": "Aider à la gestion de la bibliothèque",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Aider à la gestion de la bibliothèque",
+      "Organiser des matchs de foot",
+      "Tenir une buvette"
+    ]
+  },
+  {
+    "question": "Quelle activité ne valide pas l’unité CAP ?",
+    "reponse": "Aller à un concert",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Aller à un concert",
+      "Faire un entretien simulé",
+      "Assister à un atelier CV"
+    ]
+  },
+  {
+    "question": "Quel est l’objectif des ateliers Meet&Greet dans CAP ?",
+    "reponse": "Découvrir des métiers et professionnels",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Découvrir des métiers et professionnels",
+      "Organiser une compétition de danse",
+      "Préparer un buffet"
+    ]
+  },
+  {
+    "question": "Quel format de cours existe pour Study Skills ?",
+    "reponse": "Présentiel, e-learning, hybride",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Présentiel, e-learning, hybride",
+      "Téléphone seulement",
+      "Cours uniquement en vidéo TikTok"
+    ]
+  },
+  {
+    "question": "Quel est l’ordre logique d’un rapport académique ?",
+    "reponse": "Introduction, méthodologie, résultats, conclusion",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Introduction, méthodologie, résultats, conclusion",
+      "Sommaire, blague, dessin",
+      "Liste de courses"
+    ]
+  },
+  {
+    "question": "Pourquoi faire une bibliographie dans un rapport ?",
+    "reponse": "Pour citer les sources utilisées",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Pour citer les sources utilisées",
+      "Pour décorer la fin",
+      "Pour raconter sa vie"
+    ]
+  },
+  {
+    "question": "Que faut-il éviter dans un CV ?",
+    "reponse": "Les fautes d’orthographe",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Les fautes d’orthographe",
+      "Les compétences",
+      "La photo d’identité"
+    ]
+  },
+  {
+    "question": "Quel est le but d’une lettre de motivation ?",
+    "reponse": "Expliquer sa motivation et sa valeur ajoutée",
+    "theme": "scales",
+    "type": "quiz",
+    "propositions": [
+      "Expliquer sa motivation et sa valeur ajoutée",
+      "Présenter sa famille",
+      "Faire des blagues"
+    ]
+ },
 {
   "question": "La communication non verbale comprend…",
   "reponse": "Les gestes et mimiques",
