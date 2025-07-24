@@ -21,7 +21,7 @@ THEMES = {
     "python": ["python", "py", "pyhton", "piton"],
     "r": ["r", "langage r"],
     "data mining": ["data mining", "datamining", "mining", "extraction données"],
-    "scales": ["scales", "IP", "IP3", "CAP","Bootcamps","MILL","Worc","MILL"],
+    "scales": ["scales", "IP", "IP3", "CAP","Bootcamps","MILL","Worc","MILL","article","rapport","lapex" ,"LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS"],
     "data science": ["data science", "datascience", "data scientist", "science des données"]
 }
 
@@ -2146,6 +2146,7 @@ def extraire_theme(question_user):
         "traduction": ["traduit", "traduction", "translate", "traduire", "comment dit-on", "comment dire"],
         "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
         "antonyme": ["antonyme", "contraire", "opposé", "donne un antonyme"],
+        "scales": ["scales", "IP", "IP3", "CAP","Bootcamps","MILL","Worc","MILL","article","rapport","lapex" ,"LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS"],
         "langues": ["anglais", "espagnol", "français", "allemand", "langue"]
     }
     for th, mots in keywords.items():
