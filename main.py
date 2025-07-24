@@ -13,7 +13,7 @@ THEMES = {
     "communication": ["communication", "communiquer", "comm"],
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
     "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "bon cv", "rédaction cv"],
-    "entretien": ["entretien", "recrutement", "oral", "interview","article","rapport"],
+    "entretien": ["entretien", "recrutement", "oral", "interview","article","rapport", "Lettre de motivation","normes de lettre de motivation"],
     "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
     "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
     "antonyme": ["antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"],
@@ -472,7 +472,7 @@ base = [
     "theme": "LAPEX",
     "type": "definition"
   },
-    // CAP
+ 
   {
     "question": "C'est quoi CAP ?",
     "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.",
@@ -500,11 +500,10 @@ base = [
   {
     "question": "En quoi consiste CAP ?",
     "reponse": "CAP propose ateliers, Meet&Greet et simulations pour préparer les étudiants à la vie active.",
-    "theme": "scales",
+    "theme": "cap",
     "type": "definition"
   },
 
-  // MILL
   {
     "question": "C'est quoi MILL ?",
     "reponse": "MILL est le module Media & Information Literacy Lab qui forme à l'analyse critique des médias.",
@@ -536,7 +535,6 @@ base = [
     "type": "definition"
   },
 
-  // STADAC
   {
     "question": "C'est quoi STADAC ?",
     "reponse": "STADAC est le module Statistics, Data Analysis and Coding dédié à l’analyse de données et à la programmation.",
@@ -562,7 +560,6 @@ base = [
     "type": "definition"
   },
 
-  // WORC
   {
     "question": "C'est quoi WORC ?",
     "reponse": "WORC est le module Writing & Oratory Skills qui développe la rédaction et la prise de parole.",
@@ -587,8 +584,6 @@ base = [
     "theme": "worc",
     "type": "definition"
   },
-
-  // CS (Civic Engagement)
   {
     "question": "C'est quoi CS ?",
     "reponse": "CS est l’unité Civic Engagement, pour le service citoyen et l’engagement sur le campus.",
@@ -607,8 +602,6 @@ base = [
     "theme": "CS",
     "type": "definition"
   },
-
-  // LAPEX
   {
     "question": "C'est quoi LAPEX ?",
     "reponse": "LAPEX est le programme de langues de la FGSES pour progresser et s’ouvrir à l’international.",
@@ -627,8 +620,6 @@ base = [
     "theme": "LAPEX ",
     "type": "definition"
   },
-
-  // SCALES (structure)
   {
     "question": "C'est quoi SCALES ?",
     "reponse": "SCALES est le cluster UM6P qui accompagne les étudiants dans le développement de compétences transversales.",
@@ -654,7 +645,6 @@ base = [
     "type": "definition"
   },
 
-  // CV
   {
     "question": "C'est quoi un CV ?",
     "reponse": "Un CV est un document qui présente votre parcours, vos compétences et vos expériences pour candidater à un poste.",
@@ -699,8 +689,6 @@ base = [
     "theme": "entretien",
     "type": "definition"
   },
-
-  // Lettre de motivation
   {
     "question": "C'est quoi une lettre de motivation ?",
     "reponse": "C’est un document qui explique pourquoi vous postulez à une formation, un stage ou un emploi.",
@@ -719,8 +707,6 @@ base = [
     "theme": "entretien",
     "type": "definition"
   },
-
-  // Entretien
   {
     "question": "C'est quoi un entretien ?",
     "reponse": "C’est une rencontre orale entre un candidat et un recruteur pour évaluer la compatibilité au poste.",
@@ -739,7 +725,6 @@ base = [
     "theme": "entretien",
     "type": "definition"
   },
- // CAP
 {"question": "C'est quoi CAP ?", "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.", "theme": "cap", "type": "definition"},
 {"question": "Qu'est-ce que CAP ?", "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.", "theme": "cap", "type": "definition"},
 {"question": "Que veut dire CAP ?", "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.", "theme": "cap", "type": "definition"},
@@ -768,8 +753,6 @@ base = [
 {"question": "CAP meaning?", "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.", "theme": "cap", "type": "definition"},
 {"question": "What does CAP stand for?", "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.", "theme": "cap", "type": "definition"},
 {"question": "Purpose of CAP?", "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.", "theme": "cap", "type": "definition"},
-
-// MILL
 {"question": "C'est quoi MILL ?", "reponse": "MILL est le module Media & Information Literacy Lab qui forme à l’analyse critique des médias.", "theme": "mill", "type": "definition"},
 {"question": "Qu'est-ce que MILL ?", "reponse": "MILL est le module qui apprend à comprendre et produire des contenus médias de façon responsable.", "theme": "mill", "type": "definition"},
 {"question": "Que veut dire MILL ?", "reponse": "MILL signifie Media & Information Literacy Lab, le module médias et information de SCALES.", "theme": "mill", "type": "definition"},
@@ -798,8 +781,6 @@ base = [
 {"question": "MILL meaning?", "reponse": "MILL est le module Media & Information Literacy Lab qui forme à l’analyse critique des médias.", "theme": "mill", "type": "definition"},
 {"question": "What does MILL stand for?", "reponse": "MILL est le module Media & Information Literacy Lab qui forme à l’analyse critique des médias.", "theme": "mill", "type": "definition"},
 {"question": "Purpose of MILL?", "reponse": "MILL est le module Media & Information Literacy Lab qui forme à l’analyse critique des médias.", "theme": "mill", "type": "definition"},
-
-// STADAC
 {"question": "C'est quoi STADAC ?", "reponse": "STADAC est le module Statistics, Data Analysis and Coding dédié à l’analyse de données et à la programmation.", "theme": "stadac", "type": "definition"},
 {"question": "Qu'est-ce que STADAC ?", "reponse": "STADAC initie les étudiants à la statistique, l’analyse de données et le codage en R/Python.", "theme": "stadac", "type": "definition"},
 {"question": "Que veut dire STADAC ?", "reponse": "STADAC signifie Statistics, Data Analysis and Coding.", "theme": "stadac", "type": "definition"},
@@ -828,8 +809,6 @@ base = [
 {"question": "STADAC meaning?", "reponse": "STADAC est le module Statistics, Data Analysis and Coding dédié à l’analyse de données et à la programmation.", "theme": "stadac", "type": "definition"},
 {"question": "What does STADAC stand for?", "reponse": "STADAC est le module Statistics, Data Analysis and Coding dédié à l’analyse de données et à la programmation.", "theme": "stadac", "type": "definition"},
 {"question": "Purpose of STADAC?", "reponse": "STADAC est le module Statistics, Data Analysis and Coding dédié à l’analyse de données et à la programmation.", "theme": "stadac", "type": "definition"},
-
-// WORC
 {"question": "C'est quoi WORC ?", "reponse": "WORC est le module Writing & Oratory Skills qui développe la rédaction et la prise de parole en public.", "theme": "worc", "type": "definition"},
 {"question": "Qu'est-ce que WORC ?", "reponse": "WORC est le module Writing & Oratory Skills qui développe la rédaction et la prise de parole en public.", "theme": "worc", "type": "definition"},
 {"question": "Que veut dire WORC ?", "reponse": "WORC signifie Writing & Oratory Skills, le module d’expression écrite et orale.", "theme": "worc", "type": "definition"},
@@ -843,8 +822,6 @@ base = [
 {"question": "Définition WORC ?", "reponse": "WORC est le module Writing & Oratory Skills qui développe la rédaction et la prise de parole en public.", "theme": "worc", "type": "definition"},
 {"question": "What is WORC?", "reponse": "WORC est le module Writing & Oratory Skills qui développe la rédaction et la prise de parole en public.", "theme": "worc", "type": "definition"},
 {"question": "WORC meaning?", "reponse": "WORC est le module Writing & Oratory Skills qui développe la rédaction et la prise de parole en public.", "theme": "worc", "type": "definition"},
-
-// CS
 {"question": "C'est quoi CS ?", "reponse": "CS signifie Civic Engagement, l’unité de service citoyen et engagement sur le campus.", "theme": "CS", "type": "definition"},
 {"question": "Qu'est-ce que CS ?", "reponse": "CS est l’unité d’engagement citoyen où les étudiants participent à la vie du campus.", "theme": "CS", "type": "definition"},
 {"question": "Que veut dire CS ?", "reponse": "CS signifie Civic Engagement à la FGSES.", "theme": "CS", "type": "definition"},
@@ -856,8 +833,6 @@ base = [
 {"question": "Donne-moi une définition de CS.", "reponse": "CS signifie Civic Engagement, l’unité de service citoyen et engagement sur le campus.", "theme": "CS", "type": "definition"},
 {"question": "Définition CS ?", "reponse": "CS signifie Civic Engagement, l’unité de service citoyen et engagement sur le campus.", "theme": "CS", "type": "definition"},
 {"question": "What is CS?", "reponse": "CS signifie Civic Engagement, l’unité de service citoyen et engagement sur le campus.", "theme": "CS", "type": "definition"},
-
-// LAPEX
 {"question": "C'est quoi LAPEX ?", "reponse": "LAPEX est le programme de langues pour progresser et s’ouvrir à l’international.", "theme": "lapex", "type": "definition"},
 {"question": "Qu'est-ce que LAPEX ?", "reponse": "LAPEX est le programme de langues pour progresser et s’ouvrir à l’international.", "theme": "lapex", "type": "definition"},
 {"question": "Que veut dire LAPEX ?", "reponse": "LAPEX signifie Languages for Economics & Social Sciences.", "theme": "lapex", "type": "definition"},
@@ -868,7 +843,6 @@ base = [
 {"question": "Qu’apprend-on dans LAPEX ?", "reponse": "À communiquer dans différentes langues et à se préparer à l’international.", "theme": "lapex", "type": "definition"},
 {"question": "Donne-moi une définition de LAPEX.", "reponse": "LAPEX est le programme de langues pour progresser et s’ouvrir à l’international.", "theme": "lapex", "type": "definition"},
 {"question": "What is LAPEX?", "reponse": "LAPEX est le programme de langues pour progresser et s’ouvrir à l’international.", "theme": "lapex", "type": "definition"},
-// SCALES
 {"question": "C'est quoi SCALES ?", "reponse": "SCALES est le cluster qui accompagne les étudiants dans le développement de compétences transversales.", "theme": "scales", "type": "definition"},
 {"question": "Qu'est-ce que SCALES ?", "reponse": "SCALES propose des modules innovants pour préparer à la vie professionnelle et citoyenne.", "theme": "scales", "type": "definition"},
 {"question": "Que veut dire SCALES ?", "reponse": "SCALES signifie Skills Cluster for Agile Learning in Economics & Social Sciences.", "theme": "scales", "type": "definition"},
@@ -877,8 +851,6 @@ base = [
 {"question": "But de SCALES ?", "reponse": "Développer les soft skills et préparer à la réussite professionnelle.", "theme": "scales", "type": "definition"},
 {"question": "SCALES c’est quoi ?", "reponse": "SCALES est le cluster qui accompagne les étudiants dans le développement de compétences transversales.", "theme": "scales", "type": "definition"},
 {"question": "What is SCALES?", "reponse": "SCALES est le cluster qui accompagne les étudiants dans le développement de compétences transversales.", "theme": "scales", "type": "definition"},
-
-// CV
 {"question": "C'est quoi un CV ?", "reponse": "Un CV est un document qui présente votre parcours, vos compétences et vos expériences.", "theme": "cv", "type": "definition"},
 {"question": "Comment rédiger un CV ?", "reponse": "Un bon CV doit être clair, structuré et adapté à chaque candidature.", "theme": "cv", "type": "definition"},
 {"question": "Quelles sont les rubriques d’un CV ?", "reponse": "État civil, formation, expériences, compétences, langues, centres d’intérêt.", "theme": "cv", "type": "definition"},
@@ -888,7 +860,6 @@ base = [
 {"question": "What is a CV?", "reponse": "A CV is a document summarizing your education, skills, and experience.", "theme": "cv", "type": "definition"},
 {"question": "How to write a CV?", "reponse": "A good CV should be clear, structured, and tailored to each application.", "theme": "cv", "type": "definition"},
 
-// Rapport
 {"question": "C'est quoi un rapport ?", "reponse": "Un rapport est un document écrit qui présente l’analyse d’un projet, d’un stage ou d’une recherche.", "theme": "scales", "type": "definition"},
 {"question": "Comment rédiger un rapport ?", "reponse": "Structure ton rapport : introduction, développement, conclusion et bibliographie.", "theme": "scales", "type": "definition"},
 {"question": "Quelles sont les étapes de la rédaction d’un rapport ?", "reponse": "Planification, recherche, rédaction, relecture, mise en page.", "theme": "scales", "type": "definition"},
@@ -896,24 +867,18 @@ base = [
 {"question": "Définition rapport ?", "reponse": "Un rapport est un document de synthèse sur une expérience, un stage ou un projet.", "theme": "scales", "type": "definition"},
 {"question": "What is a report?", "reponse": "A report is a written document presenting the analysis of a project, internship, or research.", "theme": "scales", "type": "definition"},
 {"question": "How to write a report?", "reponse": "Structure your report: introduction, main body, conclusion, and references.", "theme": "scales", "type": "definition"},
-
-// Lettre de motivation
 {"question": "C'est quoi une lettre de motivation ?", "reponse": "C’est un document qui explique pourquoi vous postulez à une formation, un stage ou un emploi.", "theme": "scales", "type": "definition"},
 {"question": "Comment rédiger une lettre de motivation ?", "reponse": "Présente ton profil, explique ta motivation et ce que tu peux apporter à l’organisation.", "theme": "scales", "type": "definition"},
 {"question": "Pourquoi faire une lettre de motivation ?", "reponse": "Pour convaincre un recruteur de la cohérence de ton projet et de ton intérêt.", "theme": "scales", "type": "definition"},
 {"question": "Définition lettre de motivation ?", "reponse": "Une lettre de motivation présente vos arguments pour obtenir une place ou un emploi.", "theme": "scales", "type": "definition"},
 {"question": "What is a cover letter?", "reponse": "A cover letter explains why you are applying and what you can bring to the organization.", "theme": "scales", "type": "definition"},
 {"question": "How to write a cover letter?", "reponse": "Introduce yourself, explain your motivation, and show your added value.", "theme": "scales", "type": "definition"},
-
-// Entretien
 {"question": "C'est quoi un entretien ?", "reponse": "C’est une rencontre orale entre un candidat et un recruteur pour évaluer la compatibilité au poste.", "theme": "scales", "type": "definition"},
 {"question": "Comment préparer un entretien ?", "reponse": "Renseigne-toi sur l’entreprise, anticipe les questions, prépare tes arguments et entraîne-toi.", "theme": "scales", "type": "definition"},
 {"question": "Quelles sont les erreurs à éviter en entretien ?", "reponse": "Ne pas se renseigner sur l’entreprise, manquer d’arguments, être en retard ou négliger la présentation.", "theme": "scales", "type": "definition"},
 {"question": "Définition entretien ?", "reponse": "Un entretien est un échange formel pour évaluer la candidature à un poste ou une formation.", "theme": "scales", "type": "definition"},
 {"question": "What is an interview?", "reponse": "An interview is a meeting between a candidate and a recruiter to assess suitability for a position.", "theme": "scales", "type": "definition"},
 {"question": "How to succeed in an interview?", "reponse": "Prepare well, be confident, and communicate your strengths clearly.", "theme": "scales", "type": "definition"},
-
-// Study Skills (validation)
 {"question": "Quelles sont les modalités de validation de l’unité Study Skills ?", "reponse": "Pour valider l’unité Study Skills, il faut participer activement, réaliser les tâches demandées et obtenir la note minimale à l’évaluation.", "theme": "scales", "type": "definition"},
 {"question": "Comment valider Study Skills ?", "reponse": "Pour valider l’unité Study Skills, il faut participer activement, réaliser les tâches demandées et obtenir la note minimale à l’évaluation.", "theme": "scales", "type": "definition"},
 {"question": "Validation Study Skills, comment faire ?", "reponse": "Pour valider l’unité Study Skills, il faut participer activement, réaliser les tâches demandées et obtenir la note minimale à l’évaluation.", "theme": "scales", "type": "definition"},
@@ -940,15 +905,13 @@ base = [
 {"question": "Définition LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
 {"question": "What is LAPEX?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
 {"question": "Why LAPEX?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
-
-// Skills Portfolio
-{"question": "Qu’est-ce que le Skills Portfolio ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "scales", "type": "definition"},
-{"question": "Skills Portfolio, c’est quoi ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "scales", "type": "definition"},
-{"question": "Définition Skills Portfolio ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "scales", "type": "definition"},
-{"question": "A quoi sert le Skills Portfolio ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "scales", "type": "definition"},
-{"question": "Pourquoi faire un Skills Portfolio ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "scales", "type": "definition"},
-{"question": "How does Skills Portfolio work?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "scales", "type": "definition"},
-{"question": "What is the Skills Portfolio?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "scales", "type": "definition"},
+{"question": "Qu’est-ce que le Skills Portfolio ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "LAPEX", "type": "definition"},
+{"question": "Skills Portfolio, c’est quoi ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "LAPEX", "type": "definition"},
+{"question": "Définition Skills Portfolio ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "LAPEX", "type": "definition"},
+{"question": "A quoi sert le Skills Portfolio ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "LAPEX", "type": "definition"},
+{"question": "Pourquoi faire un Skills Portfolio ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "LAPEX", "type": "definition"},
+{"question": "How does Skills Portfolio work?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "LAPEX", "type": "definition"},
+{"question": "What is the Skills Portfolio?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "LAPEX", "type": "definition"},
 {
     "question": "En quoi consiste le module CAP ?",
     "reponse": "Prépare les étudiants à l’insertion professionnelle via ateliers CV, lettre, entretiens, réseautage.",
