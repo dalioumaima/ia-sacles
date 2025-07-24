@@ -21,6 +21,7 @@ THEMES = {
     "python": ["python", "py", "pyhton", "piton"],
     "r": ["r", "langage r"],
     "data mining": ["data mining", "datamining", "mining", "extraction données"],
+    "scales": ["scales", "IP", "IP3", "CAP","Bootcamps","MILL","Worc","MILL"],
     "data science": ["data science", "datascience", "data scientist", "science des données"]
 }
 
@@ -147,6 +148,678 @@ base = [
     "matplotlib"
   ]
 },
+    {
+  "question": "C'est quoi SCALES ?",
+  "reponse": "SCALES est le Skills Cluster for Agile Learning in Economics & Social Sciences, une structure de l’UM6P dédiée à l’accompagnement, la formation et l’innovation pédagogique dans les domaines des sciences économiques, sociales et de gestion.",
+  "theme": "SCALES",
+  "type": "definition"
+},
+    {
+    "question": "Quels sont les programmes proposés par SCALES ?",
+    "reponse": "SCALES propose plusieurs programmes innovants : Community Service, Internship Program (IP), Immersion Program in Public Policy (IP3), Career Advisory Program (CAP), et des bootcamps en statistiques, data analysis et intelligence artificielle.",
+    "theme": "SCALES",
+    "type": "liste"
+  },
+  {
+    "question": "Quelles sont les missions principales de SCALES ?",
+    "reponse": "Les missions de SCALES sont de favoriser l’employabilité des étudiants, développer leurs compétences transversales et accompagner l’innovation pédagogique dans les sciences sociales et économiques.",
+    "theme": "SCALES",
+    "type": "definition"
+  },
+  {
+    "question": "À qui s’adressent les programmes de SCALES ?",
+    "reponse": "Les programmes SCALES s’adressent aux étudiants de la FGSES, en licence, master, ou formation professionnelle, souhaitant renforcer leurs compétences et s’ouvrir sur le monde professionnel.",
+    "theme": "SCALES",
+    "type": "definition"
+  },
+  {
+    "question": "Comment puis-je participer aux activités SCALES ?",
+    "reponse": "Pour participer, il suffit de suivre les communications SCALES via les canaux officiels (email, affichage, Canvas) et de s’inscrire aux programmes ou ateliers proposés.",
+    "theme": "SCALES",
+    "type": "conseil"
+  },
+    {
+    "question": "C'est quoi le programme IP proposé par SCALES ?",
+    "reponse": "IP accompagne les étudiants pour trouver et réussir leur stage en entreprise.",
+    "theme": "SCALES",
+    "type": "definition"
+  },
+  {
+    "question": "En quoi consiste le programme IP3 de SCALES ?",
+    "reponse": "IP3 immerge les étudiants dans les politiques publiques à travers visites et ateliers.",
+    "theme": "SCALES",
+    "type": "definition"
+  },
+  {
+    "question": "Que propose le programme SATDAC de SCALES ?",
+    "reponse": "SATDAC initie les étudiants à la data, la statistique et au codage via des ateliers pratiques.",
+    "theme": "SCALES",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce que le LAPEX chez SCALES ?",
+    "reponse": "LAPEX propose des projets et ateliers pratiques pour apprendre en expérimentant.",
+    "theme": "SCALES",
+    "type": "definition"
+  },
+  {
+    "question": "En quoi consiste le programme Community Service (CS) proposé par SCALES ?",
+    "reponse": "CS engage les étudiants dans des projets solidaires au service de la communauté.",
+    "theme": "SCALES",
+    "type": "definition"
+  },
+  {
+    "question": "C’est quoi les Bootcamps SCALES ?",
+    "reponse": "Bootcamps : sessions courtes pour apprendre rapidement des compétences clés.",
+    "theme": "SCALES",
+    "type": "definition"
+  },
+  {
+    "question": "Que propose WORC dans les programmes SCALES ?",
+    "reponse": "WORC offre des ateliers pour améliorer la recherche et la communication.",
+    "theme": "SCALES",
+    "type": "definition"
+  },
+  {
+    "question": "À quoi sert le programme MILL de SCALES ?",
+    "reponse": "MILL forme à l’analyse critique des médias et à la veille digitale.",
+    "theme": "SCALES",
+    "type": "definition"
+ },
+    {
+    "question": "Qu’est-ce que le programme LAPEX ?",
+    "reponse": "LAPEX est le programme de langues pour l’économie et les sciences sociales à la FGSES, pour développer les compétences linguistiques, l’ouverture culturelle et l’employabilité.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels sont les objectifs des programmes de langues à la FGSES ?",
+    "reponse": "Développer la compétence multilingue, la communication interculturelle et l’ouverture internationale des étudiants.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles langues sont proposées à la FGSES ?",
+    "reponse": "Français, anglais, arabe, espagnol, allemand, mandarin, arabe standard et darija pour les internationaux.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels sont les programmes de langues à la FGSES ?",
+    "reponse": "Langues d’instruction (français, anglais, arabe), langues étrangères (espagnol, allemand, mandarin), langues pour internationaux (arabe standard, darija, FLE).",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels sont les niveaux A1, A2, B1, B2, C1, C2 à la FGSES ?",
+    "reponse": "A1 = débutant, A2 = élémentaire, B1 = intermédiaire, B2 = indépendant, C1 = avancé, C2 = maîtrise.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "À quoi correspond le niveau B1 ?",
+    "reponse": "B1 : niveau intermédiaire permettant de se débrouiller dans la plupart des situations et de produire un discours simple sur des sujets familiers.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "À quoi correspond le niveau C1 ?",
+    "reponse": "C1 : niveau avancé, expression fluide, compréhension de textes complexes, autonomie dans l’usage académique et professionnel.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "À quoi correspond le niveau B2 ?",
+    "reponse": "B2 : niveau indépendant, comprendre des textes complexes, interagir avec spontanéité et produire un discours clair sur une variété de sujets.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce qu’une langue d’instruction à la FGSES ?",
+    "reponse": "Langue utilisée pour l’enseignement des cours : anglais, français, arabe.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles sont les conditions pour s’inscrire à un cours de langue à la FGSES ?",
+    "reponse": "Passer un test de placement pour définir le niveau d’entrée, inscription selon les exigences du programme.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles sont les exigences linguistiques pour valider mon diplôme à la FGSES ?",
+    "reponse": "C1 dans deux langues d’instruction, B1 dans une troisième ou une langue étrangère (espagnol, allemand, mandarin).",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels sont les niveaux requis pour chaque langue à la fin du cursus ?",
+    "reponse": "Au moins C1 dans deux langues (anglais, français, arabe) et B1 dans une troisième langue ou une langue étrangère.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels tests de placement existent à la FGSES ?",
+    "reponse": "Test écrit et oral pour toutes les langues proposées, à l’entrée en licence ou en master.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "En quoi consiste un test de placement en langues à la FGSES ?",
+    "reponse": "Test composé d’une partie écrite (jusqu’à 60 minutes) et orale (jusqu’à 15 minutes) pour évaluer le niveau de l’étudiant.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment se fait le suivi des progrès en langues à la FGSES ?",
+    "reponse": "Par micro-tâches, tests finaux, placement par niveau, et monitoring continu des progrès.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment sont évalués les progrès en langues à la FGSES ?",
+    "reponse": "Évaluations continues (micro-tâches 30%), examens finaux (65%), et engagement (5%).",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Que veut dire LRS, OTS ou UPR sur le relevé de notes ?",
+    "reponse": "LRS : exigences satisfaites ; OTS : en voie de satisfaction ; UPR : progrès insuffisants.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce que le portfolio de langues ?",
+    "reponse": "Document officiel attestant du niveau linguistique de l’étudiant à la sortie de la FGSES.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Est-ce que je peux prendre plusieurs cours de langues à la FGSES ?",
+    "reponse": "Oui, il est possible de suivre plusieurs langues si l’emploi du temps le permet.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Y a-t-il des enseignants natifs pour les langues étrangères à la FGSES ?",
+    "reponse": "Oui, des natifs enseignent certaines langues pour garantir l’immersion.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Que sont les séminaires LCSS ?",
+    "reponse": "Série de séminaires sur les liens entre langue, culture et disciplines sociales, avec conférences et ateliers.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels sont les bénéfices des séminaires LCSS ?",
+    "reponse": "Mieux comprendre la culture, améliorer la communication, découvrir d’autres disciplines.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce qu’un projet média dans le MILL ?",
+    "reponse": "Projet créatif comme un podcast, un reportage ou une vidéo sur un sujet d’actualité.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment se passe un Film Debate ?",
+    "reponse": "Projection d’un film suivie d’un débat structuré, puis rédaction d’un rapport.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment sont organisés les ateliers de data analysis à SCALES ?",
+    "reponse": "Sessions pratiques d’initiation aux outils statistiques et à l’analyse de données, souvent en petits groupes.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels sont les axes du module Study Skills ?",
+    "reponse": "Écriture/oratoire, data/statistiques, engagement citoyen, culture de l’information, insertion professionnelle.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles compétences sont développées dans le module Writing and Oratory Skills ?",
+    "reponse": "Rédaction académique, communication orale, argumentation, prise de parole en public.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels sont les objectifs de la compétence Media & Information Literacy ?",
+    "reponse": "Comprendre, analyser et produire des contenus médiatiques de façon critique.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "En quoi consiste le module CAP ?",
+    "reponse": "Prépare les étudiants à l’insertion professionnelle via ateliers CV, lettre, entretiens, réseautage.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles sont les étapes du module CAP ?",
+    "reponse": "Self-Reflection, Exploration, Preparation, Launch : réflexion, exploration, préparation, lancement dans la vie pro.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels outils prépare-t-on pour la recherche d’emploi ?",
+    "reponse": "CV, lettre de motivation, LinkedIn, préparation aux entretiens et à la négociation.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce que Meet & Greet dans le CAP ?",
+    "reponse": "Rencontres entre étudiants et professionnels pour découvrir des métiers et développer son réseau.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles compétences sont évaluées lors des entretiens simulés chez SCALES ?",
+    "reponse": "Communication, attitude pro, gestion du stress, capacité à argumenter et convaincre.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels sont les projets possibles dans le Community Service (CS) ?",
+    "reponse": "Projets solidaires, bénévolat, actions associatives au service de la communauté.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "En quoi consiste un bootcamp SCALES ?",
+    "reponse": "Session intensive et courte pour acquérir rapidement une compétence pratique.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels sont les avantages du module LAPEX ?",
+    "reponse": "Améliorer son niveau en langues, élargir ses perspectives et faciliter la mobilité internationale.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles sont les certifications internationales reconnues à la FGSES ?",
+    "reponse": "IELTS, TOEFL, DELF/DALF, Selectividad, certificats d’allemand ou mandarin.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment se déroule l’IELTS à la FGSES ?",
+    "reponse": "L’IELTS est organisé sur place en partenariat avec le British Council, composé d’une partie écrite et orale.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelle est la validité de l’IELTS ?",
+    "reponse": "Le certificat IELTS est valable deux ans à compter de la date du test.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelle différence entre IELTS Academic et General ?",
+    "reponse": "IELTS Academic pour les études, IELTS General pour l’immigration ; seuls les scores Academic sont acceptés pour l’échange universitaire.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels clubs ou activités existent pour progresser en langues à la FGSES ?",
+    "reponse": "Book Club, Debating Society, Drama Club, Film Club, conférences et projets associatifs multilingues.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce qu’un placement test à la FGSES ?",
+    "reponse": "Test initial obligatoire pour déterminer le niveau et orienter vers le groupe adéquat.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce qu’un Walk-in dans les modules de langues ?",
+    "reponse": "Séance de tutorat individuel ou en petit groupe pour répondre aux questions spécifiques.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce qu’une micro-tâche en langues ?",
+    "reponse": "Exercice court, noté, permettant de valider une compétence précise (compréhension, expression…).",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce qu’un mode de livraison hybride ?",
+    "reponse": "Cours combinant présentiel, auto-apprentissage en ligne et sessions guidées à distance.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelle est la politique d’évaluation des modules de langues ?",
+    "reponse": "Évaluation continue (micro-tâches), examen final et prise en compte de la participation active.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quel est le barème de passage pour réussir un module ?",
+    "reponse": "La note minimale pour valider un module est 10/20.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce qu’une attestation de niveau de langue à la FGSES ?",
+    "reponse": "Document délivré à la fin des études indiquant le niveau atteint pour chaque langue suivie.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels sont les avantages de participer à des activités extrascolaires en langue ?",
+    "reponse": "Renforcer l’aisance orale, développer son réseau, pratiquer la langue en situation réelle.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce que SCALES ?",
+    "reponse": "SCALES est un cluster pédagogique à l’UM6P, dédié à l’innovation, l’accompagnement et le développement des compétences transversales des étudiants.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce qu’un entretien d’embauche ?",
+    "reponse": "Un entretien d’embauche est une rencontre entre un candidat et un employeur pour évaluer l’adéquation entre le profil du candidat et le poste à pourvoir.",
+    "theme": "entretien",
+    "type": "definition"
+  },
+    {
+    "question": "Qu’est-ce que le module Study Skills ?",
+    "reponse": "Le module Study Skills est un bloc obligatoire pour tous les étudiants de la FGSES, axé sur les compétences transversales et techniques clés pour la réussite académique et l’insertion professionnelle.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels sont les objectifs du module Study Skills ?",
+    "reponse": "Développer l’efficacité d’apprentissage, la pensée critique, la communication, l’autonomie et l’engagement professionnel.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels sont les cinq unités du module Study Skills ?",
+    "reponse": "1. Writing & Oratory Skills (WORC), 2. Statistics, Data Analysis & Coding (STADAC), 3. Civic Engagement (CS), 4. Media & Information Literacy (MILL), 5. Preparation for Professional Integration (CAP).",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment est structuré le module Study Skills ?",
+    "reponse": "Le module comprend cinq unités réparties sur plusieurs semestres, à valider selon le parcours de licence ou master.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment se valide chaque unité Study Skills ?",
+    "reponse": "Chaque unité vaut 0,5 ECTS ; validation par participation aux activités, réalisation des tâches et réussite à l’évaluation.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’arrive-t-il si je ne valide pas une unité Study Skills ?",
+    "reponse": "L’unité doit être repassée l’année suivante ; l’échec répété retarde la diplomation.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce que l’unité Writing & Oratory Skills (WORC) ?",
+    "reponse": "Unité dédiée à la maîtrise de l’écriture et de l’expression orale dans le contexte académique et professionnel.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Que fait-on dans l’unité Writing & Oratory Skills (WORC) ?",
+    "reponse": "Ateliers sur la rédaction académique, la synthèse, la communication écrite, la prise de parole, le débat, la présentation et la modération.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment valider l’unité Writing & Oratory Skills (WORC) ?",
+    "reponse": "Il faut réussir un atelier de rédaction (5h) et un atelier d’expression orale (5h), avec évaluation à la fin de chaque atelier.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce que l’unité Statistics, Data Analysis & Coding (STADAC) ?",
+    "reponse": "Unité consacrée à l’initiation à la statistique, à la manipulation et à la visualisation de données avec R et Python.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles compétences développe-t-on dans STADAC ?",
+    "reponse": "Statistiques de base, structures de données, programmation en R et Python, manipulation et visualisation de données.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment valider l’unité STADAC ?",
+    "reponse": "Réussir deux trainings : un en R (12h), un en Python (12h), avec évaluation à la fin de chaque formation.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce que Civic Engagement (CS) ?",
+    "reponse": "C’est une unité d’engagement citoyen où l’étudiant participe à des rôles solidaires sur le campus, développant travail d’équipe et responsabilité.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels rôles peut-on avoir dans Civic Engagement ?",
+    "reponse": "Library Assistant, Student Life Assistant, Administrative Task Operator, Writing & Language Tutor.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment valider l’unité Civic Engagement ?",
+    "reponse": "Effectuer au moins 3h de service citoyen et rédiger un feedback écrit sur l’expérience.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce que Media & Information Literacy (MILL) ?",
+    "reponse": "Unité pour apprendre à évaluer, utiliser et produire de l’information de façon critique et responsable à l’ère numérique.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles activités trouve-t-on dans MILL ?",
+    "reponse": "Conférence InfoLab 360°, simulation de crise de désinformation, ciné-débat, production de podcast, film ou interview.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment valider l’unité MILL ?",
+    "reponse": "Choisir et réussir une activité de 7h : InfoLab, ciné-débat ou projet média, avec évaluation à la fin.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce que CAP (Preparation for Professional Integration) ?",
+    "reponse": "Unité dédiée à la préparation à l’insertion professionnelle : exploration de carrière, ateliers, rencontres pros et simulations d’entretien.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles sont les étapes du CAP ?",
+    "reponse": "Self-Reflection (auto-évaluation), Exploration (Meet&Greet), Preparation (ateliers), Launch (entretiens ou Career Day).",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment valider le CAP ?",
+    "reponse": "Compléter le test d’auto-évaluation, assister à 2 Meet&Greet, participer à 2 ateliers et réussir la simulation d’entretien.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quels formats d’apprentissage existent pour Study Skills ?",
+    "reponse": "Présentiel, e-learning (asynchrone), ou hybride (blended learning) via la plateforme Canvas.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment sont gérées les absences dans Study Skills ?",
+    "reponse": "Toute absence doit être justifiée officiellement ; sinon, l’unité est invalidée.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelle est la politique anti-plagiat de SCALES ?",
+    "reponse": "Tout plagiat ou tricherie conduit à une sanction disciplinaire.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment s’inscrire aux ateliers SCALES ?",
+    "reponse": "Inscription obligatoire via le portail SCALES ; places attribuées selon le principe du premier arrivé, premier servi.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Puis-je modifier mon inscription à un atelier ?",
+    "reponse": "Non, sauf cas de force majeure justifié (médical ou académique).",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Que faire en cas de problème technique ?",
+    "reponse": "Signaler le problème à l’équipe SCALES avant la date limite ; les réclamations tardives ne sont pas acceptées.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles sont les règles d’utilisation des contenus SCALES ?",
+    "reponse": "Les contenus multimédias sont réservés à un usage pédagogique, toute réutilisation non autorisée est interdite.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment suivre sa progression dans Study Skills ?",
+    "reponse": "Un rapport de progression est envoyé chaque semestre, listant les unités validées et celles à compléter.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qu’est-ce que le Skills Portfolio ?",
+    "reponse": "Dossier remis en fin d’études, récapitulant la progression et les compétences validées dans Study Skills.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles sont les mentions du Skills Portfolio ?",
+    "reponse": "SRS (requirements satisfied), OTSS (on track), UPSS (unsatisfactory progress).",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles sont les conséquences d’une progression insatisfaisante dans Study Skills ?",
+    "reponse": "Tout retard ou échec non corrigé dans Study Skills retarde la diplomation.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qui contacter en cas de question ou de difficulté dans Study Skills ?",
+    "reponse": "Contacter l’équipe SCALES pour tout problème lié aux unités transversales, inscriptions ou questions techniques.",
+    "theme": "scales",
+    "type": "definition"
+  },
+  {
+    "question": "Comment bien se présenter lors d’un entretien ?",
+    "reponse": "Commencez par une présentation claire et structurée : indiquez votre nom, formation, expériences majeures, puis expliquez en quoi votre profil correspond au poste visé.",
+    "theme": "entretien",
+    "type": "definition"
+  },
+  {
+    "question": "Quels sont les types de questions posées en entretien ?",
+    "reponse": "Questions sur le parcours, les compétences techniques, les qualités humaines (soft skills), la motivation, la gestion de situations difficiles et la connaissance de l’entreprise.",
+    "theme": "entretien",
+    "type": "definition"
+  },
+  {
+    "question": "Quelles sont les erreurs à éviter en entretien ?",
+    "reponse": "Évitez de manquer de ponctualité, de parler négativement de vos anciens employeurs, de ne pas préparer vos réponses ou de manquer de confiance en vous.",
+    "theme": "entretien",
+    "type": "definition"
+  },
+  {
+    "question": "Comment répondre à la question 'Quelles sont vos qualités et vos défauts' ?",
+    "reponse": "Soyez honnête : choisissez des qualités utiles au poste et des défauts non bloquants, en montrant que vous cherchez à vous améliorer.",
+    "theme": "entretien",
+    "type": "definition"
+  },
+  {
+    "question": "Pourquoi est-il important de se renseigner sur l’entreprise avant un entretien ?",
+    "reponse": "Cela montre votre motivation et vous permet d’adapter vos réponses. Vous démontrez que vous comprenez les valeurs et les besoins de l’employeur.",
+    "theme": "entretien",
+    "type": "definition"
+  },
+  {
+    "question": "Comment gérer le stress lors d’un entretien ?",
+    "reponse": "Préparez-vous à l’avance, entraînez-vous à répondre à des questions, respirez profondément avant d’entrer et gardez une attitude positive.",
+    "theme": "entretien",
+    "type": "definition"
+  },
+  {
+    "question": "Que faire après un entretien d’embauche ?",
+    "reponse": "Envoyez un message de remerciement pour montrer votre intérêt et demandez un retour sur votre entretien si possible.",
+    "theme": "entretien",
+    "type": "definition"
+  },
+  {
+    "question": "Quels documents préparer pour un entretien ?",
+    "reponse": "CV actualisé, lettre de motivation, copies de diplômes, certificats, portfolio, et tout document demandé par l’employeur.",
+    "theme": "entretien",
+    "type": "definition"
+  },
+  {
+    "question": "Citez des soft skills importants pour réussir un entretien.",
+    "reponse": "Communication, esprit d’équipe, gestion du temps, adaptabilité, esprit d’initiative, et capacité à résoudre les problèmes.",
+    "theme": "soft skills",
+    "type": "definition"
+  },
+  {
+    "question": "Comment expliquer un trou dans son CV en entretien ?",
+    "reponse": "Soyez transparent et expliquez ce que vous avez fait pendant cette période (formations, bénévolat, projets personnels…). Mettez l’accent sur les compétences acquises.",
+    "theme": "entretien",
+    "type": "definition"
+  },
+  {
+    "question": "Comment conclure un entretien d’embauche ?",
+    "reponse": "Remerciez l’interlocuteur pour son temps, réaffirmez votre motivation et demandez les prochaines étapes du processus.",
+    "theme": "entretien",
+    "type": "definition"
+  },
+  {
+    "question": "Quelle tenue vestimentaire adopter pour un entretien ?",
+    "reponse": "Adoptez une tenue professionnelle et sobre, adaptée au secteur d’activité. Soignez votre apparence et évitez les tenues trop décontractées.",
+    "theme": "entretien",
+    "type": "definition"
+  },
+  {
+    "question": "Que répondre à 'Pourquoi voulez-vous travailler ici ?'",
+    "reponse": "Montrez que vous avez étudié l’entreprise et que ses valeurs, missions ou projets correspondent à vos aspirations et compétences.",
+    "theme": "entretien",
+    "type": "definition"
+  },
+  {
+    "question": "Comment décrire SCALES en une phrase ?",
+    "reponse": "SCALES est un cluster pédagogique dédié à l’acquisition de compétences transversales pour l’employabilité des étudiants en sciences économiques et sociales.",
+    "theme": "SCALES",
+    "type": "definition"
+  },
+  {
+    "question": "Donne-moi un exemple de question à poser à la fin d’un entretien.",
+    "reponse": "Pouvez-vous me décrire une journée type pour ce poste ? Quels sont les principaux défis à relever ? Comment évaluez-vous la réussite dans ce rôle ?",
+    "theme": "entretien",
+    "type": "conseil"
+    },
 {
   "question": "Quel outil en R permet de faire des applications web ?",
   "reponse": "Shiny",
