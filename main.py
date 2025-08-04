@@ -669,8 +669,6 @@ base = [
     "theme": "cv",
     "type": "definition"
   },
-
-  // Rapport
   {
     "question": "C'est quoi un rapport ?",
     "reponse": "Un rapport est un document écrit qui présente l’analyse d’un projet, d’un stage ou d’une recherche.",
@@ -2756,6 +2754,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
