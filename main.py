@@ -26,8 +26,8 @@ THEMES = {
     "worc": ["Worc","WORC","worc"],
     "STADAC": ["STADAC","stadac","Stadac"],
     "CS": ["cs","CS","Community Service"],
-    "cap": ["CAP",,"cap","IELTS","IP", "IP3","Meet & Greet","Meet&Greet","Meet and Greet"],
-    "LAPEX": ["lapex" ,"LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues"],
+    "cap": ["CAP","cap","IELTS","IP", "IP3","Meet & Greet","Meet&Greet","Meet and Greet"],
+    "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues"],
     "data science": ["data science", "datascience", "data scientist", "science des données"]
 }
 
@@ -2756,5 +2756,6 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
