@@ -893,8 +893,6 @@ base = [
 {"question": "How to validate Study Skills unit?", "reponse": "Pour valider l’unité Study Skills, il faut participer activement, réaliser les tâches demandées et obtenir la note minimale à l’évaluation.", "theme": "scales", "type": "definition"},
 {"question": "Study Skills validation process?", "reponse": "Pour valider l’unité Study Skills, il faut participer activement, réaliser les tâches demandées et obtenir la note minimale à l’évaluation.", "theme": "scales", "type": "definition"},
 {"question": "Validation Study Skills ?", "reponse": "Pour valider l’unité Study Skills, il faut participer activement, réaliser les tâches demandées et obtenir la note minimale à l’évaluation.", "theme": "scales", "type": "definition"},
-
-// LAPEX objectifs (toujours theme: "scales" si tu préfères ou sinon "lapex" selon ton architecture, mais dans ta demande précédente tu mettais scales)
 {"question": "Quels sont les objectifs du module LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
 {"question": "Objectifs de LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
 {"question": "Pourquoi suivre LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
@@ -2758,3 +2756,4 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
