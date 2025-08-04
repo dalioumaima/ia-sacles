@@ -463,7 +463,7 @@ base = [
   {
     "question": "C'est quoi CS ?",
     "reponse": "CS signifie Civic Engagement. C’est l’unité de service citoyen qui développe l’engagement et le travail en équipe.",
-    "theme": CS",
+    "theme": "CS",
     "type": "definition"
   },
   {
@@ -2756,4 +2756,5 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
