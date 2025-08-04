@@ -2676,15 +2676,7 @@ def extraire_theme(question_user):
     "CS": ["cs","CS","Community Service"],
     "cap": ["CAP","cap","IELTS","IP", "IP3","Meet & Greet","Meet&Greet","Meet and Greet"],
     "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues"],
-    "data science": ["data science", "datascience", "data scientist", "science des données"]
-
-
-
-
-
-
-
-        
+    "data science": ["data science", "datascience", "data scientist", "science des données"]      
     }
     for th, mots in keywords.items():
         if any(m in question_user for m in mots):
@@ -2777,6 +2769,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
