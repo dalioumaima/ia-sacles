@@ -2656,12 +2656,35 @@ def extraire_theme(question_user):
                 best_theme = theme
     # Reconnaissance manuelle en cas d'ambiguïté
     keywords = {
-        "conjugaison": ["conjugue", "conjugaison", "conjuguer", "verbe", "temps", "présent", "imparfait", "passé", "futur"],
-        "traduction": ["traduit", "traduction", "translate", "traduire", "comment dit-on", "comment dire"],
-        "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
-        "antonyme": ["antonyme", "contraire", "opposé", "donne un antonyme"],
-        "scales": ["scales", "IP", "IP3", "CAP","Bootcamps","MILL","Worc","MILL","article","rapport","lapex" ,"LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS"],
-        "langues": ["anglais", "espagnol", "français", "allemand", "langue"]
+    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
+    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs"],
+    "communication": ["communication", "communiquer", "comm"],
+    "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
+    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "bon cv", "rédaction cv"],
+    "entretien": ["entretien", "recrutement", "oral", "interview","article","rapport", "Lettre de motivation","normes de lettre de motivation"],
+    "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
+    "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
+    "antonyme": ["antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"],
+    "conjugaison": ["conjugue","conjugaison", "conjuguer", "verbe", "temps", "présent", "imparfait", "passé", "futur"],
+    "python": ["python", "py", "pyhton", "piton"],
+    "r": ["r", "langage r"],
+    "data mining": ["data mining", "datamining", "mining", "extraction données"],
+    "scales": ["scales","SCALES","Bootcamps","Study Skills","LCSS",],
+    "mill": ["MILL","mill"],
+    "worc": ["Worc","WORC","worc"],
+    "STADAC": ["STADAC","stadac","Stadac"],
+    "CS": ["cs","CS","Community Service"],
+    "cap": ["CAP","cap","IELTS","IP", "IP3","Meet & Greet","Meet&Greet","Meet and Greet"],
+    "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues"],
+    "data science": ["data science", "datascience", "data scientist", "science des données"]
+
+
+
+
+
+
+
+        
     }
     for th, mots in keywords.items():
         if any(m in question_user for m in mots):
@@ -2754,6 +2777,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
