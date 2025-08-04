@@ -746,6 +746,8 @@ base = [
     "type": "definition"
   },
 {"question": "C'est quoi CAP ?", "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.", "theme": "cap", "type": "definition"},
+{"question": "C'est quoi l'IA ?","reponse": "C'est la discipline qui vise à faire réaliser à des machines des tâches normalement humaines.", "theme": "intelligence artificielle", "type": "definition"},
+    {"question": "C'est quoi l'AI ?","reponse": "C'est la discipline qui vise à faire réaliser à des machines des tâches normalement humaines.", "theme": "intelligence artificielle", "type": "definition"},
 {"question": "Qu'est-ce que CAP ?", "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.", "theme": "cap", "type": "definition"},
 {"question": "Que veut dire CAP ?", "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.", "theme": "cap", "type": "definition"},
 {"question": "Que signifie CAP ?", "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.", "theme": "cap", "type": "definition"},
@@ -2894,6 +2896,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
