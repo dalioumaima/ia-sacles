@@ -44,6 +44,28 @@ base = [
             "Un navigateur web"
         ]
     },
+     {
+        "question": "C'est quoi l'IA ?",
+        "reponse": "C'est la discipline qui vise à faire réaliser à des machines des tâches normalement humaines.",
+        "theme": "intelligence artificielle",
+        "type": "definition",
+        "propositions": [
+            "Un langage de programmation",
+            "Un ordinateur portable",
+            "Un navigateur web"
+        ]
+    },
+    {
+        "question": "Qu'est ce que l'AI ?",
+        "reponse": "C'est la discipline qui vise à faire réaliser à des machines des tâches normalement humaines.",
+        "theme": "intelligence artificielle",
+        "type": "definition",
+        "propositions": [
+            "Un langage de programmation",
+            "Un ordinateur portable",
+            "Un navigateur web"
+        ]
+    },
     {
         "question": "Définis l'intelligence artificielle.",
         "reponse": "L'intelligence artificielle est un ensemble de méthodes permettant aux machines de simuler des comportements humains.",
@@ -575,7 +597,7 @@ base = [
   {
     "question": "Que veut dire WORC ?",
     "reponse": "worc signifie Writing & Oratory Skills.",
-    "theme": "cap",
+    "theme": "worc",
     "type": "definition"
   },
   {
@@ -2872,6 +2894,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
