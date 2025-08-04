@@ -2765,48 +2765,85 @@ def quiz():
                 "correct": correct_index
             })
     return jsonify({"quiz": quiz[:max(2, len(quiz))]})
-# ----------- Logique intelligente ------------
+# ---------- LOGIQUE AMÉLIORÉE : MATCHING STRICT -------------------
 
 def detect_theme(question):
-    """Détecte les thèmes les plus probables dans la question posée"""
-    detected = []
+    """Détecte le thème principal selon le plus grand nombre de mots-clés présents."""
     question_lower = question.lower()
+    best_theme = None
+    max_matches = 0
     for theme, keywords in THEMES.items():
-        for kw in keywords:
-            if kw.lower() in question_lower:
-                detected.append(theme)
-                break
-    return list(set(detected))
+        matches = sum([kw.lower() in question_lower for kw in keywords])
+        if matches > max_matches:
+            best_theme = theme
+            max_matches = matches
+    return best_theme
 
 def find_best_answer(question):
-    """Trouve la meilleure réponse dans la base selon la question"""
-    themes = detect_theme(question)
-    # 1. Filtrer la base par thèmes détectés (si aucun, tout garder)
-    if themes:
-        candidates = [item for item in base if item.get("theme", "").lower() in [t.lower() for t in themes]]
+    theme = detect_theme(question)
+    if theme:
+        # On ne prend QUE ce thème !
+        candidates = [item for item in base if item.get("theme", "").lower() == theme.lower()]
     else:
-        candidates = base
+        # Aucun thème = aucune réponse au hasard
+        return {
+            "reponse": "Je n'ai pas compris la thématique de ta question, peux-tu préciser ?",
+            "type": "notfound",
+            "propositions": []
+        }
 
-    # 2. Chercher la question la plus similaire (score fuzzy)
+    # Matching exact prioritaire, puis fuzzy
     best_score = 0
     best_answer = None
+    question_lower = question.lower().strip("?!. ")
     for item in candidates:
-        score = fuzz.token_set_ratio(question.lower(), item["question"].lower())
+        candidate_q = item["question"].lower().strip("?!. ")
+        if candidate_q == question_lower:
+            return item  # Correspondance exacte = priorité
+        score = fuzz.token_set_ratio(question_lower, candidate_q)
         if score > best_score:
             best_score = score
             best_answer = item
 
-    # 3. Si rien de pertinent, on retourne un message intelligent
-    SEUIL_SIMILARITE = 75  # Ajuste selon besoin
+    SEUIL_SIMILARITE = 90  # Seuil élevé pour éviter tout hors-sujet
     if best_answer and best_score >= SEUIL_SIMILARITE:
         return best_answer
     else:
         return {
-            "reponse": "Je n'ai pas encore de réponse précise à cette question. Essaie de reformuler, ou pose-moi une autre question sur : " +
-                (", ".join(themes) if themes else "mes thématiques principales."),
+            "reponse": f"Aucune réponse exacte trouvée pour ta question sur le thème « {theme} ». Peux-tu la reformuler ?",
             "type": "notfound",
             "propositions": []
         }
+
+# ----------- REFORMULATION (simple mais efficace) ---------------
+def reformuler_reponse(reponse):
+    variations = [
+        f"En d’autres termes : {reponse}",
+        f"Pour le dire autrement : {reponse}",
+        f"Autrement dit : {reponse}",
+        f"On peut résumer ainsi : {reponse}"
+    ]
+    return random.choice(variations)
+
+# ----------- ROUTE PRINCIPALE CHAT ------------------------------
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    data = request.get_json()
+    question = data.get("question", "")
+    reformulation = data.get("reformulation", False)
+
+    reponse_item = find_best_answer(question)
+    reponse = reponse_item.get("reponse", "")
+    if reformulation and reponse_item.get("type") != "notfound":
+        reponse = reformuler_reponse(reponse)
+
+    return jsonify({
+        "reponse": reponse,
+        "type": reponse_item.get("type", ""),
+        "propositions": reponse_item.get("propositions", [])
+    })
+
 
 # ----------- ROUTE FLASK ------------
 
@@ -2835,6 +2872,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
