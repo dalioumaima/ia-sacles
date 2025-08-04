@@ -857,7 +857,6 @@ base = [
 {"question": "Définition CV ?", "reponse": "Un CV est un résumé professionnel de votre parcours et compétences.", "theme": "cv", "type": "definition"},
 {"question": "What is a CV?", "reponse": "A CV is a document summarizing your education, skills, and experience.", "theme": "cv", "type": "definition"},
 {"question": "How to write a CV?", "reponse": "A good CV should be clear, structured, and tailored to each application.", "theme": "cv", "type": "definition"},
-
 {"question": "C'est quoi un rapport ?", "reponse": "Un rapport est un document écrit qui présente l’analyse d’un projet, d’un stage ou d’une recherche.", "theme": "scales", "type": "definition"},
 {"question": "Comment rédiger un rapport ?", "reponse": "Structure ton rapport : introduction, développement, conclusion et bibliographie.", "theme": "scales", "type": "definition"},
 {"question": "Quelles sont les étapes de la rédaction d’un rapport ?", "reponse": "Planification, recherche, rédaction, relecture, mise en page.", "theme": "scales", "type": "definition"},
@@ -2081,6 +2080,18 @@ base = [
     "theme": "intelligence artificielle",
     "type": "definition"
   },
+     {
+    "question": "C'est quoi IA ?",
+    "reponse": "L’intelligence artificielle est la discipline qui vise à faire réaliser à des machines des tâches normalement humaines, comme apprendre, raisonner ou comprendre le langage.",
+    "theme": "intelligence artificielle",
+    "type": "definition"
+  },
+     {
+    "question": "Qu'est ce que l'IA ?",
+    "reponse": "L’intelligence artificielle est la discipline qui vise à faire réaliser à des machines des tâches normalement humaines, comme apprendre, raisonner ou comprendre le langage.",
+    "theme": "intelligence artificielle",
+    "type": "definition"
+  },
   {
     "question": "Définis l'intelligence artificielle.",
     "reponse": "L'intelligence artificielle regroupe des méthodes permettant à un ordinateur d’imiter l’intelligence humaine.",
@@ -2754,7 +2765,62 @@ def quiz():
                 "correct": correct_index
             })
     return jsonify({"quiz": quiz[:max(2, len(quiz))]})
+# ----------- Logique intelligente ------------
 
+def detect_theme(question):
+    """Détecte les thèmes les plus probables dans la question posée"""
+    detected = []
+    question_lower = question.lower()
+    for theme, keywords in THEMES.items():
+        for kw in keywords:
+            if kw.lower() in question_lower:
+                detected.append(theme)
+                break
+    return list(set(detected))
+
+def find_best_answer(question):
+    """Trouve la meilleure réponse dans la base selon la question"""
+    themes = detect_theme(question)
+    # 1. Filtrer la base par thèmes détectés (si aucun, tout garder)
+    if themes:
+        candidates = [item for item in base if item.get("theme", "").lower() in [t.lower() for t in themes]]
+    else:
+        candidates = base
+
+    # 2. Chercher la question la plus similaire (score fuzzy)
+    best_score = 0
+    best_answer = None
+    for item in candidates:
+        score = fuzz.token_set_ratio(question.lower(), item["question"].lower())
+        if score > best_score:
+            best_score = score
+            best_answer = item
+
+    # 3. Si rien de pertinent, on retourne un message intelligent
+    SEUIL_SIMILARITE = 75  # Ajuste selon besoin
+    if best_answer and best_score >= SEUIL_SIMILARITE:
+        return best_answer
+    else:
+        return {
+            "reponse": "Je n'ai pas encore de réponse précise à cette question. Essaie de reformuler, ou pose-moi une autre question sur : " +
+                (", ".join(themes) if themes else "mes thématiques principales."),
+            "type": "notfound",
+            "propositions": []
+        }
+
+# ----------- ROUTE FLASK ------------
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    data = request.get_json()
+    question = data.get("question", "")
+    reponse_item = find_best_answer(question)
+    # On prépare le retour selon type (quiz ou normal)
+    return jsonify({
+        "reponse": reponse_item.get("reponse", ""),
+        "type": reponse_item.get("type", ""),
+        "propositions": reponse_item.get("propositions", [])
+    })
 
 # ====== Route spéciale pour servir le React build (doit être tout à la fin) ======
 @app.route('/', defaults={'path': ''})
@@ -2769,6 +2835,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
