@@ -32,7 +32,7 @@ THEMES = {
     "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues"],
     "data science": ["data science", "datascience", "data scientist", "science des données"],
     "techniques de recherche d'emploi et stage": ["recherche", "stage", "emploi", "offres", "plateforme", "candidature", "candidature spontanée", "postuler"],
-    "réseautage professionnel": ["réseau", "LinkedIn", "contacts", "piston", "groupe", "meetup", "relations"],
+    "réseautage professionnel": ["réseau", "LinkedIn", "contacts", "piston", "groupe", "meetup", "relations", "réseautage", "linkedin", "profil linkedin", "ajouter sur linkedin", "réseau linkedin", "importance linkedin", "contacts pro", "piston", "groupes linkedin", "relations", "meetup", "partager linkedin],
     "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
     "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement"],
     "valorisation des expériences": ["valoriser", "expérience internationale", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
@@ -2838,6 +2838,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
