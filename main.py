@@ -9,11 +9,12 @@ CORS(app)
 
 THEMES = {
     "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
-    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs"],
+    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences""adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie],
     "communication": ["communication", "communiquer", "comm"],
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
-    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "bon cv", "rédaction cv"],
-    "entretien": ["entretien", "recrutement", "oral", "interview","article","rapport", "Lettre de motivation","normes de lettre de motivation"],
+    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "bon cv", "rédaction cv", "trou dans le cv", "curriculum", "résumé],
+    "entretien": ["entretien", "recrutement", "oral", "interview","article","rapport","questions entretien" "questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile],
+    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre],
     "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
     "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
     "antonyme": ["antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"],
@@ -26,9 +27,18 @@ THEMES = {
     "worc": ["Worc","WORC","worc"],
     "STADAC": ["STADAC","stadac","Stadac"],
     "CS": ["cs","CS","Community Service"],
-    "cap": ["CAP","cap","IELTS","IP", "IP3","Meet & Greet","Meet&Greet","Meet and Greet"],
+    "cap": ["CAP","cap","IELTS","IP", "IP3"],
+    "événements professionnels": ["Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
     "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues"],
-    "data science": ["data science", "datascience", "data scientist", "science des données"]
+    "data science": ["data science", "datascience", "data scientist", "science des données"],
+    "techniques de recherche d'emploi et stage": ["recherche", "stage", "emploi", "offres", "plateforme", "candidature", "candidature spontanée", "postuler"],
+    "réseautage professionnel": ["réseau", "LinkedIn", "contacts", "piston", "groupe", "meetup", "relations"],
+    "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
+    "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement"],
+    "valorisation des expériences": ["valoriser", "expérience internationale", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
+    "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
+    "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
+    
 }
 
 base = [
@@ -500,7 +510,7 @@ base = [
   {
     "question": "En quoi consiste CAP ?",
     "reponse": "CAP propose ateliers, Meet&Greet et simulations pour préparer les étudiants à la vie active.",
-    "theme": "cap",
+    "theme": "événements professionnels",
     "type": "definition"
   },
 
@@ -690,19 +700,19 @@ base = [
   {
     "question": "C'est quoi une lettre de motivation ?",
     "reponse": "C’est un document qui explique pourquoi vous postulez à une formation, un stage ou un emploi.",
-    "theme": "entretien",
+    "theme": "lettre de motivation",
     "type": "definition"
   },
   {
     "question": "Comment rédiger une lettre de motivation ?",
     "reponse": "Présente ton profil, explique ta motivation et ce que tu peux apporter à l’organisation.",
-    "theme": "entretien",
+    "theme": "lettre de motivation",
     "type": "definition"
   },
   {
     "question": "Pourquoi faire une lettre de motivation ?",
     "reponse": "Pour convaincre un recruteur de la cohérence de ton projet et de ton intérêt.",
-    "theme": "entretien",
+    "theme": "lettre de motivation",
     "type": "definition"
   },
   {
@@ -723,6 +733,55 @@ base = [
     "theme": "entretien",
     "type": "definition"
   },
+{"question": "Comment commencer ma recherche de stage ou d'emploi ?", "reponse": "Commence par définir ton projet professionnel : quel secteur t'intéresse, quels types de postes ? Ensuite, prépare ton CV et ton profil LinkedIn. Tu peux utiliser les plateformes comme LinkedIn, Welcome to the Jungle, Indeed, ou celles de ton école/université.", "theme": "techniques de recherche d'emploi et stage", "type": "definition"},
+{"question": "Où puis-je trouver des offres de stage ?", "reponse": "Tu peux consulter : Les plateformes de ton établissement (ex: Career Center), LinkedIn, Indeed, Jobteaser, Les sites des entreprises qui t’intéressent directement, Les salons de l’emploi et forums étudiants.", "theme": "techniques de recherche d'emploi et stage", "type": "definition"},
+{"question": "Quels sites utiliser ?", "reponse": "LinkedIn, Indeed, Welcome to the Jungle, Jobteaser, site de l’APEC, Monster, Glassdoor, ou encore les sites propres aux entreprises ou à ton établissement.", "theme": "techniques de recherche d'emploi et stage", "type": "definition"},
+{"question": "Mieux vaut postuler partout ou cibler ?", "reponse": "Il vaut mieux cibler : 10 candidatures bien préparées et personnalisées valent mieux que 50 candidatures génériques. Prends le temps d’analyser chaque offre, d’adapter ton CV et ta lettre.", "theme": "techniques de recherche d'emploi et stage", "type": "definition"},
+{"question": "Comment contacter une entreprise sans offre ?", "reponse": "Envoie une candidature spontanée : Trouve le bon interlocuteur, rédige un mail court et personnalisé, joins ton CV et relance poliment une fois/semaine maximum.", "theme": "techniques de recherche d'emploi et stage", "type": "definition"},
+{"question": "Lettre spontanée : comment faire ?", "reponse": "Adresse-toi au bon contact (RH, manager, etc.), explique ta démarche en quelques lignes, valorise tes compétences et montre que tu as compris les enjeux de l’entreprise.", "theme": "techniques de recherche d'emploi et stage", "type": "definition"},
+{"question": "Comment structurer une candidature spontanée efficace ?", "reponse": "1. Accroche personnalisée. 2. Mise en avant de tes compétences & motivation pour l’entreprise. 3. Conclusion claire avec proposition d’échange.", "theme": "techniques de recherche d'emploi et stage", "type": "definition"},
+{"question": "Puis-je utiliser la même lettre pour plusieurs candidatures ?", "reponse": "Non : chaque lettre doit être adaptée à l’entreprise et au poste. Le recruteur repère vite les lettres génériques.", "theme": "techniques de recherche d'emploi et stage", "type": "definition"},
+{"question": "Quelles sont les erreurs à éviter sur un CV ?", "reponse": "Un CV trop long (1 page suffit pour un étudiant de licence), des fautes d’orthographe, un design trop chargé, une absence de résultats chiffrés ou d’exemples concrets.", "theme": "cv", "type": "definition"},
+{"question": "Pourquoi mon CV ne marche pas ?", "reponse": "Manque de clarté, trop d’informations non pertinentes, présentation peu soignée, ou absence d’éléments mesurables sur tes réalisations.", "theme": "cv", "type": "definition"},
+{"question": "Et si on me parle d’un trou dans le CV ?", "reponse": "Prépare une explication honnête : reprise d’études, projet personnel, bénévolat, etc. Mets l’accent sur ce que tu as appris pendant cette période.", "theme": "cv", "type": "definition"},
+{"question": "Quelles erreurs éviter dans un CV ?", "reponse": "Évite les fautes, les designs trop chargés, et reste synthétique (une page).", "theme": "cv", "type": "definition"},
+{"question": "Dois-je répéter mon CV dans la lettre de motivation ?", "reponse": "Non, la lettre complète le CV en apportant des éléments plus personnels.", "theme": "cv", "type": "definition"},
+{"question": "Comment rédiger une bonne lettre de motivation ?", "reponse": "Structure ta lettre en 3 parties : Introduction : pourquoi tu écris ? Toi + l’entreprise : ce que tu peux apporter, pourquoi tu es motivé. Adapte toujours ta lettre à l’offre et à l’entreprise. Conclusion : proposition d’un entretien, formule de politesse.", "theme": "lettre de motivation", "type": "definition"},
+{"question": "Quelle est la longueur idéale d’une lettre de motivation ?", "reponse": "Une demi-page à une page maximum.", "theme": "lettre de motivation", "type": "definition"},
+{"question": "Faut-il mettre un titre dans une lettre de motivation ?", "reponse": "Non obligatoire, mais ça peut aider à préciser l’objet de ta candidature.", "theme": "lettre de motivation", "type": "definition"},
+{"question": "Comment commencer une lettre de motivation ?", "reponse": "Évite le classique “Je vous adresse ma candidature...”. Privilégie une accroche personnalisée ou un élément en lien direct avec l’offre ou l’entreprise.", "theme": "lettre de motivation", "type": "definition"},
+{"question": "À qui dois-je adresser ma lettre ?", "reponse": "Si possible à une personne identifiée (manager, RH). Sinon, 'Madame, Monsieur'.", "theme": "lettre de motivation", "type": "definition"},
+{"question": "Faut-il signer une lettre de motivation ?", "reponse": "Oui si tu l’envoies par courrier, optionnel par mail (mais termine toujours par une formule de politesse).", "theme": "lettre de motivation", "type": "definition"},
+{"question": "Peut-on utiliser des bullet points dans une lettre ?", "reponse": "Oui si c’est pertinent, mais reste sobre et lisible.", "theme": "lettre de motivation", "type": "definition"},
+{"question": "Comment conclure efficacement ?", "reponse": "Exprime ton souhait de rencontre/échange et termine par une formule polie.", "theme": "lettre de motivation", "type": "definition"},
+{"question": "Existe-t-il des outils pour m’aider à rédiger ma lettre ?", "reponse": "Oui : Canva, DoYouBuzz, Kickresume, Jobteaser… Mais relis toujours et adapte toi-même le contenu !", "theme": "lettre de motivation", "type": "definition"},
+{"question": "Comment me préparer pour un entretien d'embauche ?", "reponse": "Renseigne-toi sur l'institution (valeurs, projets, chiffres clés). Prépare des réponses aux questions classiques (forces/faiblesses, présentation, etc.). Entraîne-toi à parler de ton parcours en 2-3 minutes. Prépare des questions à poser au recruteur.", "theme": "entretien", "type": "definition"},
+{"question": "Que répondre à la question “Parlez-moi de vous” ?", "reponse": "Structure ta réponse en 3 temps : Ton parcours académique, Tes expériences professionnelles ou associatives, Ce que tu recherches et pourquoi tu es ici aujourd’hui.", "theme": "entretien", "type": "definition"},
+{"question": "Que faire face aux questions difficiles en entretien ?", "reponse": "Sois honnête, transforme les faiblesses en apprentissage, et prépare des exemples précis pour illustrer tes réponses.", "theme": "entretien", "type": "definition"},
+{"question": "Comment se préparer à un entretien technique ou d’expertise ?", "reponse": "Revois les fondamentaux de ton domaine, prépare des cas concrets, et entraîne-toi à expliquer clairement ta démarche.", "theme": "entretien", "type": "definition"},
+{"question": "Pourquoi est-il important d’avoir un profil LinkedIn ?", "reponse": "LinkedIn te permet : De te rendre visible auprès des recruteurs, De te constituer un réseau professionnel, D’accéder à des offres cachées ou exclusives, De suivre l’actualité des entreprises.", "theme": "réseautage professionnel", "type": "definition"},
+{"question": "Comment développer mon réseau professionnel ?", "reponse": "Ajoute tes camarades, profs, anciens de ton école. Participe à des événements (conférences, forums, webinars). Envoie des messages personnalisés pour entrer en contact. Partage ou commente des contenus pertinents sur LinkedIn.", "theme": "réseautage professionnel", "type": "definition"},
+{"question": "Réseau vs piston : quelle différence ?", "reponse": "Le réseau est basé sur la confiance, les échanges et le professionnalisme. Le piston, c’est une recommandation sans forcément de fond. Le réseau t’informe, t’oriente, te recommande si tu as montré tes qualités.", "theme": "réseautage professionnel", "type": "definition"},
+{"question": "Comment construire un réseau utile pour mon avenir pro ?", "reponse": "Entretiens tes relations avec tes anciens stages, alternances, enseignants. Participe à des meetups, conférences, salons spécialisés. Rejoins des groupes LinkedIn dans ton domaine.", "theme": "réseautage professionnel", "type": "definition"},
+{"question": "Quelles sont les soft skills les plus recherchées par les employeurs ?", "reponse": "Communication, Esprit d’équipe, Sens de l’organisation, Capacité d’adaptation, Esprit critique / résolution de problèmes.", "theme": "soft skills", "type": "definition"},
+{"question": "Quelles compétences mettre en avant ?", "reponse": "Celles attendues dans le poste visé : soft skills (adaptabilité, autonomie, communication), langues, outils techniques, connaissance du secteur.", "theme": "soft skills", "type": "definition"},
+{"question": "Comment valoriser mes expériences internationales ?", "reponse": "Souligne ton autonomie, ton adaptabilité, ta capacité à évoluer dans un autre contexte. Donne des exemples concrets de projets réalisés.", "theme": "soft skills", "type": "definition"},
+{"question": "Comment construire mon projet professionnel ?", "reponse": "Pose-toi les bonnes questions : Qu’est-ce que j’aime faire ? Quelles sont mes compétences ? Quels secteurs m’attirent ? Quel mode de travail me convient (startup, grand groupe, etc.) ? Discute avec des professionnels ou un conseiller d’orientation pour affiner ton projet.", "theme": "orientation professionnelle", "type": "definition"},
+{"question": "Comment affiner mon positionnement professionnel avant la fin de mon M2 ?", "reponse": "Identifie les métiers cibles en fonction de tes compétences et aspirations. Renseigne-toi sur les débouchés concrets de ta spécialisation. Consulte les fiches métiers (APEC, ONISEP, Pôle Emploi) et parle à des anciens élèves pour mieux cerner les réalités du marché.", "theme": "orientation professionnelle", "type": "definition"},
+{"question": "Est-ce que je dois choisir entre grand groupe, PME ou startup ?", "reponse": "Tout dépend de ton profil et de tes attentes : Grand groupe : structuration, formations internes, image. PME/Startup : polyvalence, responsabilité rapide, agilité. Expérimente si possible via des stages ou alternances.", "theme": "orientation professionnelle", "type": "definition"},
+{"question": "Qu’est-ce qu’un Meet & Greet ?", "reponse": "Une rencontre informelle entre étudiants, alumni et professionnels pour échanger, poser des questions et développer ton réseau.", "theme": "événements professionnels", "type": "definition"},
+{"question": "Puis-je échanger mes coordonnées avec les intervenants ?", "reponse": "Oui, il est conseillé d’ajouter les intervenants sur LinkedIn, avec un message personnalisé.", "theme": "événements professionnels", "type": "definition"},
+{"question": "Est-ce que je peux participer même si je suis timide ou indécis ?", "reponse": "Oui, ces événements sont conçus pour permettre à tous de découvrir différents parcours et d’élargir leur réseau, même en tant qu’observateur.", "theme": "événements professionnels", "type": "definition"},
+{"question": "Où trouver le calendrier des Meet & Greet ?", "reponse": "L’agenda est disponible sur la plateforme de ton établissement, dans les emails d’annonce ou auprès du service carrière.", "theme": "événements professionnels", "type": "definition"},
+{"question": "Comment valoriser mes expériences internationales ?", "reponse": "Mets en avant ton autonomie, ta capacité à évoluer dans des environnements différents, et les compétences acquises sur le terrain.", "theme": "valorisation des expériences", "type": "definition"},
+{"question": "Est-ce qu’un doctorat est bien vu en entreprise ?", "reponse": "Oui, surtout dans les secteurs de la R&D, du conseil ou de la data. Mets en avant l’esprit d’analyse et la rigueur scientifique développés durant le doctorat.", "theme": "valorisation des expériences", "type": "definition"},
+{"question": "Que faire si je n’ai pas d’expérience à valoriser ?", "reponse": "Mets l’accent sur tes projets académiques, ton engagement associatif, ou toute autre expérience où tu as démontré des compétences transférables.", "theme": "valorisation des expériences", "type": "definition"},
+{"question": "Comment bien me préparer à un entretien ?", "reponse": "Prépare-toi mentalement, anticipe les questions classiques et travaille ta présentation personnelle en 2 minutes.", "theme": "préparation personnelle", "type": "definition"},
+{"question": "Comment me sentir prêt(e) ?", "reponse": "Entraîne-toi à l’oral avec des proches ou en enregistrant ta présentation. Visualise un échange constructif et bienveillant.", "theme": "préparation personnelle", "type": "definition"},
+{"question": "Comment bien me présenter ?", "reponse": "Structure ta présentation : parcours académique, expériences-clés, compétences fortes et projet actuel.", "theme": "préparation personnelle", "type": "definition"},
+{"question": "Je suis en fin d'études, que faire ?", "reponse": "Clarifie ton projet professionnel, mobilise ton réseau, reste ouvert aux opportunités de stage ou de premier emploi, et prends rendez-vous avec le service carrière.", "theme": "généralités et questions fréquentes", "type": "definition"},
+{"question": "Quelle taille d’entreprise est faite pour moi ?", "reponse": "Réfléchis à tes priorités : autonomie, cadre, diversité de missions, perspectives d’évolution… Discute avec des professionnels de différents environnements.", "theme": "généralités et questions fréquentes", "type": "definition"},
+{"question": "Puis-je utiliser la même lettre pour plusieurs candidatures ?", "reponse": "Non, il est important de personnaliser chaque lettre pour montrer ton intérêt réel pour le poste et l'entreprise.", "theme": "généralités et questions fréquentes", "type": "definition"},
 {"question": "C'est quoi CAP ?", "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.", "theme": "cap", "type": "definition"},
 {"question": "Qu'est-ce que CAP ?", "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.", "theme": "cap", "type": "definition"},
 {"question": "Que veut dire CAP ?", "reponse": "CAP est le module qui prépare les étudiants à l’insertion professionnelle par des ateliers et simulations.", "theme": "cap", "type": "definition"},
@@ -865,12 +924,12 @@ base = [
 {"question": "Définition rapport ?", "reponse": "Un rapport est un document de synthèse sur une expérience, un stage ou un projet.", "theme": "scales", "type": "definition"},
 {"question": "What is a report?", "reponse": "A report is a written document presenting the analysis of a project, internship, or research.", "theme": "scales", "type": "definition"},
 {"question": "How to write a report?", "reponse": "Structure your report: introduction, main body, conclusion, and references.", "theme": "scales", "type": "definition"},
-{"question": "C'est quoi une lettre de motivation ?", "reponse": "C’est un document qui explique pourquoi vous postulez à une formation, un stage ou un emploi.", "theme": "scales", "type": "definition"},
-{"question": "Comment rédiger une lettre de motivation ?", "reponse": "Présente ton profil, explique ta motivation et ce que tu peux apporter à l’organisation.", "theme": "scales", "type": "definition"},
-{"question": "Pourquoi faire une lettre de motivation ?", "reponse": "Pour convaincre un recruteur de la cohérence de ton projet et de ton intérêt.", "theme": "scales", "type": "definition"},
-{"question": "Définition lettre de motivation ?", "reponse": "Une lettre de motivation présente vos arguments pour obtenir une place ou un emploi.", "theme": "scales", "type": "definition"},
+{"question": "C'est quoi une lettre de motivation ?", "reponse": "C’est un document qui explique pourquoi vous postulez à une formation, un stage ou un emploi.", "theme": "lettre de motivation", "type": "definition"},
+{"question": "Comment rédiger une lettre de motivation ?", "reponse": "Présente ton profil, explique ta motivation et ce que tu peux apporter à l’organisation.", "theme": "lettre de motivation", "type": "definition"},
+{"question": "Pourquoi faire une lettre de motivation ?", "reponse": "Pour convaincre un recruteur de la cohérence de ton projet et de ton intérêt.", "theme": "lettre de motivation", "type": "definition"},
+{"question": "Définition lettre de motivation ?", "reponse": "Une lettre de motivation présente vos arguments pour obtenir une place ou un emploi.", "theme": "lettre de motivation", "type": "definition"},
 {"question": "What is a cover letter?", "reponse": "A cover letter explains why you are applying and what you can bring to the organization.", "theme": "scales", "type": "definition"},
-{"question": "How to write a cover letter?", "reponse": "Introduce yourself, explain your motivation, and show your added value.", "theme": "scales", "type": "definition"},
+{"question": "How to write a cover letter?", "reponse": "Introduce yourself, explain your motivation, and show your added value.", "theme": "lettre de motivation", "type": "definition"},
 {"question": "C'est quoi un entretien ?", "reponse": "C’est une rencontre orale entre un candidat et un recruteur pour évaluer la compatibilité au poste.", "theme": "scales", "type": "definition"},
 {"question": "Comment préparer un entretien ?", "reponse": "Renseigne-toi sur l’entreprise, anticipe les questions, prépare tes arguments et entraîne-toi.", "theme": "scales", "type": "definition"},
 {"question": "Quelles sont les erreurs à éviter en entretien ?", "reponse": "Ne pas se renseigner sur l’entreprise, manquer d’arguments, être en retard ou négliger la présentation.", "theme": "scales", "type": "definition"},
@@ -908,7 +967,8 @@ base = [
 {"question": "Pourquoi faire un Skills Portfolio ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "LAPEX", "type": "definition"},
 {"question": "How does Skills Portfolio work?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "LAPEX", "type": "definition"},
 {"question": "What is the Skills Portfolio?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "LAPEX", "type": "definition"},
-{
+
+    {
     "question": "En quoi consiste le module CAP ?",
     "reponse": "Prépare les étudiants à l’insertion professionnelle via ateliers CV, lettre, entretiens, réseautage.",
     "theme": "cap",
@@ -929,7 +989,7 @@ base = [
   {
     "question": "Qu’est-ce que Meet & Greet dans le CAP ?",
     "reponse": "Rencontres entre étudiants et professionnels pour découvrir des métiers et développer son réseau.",
-    "theme": "cap",
+    "theme": "événements professionnels",
     "type": "definition"
   },
   {
@@ -1277,7 +1337,7 @@ base = [
   {
     "question": "Comment rédiger une lettre de motivation ?",
     "reponse": "Présente-toi brièvement, explique pourquoi tu postules, en quoi ton profil correspond, et termine par une formule de politesse et une demande d’entretien.",
-    "theme": "entretien",
+    "theme": "lettre de motivation",
     "type": "definition"
   },
   {
@@ -1812,7 +1872,7 @@ base = [
   {
     "question": "Quel est l’objectif des ateliers Meet&Greet dans CAP ?",
     "reponse": "Découvrir des métiers et professionnels",
-    "theme": "scales",
+    "theme": "événements professionnels",
     "type": "quiz",
     "propositions": [
       "Découvrir des métiers et professionnels",
@@ -1867,7 +1927,7 @@ base = [
   {
     "question": "Quel est le but d’une lettre de motivation ?",
     "reponse": "Expliquer sa motivation et sa valeur ajoutée",
-    "theme": "scales",
+    "theme": "lettre de motivation",
     "type": "quiz",
     "propositions": [
       "Expliquer sa motivation et sa valeur ajoutée",
@@ -2656,16 +2716,17 @@ def extraire_theme(question_user):
                 best_theme = theme
     # Reconnaissance manuelle en cas d'ambiguïté
     keywords = {
-    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
-    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs"],
+   "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
+    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences""adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie],
     "communication": ["communication", "communiquer", "comm"],
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
-    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "bon cv", "rédaction cv"],
-    "entretien": ["entretien", "recrutement", "oral", "interview","article","rapport", "Lettre de motivation","normes de lettre de motivation"],
+    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "bon cv", "rédaction cv", "trou dans le cv", "curriculum", "résumé],
+    "entretien": ["entretien", "recrutement", "oral", "interview","article","rapport","questions entretien" "questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile],
+    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre],
     "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
     "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
     "antonyme": ["antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"],
-    "conjugaison": ["conjugue","conjugaison", "conjuguer", "verbe", "temps", "présent", "imparfait", "passé", "futur"],
+    "conjugaison": ["conjugaison", "conjuguer", "verbe", "temps", "présent", "imparfait", "passé", "futur"],
     "python": ["python", "py", "pyhton", "piton"],
     "r": ["r", "langage r"],
     "data mining": ["data mining", "datamining", "mining", "extraction données"],
@@ -2674,9 +2735,17 @@ def extraire_theme(question_user):
     "worc": ["Worc","WORC","worc"],
     "STADAC": ["STADAC","stadac","Stadac"],
     "CS": ["cs","CS","Community Service"],
-    "cap": ["CAP","cap","IELTS","IP", "IP3","Meet & Greet","Meet&Greet","Meet and Greet"],
+    "cap": ["CAP","cap","IELTS","IP", "IP3"],
+    "événements professionnels": ["Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
     "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues"],
-    "data science": ["data science", "datascience", "data scientist", "science des données"]      
+    "data science": ["data science", "datascience", "data scientist", "science des données"],
+    "techniques de recherche d'emploi et stage": ["recherche", "stage", "emploi", "offres", "plateforme", "candidature", "candidature spontanée", "postuler"],
+    "réseautage professionnel": ["réseau", "LinkedIn", "contacts", "piston", "groupe", "meetup", "relations"],
+    "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
+    "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement"],
+    "valorisation des expériences": ["valoriser", "expérience internationale", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
+    "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
+    "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
     }
     for th, mots in keywords.items():
         if any(m in question_user for m in mots):
@@ -2769,6 +2838,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
