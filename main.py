@@ -12,8 +12,8 @@ THEMES = {
     "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences""adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie],
     "communication": ["communication", "communiquer", "comm"],
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
-    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "bon cv", "rédaction cv", "trou dans le cv", "curriculum", "résumé],
-    "entretien": ["entretien", "recrutement", "oral", "interview","article","rapport","questions entretien" "questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile],
+    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "rédaction", "rubrique", "section", "formation","expérience", "expériences", "compétence", "compétences", "photo", "structure", "résumé", "profil","trou dans le cv", "erreur cv", "modèle cv"],
+    "entretien": ["entretien", "recrutement", "oral", "interview","questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile","simulateur", "recrutement", "recruteur","questions difficiles", "présentez-vous", "simulation entretien"],
     "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre],
     "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
     "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
@@ -28,13 +28,13 @@ THEMES = {
     "STADAC": ["STADAC","stadac","Stadac"],
     "CS": ["cs","CS","Community Service"],
     "cap": ["CAP","cap","IELTS","IP", "IP3"],
-    "événements professionnels": ["Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
     "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues"],
     "data science": ["data science", "datascience", "data scientist", "science des données"],
-    "techniques de recherche d'emploi et stage": ["recherche", "stage", "emploi", "offres", "plateforme", "candidature", "candidature spontanée", "postuler"],
-    "réseautage professionnel": ["réseau", "LinkedIn", "contacts", "piston", "groupe", "meetup", "relations", "réseautage", "linkedin", "profil linkedin", "ajouter sur linkedin", "réseau linkedin", "importance linkedin", "contacts pro", "piston", "groupes linkedin", "relations", "meetup", "partager linkedin],
+    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler""recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle", "trouver un emploi"],
+    "linkedin": ["linkedin", "profil linkedin", "compte linkedin", "ajouter sur linkedin", "réseau linkedin","importance linkedin", "recommandation linkedin", "message linkedin", "partager linkedin"],
+    "réseautage professionnel": ["réseau","contacts", "piston", "groupe", "meetup", "relations", "réseautage", "contacts pro"],
     "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
-    "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement"],
+    "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement","Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
     "valorisation des expériences": ["valoriser", "expérience internationale", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
     "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
@@ -2716,12 +2716,12 @@ def extraire_theme(question_user):
                 best_theme = theme
     # Reconnaissance manuelle en cas d'ambiguïté
     keywords = {
-        "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
+    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
     "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences""adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie],
     "communication": ["communication", "communiquer", "comm"],
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
-    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "bon cv", "rédaction cv", "trou dans le cv", "curriculum", "résumé],
-    "entretien": ["entretien", "recrutement", "oral", "interview","article","rapport","questions entretien" "questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile],
+    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "rédaction", "rubrique", "section", "formation","expérience", "expériences", "compétence", "compétences", "photo", "structure", "résumé", "profil","trou dans le cv", "erreur cv", "modèle cv"],
+    "entretien": ["entretien", "recrutement", "oral", "interview","questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile","simulateur", "recrutement", "recruteur","questions difficiles", "présentez-vous", "simulation entretien"],
     "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre],
     "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
     "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
@@ -2736,13 +2736,13 @@ def extraire_theme(question_user):
     "STADAC": ["STADAC","stadac","Stadac"],
     "CS": ["cs","CS","Community Service"],
     "cap": ["CAP","cap","IELTS","IP", "IP3"],
-    "événements professionnels": ["Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
     "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues"],
     "data science": ["data science", "datascience", "data scientist", "science des données"],
-    "techniques de recherche d'emploi et stage": ["recherche", "stage", "emploi", "offres", "plateforme", "candidature", "candidature spontanée", "postuler"],
-    "réseautage professionnel": ["réseau", "LinkedIn", "contacts", "piston", "groupe", "meetup", "relations", "réseautage", "linkedin", "profil linkedin", "ajouter sur linkedin", "réseau linkedin", "importance linkedin", "contacts pro", "piston", "groupes linkedin", "relations", "meetup", "partager linkedin],
+    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler""recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle", "trouver un emploi"],
+    "linkedin": ["linkedin", "profil linkedin", "compte linkedin", "ajouter sur linkedin", "réseau linkedin","importance linkedin", "recommandation linkedin", "message linkedin", "partager linkedin"],
+    "réseautage professionnel": ["réseau","contacts", "piston", "groupe", "meetup", "relations", "réseautage", "contacts pro"],
     "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
-    "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement"],
+    "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement","Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
     "valorisation des expériences": ["valoriser", "expérience internationale", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
     "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
@@ -2838,6 +2838,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
