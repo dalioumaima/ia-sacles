@@ -14,7 +14,7 @@ THEMES = {
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
     "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "rédaction", "rubrique", "section", "formation","expérience", "expériences", "compétence", "compétences", "photo", "structure", "résumé", "profil","trou dans le cv", "erreur cv", "modèle cv"],
     "entretien": ["entretien", "recrutement", "oral", "interview","questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile","simulateur", "recrutement", "recruteur","questions difficiles", "présentez-vous", "simulation entretien"],
-    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre],
+    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre"],
     "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
     "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
     "antonyme": ["antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"],
@@ -2838,6 +2838,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
