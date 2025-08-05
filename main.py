@@ -9,7 +9,7 @@ CORS(app)
 
 THEMES = {
     "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
-    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences""adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie],
+    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences","adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
     "communication": ["communication", "communiquer", "comm"],
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
     "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "rédaction", "rubrique", "section", "formation","expérience", "expériences", "compétence", "compétences", "photo", "structure", "résumé", "profil","trou dans le cv", "erreur cv", "modèle cv"],
@@ -2717,7 +2717,7 @@ def extraire_theme(question_user):
     # Reconnaissance manuelle en cas d'ambiguïté
     keywords = {
     "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
-    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences""adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie],
+    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences","adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
     "communication": ["communication", "communiquer", "comm"],
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
     "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "rédaction", "rubrique", "section", "formation","expérience", "expériences", "compétence", "compétences", "photo", "structure", "résumé", "profil","trou dans le cv", "erreur cv", "modèle cv"],
@@ -2838,6 +2838,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
