@@ -8,98 +8,36 @@ app = Flask(__name__, static_folder="build", static_url_path="/")
 CORS(app)
 
 THEMES = {
-    "intelligence artificielle": [
-        "intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"
-    ],
-    "soft skills": [
-        "soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs",
-        "compétences", "adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"
-    ],
-    "communication": [
-        "communication", "communiquer", "comm"
-    ],
-    "langues": [
-        "langues", "langage", "anglais", "français", "espagnol", "allemand"
-    ],
-    "cv": [
-        "cv", "curriculum", "curriculum vitae", "c.v.", "bon cv", "rédaction cv",
-        "trou dans le cv", "résumé", "mise en page cv", "améliorer cv", "design cv"
-    ],
-    "entretien": [
-        "entretien", "recrutement", "oral", "interview", "questions entretien", "présentation",
-        "préparer entretien", "parlez-moi de vous", "difficile", "simulation entretien",
-        "entretien technique", "entretien expertise"
-    ],
-    "lettre de motivation": [
-        "lettre motivation", "motivation", "lettre de motivation", "normes de lettre de motivation",
-        "titre de lettre", "bullet", "signature", "conclure", "outils lettre", "personnaliser lettre"
-    ],
-    "traduction": [
-        "traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"
-    ],
-    "synonyme": [
-        "synonyme", "syno", "donne un synonyme", "autre mot pour"
-    ],
-    "antonyme": [
-        "antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"
-    ],
-    "conjugaison": [
-        "conjugaison", "conjuguer", "verbe", "temps", "présent", "imparfait", "passé", "futur"
-    ],
-    "python": [
-        "python", "py", "pyhton", "piton"
-    ],
-    "r": [
-        "r", "langage r"
-    ],
-    "data mining": [
-        "data mining", "datamining", "mining", "extraction données"
-    ],
-    "scales": [
-        "scales", "SCALES", "Bootcamps", "Study Skills", "LCSS"
-    ],
-    "mill": [
-        "MILL", "mill"
-    ],
-    "worc": [
-        "Worc", "WORC", "worc"
-    ],
-    "STADAC": [
-        "STADAC", "stadac", "Stadac"
-    ],
-    "CS": [
-        "cs", "CS", "Community Service"
-    ],
-    "cap": [
-        "CAP", "cap", "IELTS", "IP", "IP3"
-    ],
-    "événements professionnels": [
-        "meet & greet", "événement", "événements", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement", "Meet&Greet", "Meet and Greet"
-    ],
-    "LAPEX": [
-        "lapex", "LAPEX", "Study Skills", "LCSS", "Skills Portfolio", "Portfolio", "LRS", "langues"
-    ],
-    "data science": [
-        "data science", "datascience", "data scientist", "science des données"
-    ],
-    "techniques de recherche d'emploi et stage": [
-        "recherche", "stage", "emploi", "offre de stage", "offre d'emploi", "plateforme emploi", "jobteaser", "indeed", "welcome to the jungle", "candidature", "candidature spontanée", "postuler"
-    ],
-    "réseautage professionnel": [
-        "réseau", "réseautage", "linkedin", "profil linkedin", "ajouter sur linkedin", "réseau linkedin", "importance linkedin", "contacts pro", "piston", "groupes linkedin", "relations", "meetup", "partager linkedin"
-    ],
-    "orientation professionnelle": [
-        "projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"
-    ],
-    "valorisation des expériences": [
-        "valoriser", "expérience internationale", "doctorat", "projet académique", "engagement associatif", "compétence transférable"
-    ],
-    "préparation personnelle": [
-        "préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"
-    ],
-    "généralités et questions fréquentes": [
-        "fin d'études", "taille entreprise", "questions fréquentes", "généralités"
-    ]
+    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
+    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences""adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie],
+    "communication": ["communication", "communiquer", "comm"],
+    "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
+    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "bon cv", "rédaction cv", "trou dans le cv", "curriculum", "résumé],
+    "entretien": ["entretien", "recrutement", "oral", "interview","article","rapport","questions entretien" "questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile],
+    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre],
+    "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
+    "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
+    "antonyme": ["antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"],
+    "conjugaison": ["conjugaison", "conjuguer", "verbe", "temps", "présent", "imparfait", "passé", "futur"],
+    "python": ["python", "py", "pyhton", "piton"],
+    "r": ["r", "langage r"],
+    "data mining": ["data mining", "datamining", "mining", "extraction données"],
+    "scales": ["scales","SCALES","Bootcamps","Study Skills","LCSS",],
+    "mill": ["MILL","mill"],
+    "worc": ["Worc","WORC","worc"],
+    "STADAC": ["STADAC","stadac","Stadac"],
+    "CS": ["cs","CS","Community Service"],
+    "cap": ["CAP","cap","IELTS","IP", "IP3"],
+    "événements professionnels": ["Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
+    "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues"],
+    "data science": ["data science", "datascience", "data scientist", "science des données"],
+    "techniques de recherche d'emploi et stage": ["recherche", "stage", "emploi", "offres", "plateforme", "candidature", "candidature spontanée", "postuler"],
+    "réseautage professionnel": ["réseau", "LinkedIn", "contacts", "piston", "groupe", "meetup", "relations", "réseautage", "linkedin", "profil linkedin", "ajouter sur linkedin", "réseau linkedin", "importance linkedin", "contacts pro", "piston", "groupes linkedin", "relations", "meetup", "partager linkedin],
+    "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
+    "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement"],
+    "valorisation des expériences": ["valoriser", "expérience internationale", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
+    "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
+    "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
 }
 
 
@@ -2778,98 +2716,36 @@ def extraire_theme(question_user):
                 best_theme = theme
     # Reconnaissance manuelle en cas d'ambiguïté
     keywords = {
-       "intelligence artificielle": [
-        "intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"
-    ],
-    "soft skills": [
-        "soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs",
-        "compétences", "adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"
-    ],
-    "communication": [
-        "communication", "communiquer", "comm"
-    ],
-    "langues": [
-        "langues", "langage", "anglais", "français", "espagnol", "allemand"
-    ],
-    "cv": [
-        "cv", "curriculum", "curriculum vitae", "c.v.", "bon cv", "rédaction cv",
-        "trou dans le cv", "résumé", "mise en page cv", "améliorer cv", "design cv"
-    ],
-    "entretien": [
-        "entretien", "recrutement", "oral", "interview", "questions entretien", "présentation",
-        "préparer entretien", "parlez-moi de vous", "difficile", "simulation entretien",
-        "entretien technique", "entretien expertise"
-    ],
-    "lettre de motivation": [
-        "lettre motivation", "motivation", "lettre de motivation", "normes de lettre de motivation",
-        "titre de lettre", "bullet", "signature", "conclure", "outils lettre", "personnaliser lettre"
-    ],
-    "traduction": [
-        "traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"
-    ],
-    "synonyme": [
-        "synonyme", "syno", "donne un synonyme", "autre mot pour"
-    ],
-    "antonyme": [
-        "antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"
-    ],
-    "conjugaison": [
-        "conjugaison", "conjuguer", "verbe", "temps", "présent", "imparfait", "passé", "futur"
-    ],
-    "python": [
-        "python", "py", "pyhton", "piton"
-    ],
-    "r": [
-        "r", "langage r"
-    ],
-    "data mining": [
-        "data mining", "datamining", "mining", "extraction données"
-    ],
-    "scales": [
-        "scales", "SCALES", "Bootcamps", "Study Skills", "LCSS"
-    ],
-    "mill": [
-        "MILL", "mill"
-    ],
-    "worc": [
-        "Worc", "WORC", "worc"
-    ],
-    "STADAC": [
-        "STADAC", "stadac", "Stadac"
-    ],
-    "CS": [
-        "cs", "CS", "Community Service"
-    ],
-    "cap": [
-        "CAP", "cap", "IELTS", "IP", "IP3"
-    ],
-    "événements professionnels": [
-        "meet & greet", "événement", "événements", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement", "Meet&Greet", "Meet and Greet"
-    ],
-    "LAPEX": [
-        "lapex", "LAPEX", "Study Skills", "LCSS", "Skills Portfolio", "Portfolio", "LRS", "langues"
-    ],
-    "data science": [
-        "data science", "datascience", "data scientist", "science des données"
-    ],
-    "techniques de recherche d'emploi et stage": [
-        "recherche", "stage", "emploi", "offre de stage", "offre d'emploi", "plateforme emploi", "jobteaser", "indeed", "welcome to the jungle", "candidature", "candidature spontanée", "postuler"
-    ],
-    "réseautage professionnel": [
-        "réseau", "réseautage", "linkedin", "profil linkedin", "ajouter sur linkedin", "réseau linkedin", "importance linkedin", "contacts pro", "piston", "groupes linkedin", "relations", "meetup", "partager linkedin"
-    ],
-    "orientation professionnelle": [
-        "projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"
-    ],
-    "valorisation des expériences": [
-        "valoriser", "expérience internationale", "doctorat", "projet académique", "engagement associatif", "compétence transférable"
-    ],
-    "préparation personnelle": [
-        "préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"
-    ],
-    "généralités et questions fréquentes": [
-        "fin d'études", "taille entreprise", "questions fréquentes", "généralités"
-    ]
+        "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
+    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences""adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie],
+    "communication": ["communication", "communiquer", "comm"],
+    "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
+    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "bon cv", "rédaction cv", "trou dans le cv", "curriculum", "résumé],
+    "entretien": ["entretien", "recrutement", "oral", "interview","article","rapport","questions entretien" "questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile],
+    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre],
+    "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
+    "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
+    "antonyme": ["antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"],
+    "conjugaison": ["conjugaison", "conjuguer", "verbe", "temps", "présent", "imparfait", "passé", "futur"],
+    "python": ["python", "py", "pyhton", "piton"],
+    "r": ["r", "langage r"],
+    "data mining": ["data mining", "datamining", "mining", "extraction données"],
+    "scales": ["scales","SCALES","Bootcamps","Study Skills","LCSS",],
+    "mill": ["MILL","mill"],
+    "worc": ["Worc","WORC","worc"],
+    "STADAC": ["STADAC","stadac","Stadac"],
+    "CS": ["cs","CS","Community Service"],
+    "cap": ["CAP","cap","IELTS","IP", "IP3"],
+    "événements professionnels": ["Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
+    "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues"],
+    "data science": ["data science", "datascience", "data scientist", "science des données"],
+    "techniques de recherche d'emploi et stage": ["recherche", "stage", "emploi", "offres", "plateforme", "candidature", "candidature spontanée", "postuler"],
+    "réseautage professionnel": ["réseau", "LinkedIn", "contacts", "piston", "groupe", "meetup", "relations", "réseautage", "linkedin", "profil linkedin", "ajouter sur linkedin", "réseau linkedin", "importance linkedin", "contacts pro", "piston", "groupes linkedin", "relations", "meetup", "partager linkedin],
+    "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
+    "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement"],
+    "valorisation des expériences": ["valoriser", "expérience internationale", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
+    "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
+    "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
     }
     for th, mots in keywords.items():
         if any(m in question_user for m in mots):
@@ -2962,6 +2838,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
