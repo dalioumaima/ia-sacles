@@ -10,11 +10,11 @@ CORS(app)
 THEMES = {
     "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
     "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences","adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
-    "communication": ["communication", "communiquer", "comm"],
+    "communication": ["communication", "communiquer", "comm","rapport","rapport académique","bibliographie","article"],
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
     "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "rédaction", "rubrique", "section", "formation","expérience", "expériences", "compétence", "compétences", "photo", "structure", "résumé", "profil","trou dans le cv", "erreur cv", "modèle cv"],
     "entretien": ["entretien", "recrutement", "oral", "interview","questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile","simulateur", "recrutement", "recruteur","questions difficiles", "présentez-vous", "simulation entretien"],
-    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre"],
+    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre","cover letter"],
     "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
     "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
     "antonyme": ["antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"],
@@ -22,15 +22,15 @@ THEMES = {
     "python": ["python", "py", "pyhton", "piton"],
     "r": ["r", "langage r"],
     "data mining": ["data mining", "datamining", "mining", "extraction données"],
-    "scales": ["scales","SCALES","Bootcamps","Study Skills","LCSS",],
+    "scales": ["scales","SCALES","Bootcamps","Study Skills","module Writing and Oratory Skills","plagiat"],
     "mill": ["MILL","mill"],
     "worc": ["Worc","WORC","worc"],
-    "STADAC": ["STADAC","stadac","Stadac"],
-    "CS": ["cs","CS","Community Service"],
+    "STADAC": ["STADAC","stadac","Stadac","outil de programmation"],
+    "CS": ["cs","CS","Community Service","citoyenneté","civic engagement"],
     "cap": ["CAP","cap","IELTS","IP", "IP3"],
-    "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues"],
+    "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues","LCSS","exigences linguistiques","progrès en langues","langues étrangères","OTS"],
     "data science": ["data science", "datascience", "data scientist", "science des données"],
-    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler""recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle", "trouver un emploi"],
+    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler""recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle", "trouver un emploi","recherche d'emploi"],
     "linkedin": ["linkedin", "profil linkedin", "compte linkedin", "ajouter sur linkedin", "réseau linkedin","importance linkedin", "recommandation linkedin", "message linkedin", "partager linkedin"],
     "réseautage professionnel": ["réseau","contacts", "piston", "groupe", "meetup", "relations", "réseautage", "contacts pro"],
     "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
@@ -257,13 +257,13 @@ base = [
   {
     "question": "Quelles langues sont proposées à la FGSES ?",
     "reponse": "Français, anglais, arabe, espagnol, allemand, mandarin, arabe standard et darija pour les internationaux.",
-    "theme": "LAPEX",
+    "theme": "langues",
     "type": "definition"
   },
   {
     "question": "Quels sont les programmes de langues à la FGSES ?",
     "reponse": "Langues d’instruction (français, anglais, arabe), langues étrangères (espagnol, allemand, mandarin), langues pour internationaux (arabe standard, darija, FLE).",
-    "theme": "LAPEX",
+    "theme": "langues",
     "type": "definition"
   },
   {
@@ -293,13 +293,13 @@ base = [
   {
     "question": "Qu’est-ce qu’une langue d’instruction à la FGSES ?",
     "reponse": "Langue utilisée pour l’enseignement des cours : anglais, français, arabe.",
-    "theme": "LAPEX",
+    "theme": "langues",
     "type": "definition"
   },
   {
     "question": "Quelles sont les conditions pour s’inscrire à un cours de langue à la FGSES ?",
     "reponse": "Passer un test de placement pour définir le niveau d’entrée, inscription selon les exigences du programme.",
-    "theme": "LAPEX",
+    "theme": "langues",
     "type": "definition"
   },
   {
@@ -311,7 +311,7 @@ base = [
   {
     "question": "Quels sont les niveaux requis pour chaque langue à la fin du cursus ?",
     "reponse": "Au moins C1 dans deux langues (anglais, français, arabe) et B1 dans une troisième langue ou une langue étrangère.",
-    "theme": "LAPEX",
+    "theme": "langues",
     "type": "definition"
   },
   {
@@ -344,6 +344,12 @@ base = [
     "theme": "LAPEX",
     "type": "definition"
   },
+     {
+    "question": "c'est quoi OTS?",
+    "reponse": "OTS : en voie de satisfaction",
+    "theme": "LAPEX",
+    "type": "definition"
+  },
   {
     "question": "Qu’est-ce que le portfolio de langues ?",
     "reponse": "Document officiel attestant du niveau linguistique de l’étudiant à la sortie de la FGSES.",
@@ -371,7 +377,7 @@ base = [
   {
     "question": "Quels sont les bénéfices des séminaires LCSS ?",
     "reponse": "Mieux comprendre la culture, améliorer la communication, découvrir d’autres disciplines.",
-    "theme": "scales",
+    "theme": "LAPEX",
     "type": "definition"
   },
   {
@@ -585,7 +591,7 @@ base = [
   {
     "question": "Que veut dire WORC ?",
     "reponse": "worc signifie Writing & Oratory Skills.",
-    "theme": "cap",
+    "theme": "worc",
     "type": "definition"
   },
   {
@@ -917,25 +923,25 @@ base = [
 {"question": "What is a CV?", "reponse": "A CV is a document summarizing your education, skills, and experience.", "theme": "cv", "type": "definition"},
 {"question": "How to write a CV?", "reponse": "A good CV should be clear, structured, and tailored to each application.", "theme": "cv", "type": "definition"},
 
-{"question": "C'est quoi un rapport ?", "reponse": "Un rapport est un document écrit qui présente l’analyse d’un projet, d’un stage ou d’une recherche.", "theme": "scales", "type": "definition"},
-{"question": "Comment rédiger un rapport ?", "reponse": "Structure ton rapport : introduction, développement, conclusion et bibliographie.", "theme": "scales", "type": "definition"},
-{"question": "Quelles sont les étapes de la rédaction d’un rapport ?", "reponse": "Planification, recherche, rédaction, relecture, mise en page.", "theme": "scales", "type": "definition"},
-{"question": "Pourquoi faire un rapport ?", "reponse": "Pour analyser, synthétiser et communiquer des résultats ou une expérience.", "theme": "scales", "type": "definition"},
-{"question": "Définition rapport ?", "reponse": "Un rapport est un document de synthèse sur une expérience, un stage ou un projet.", "theme": "scales", "type": "definition"},
-{"question": "What is a report?", "reponse": "A report is a written document presenting the analysis of a project, internship, or research.", "theme": "scales", "type": "definition"},
-{"question": "How to write a report?", "reponse": "Structure your report: introduction, main body, conclusion, and references.", "theme": "scales", "type": "definition"},
+{"question": "C'est quoi un rapport ?", "reponse": "Un rapport est un document écrit qui présente l’analyse d’un projet, d’un stage ou d’une recherche.", "theme": "communication", "type": "definition"},
+{"question": "Comment rédiger un rapport ?", "reponse": "Structure ton rapport : introduction, développement, conclusion et bibliographie.", "theme": "communication", "type": "definition"},
+{"question": "Quelles sont les étapes de la rédaction d’un rapport ?", "reponse": "Planification, recherche, rédaction, relecture, mise en page.", "theme": "communication", "type": "definition"},
+{"question": "Pourquoi faire un rapport ?", "reponse": "Pour analyser, synthétiser et communiquer des résultats ou une expérience.", "theme": "communication", "type": "definition"},
+{"question": "Définition rapport ?", "reponse": "Un rapport est un document de synthèse sur une expérience, un stage ou un projet.", "theme": "communication", "type": "definition"},
+{"question": "What is a report?", "reponse": "A report is a written document presenting the analysis of a project, internship, or research.", "theme": "communication", "type": "definition"},
+{"question": "How to write a report?", "reponse": "Structure your report: introduction, main body, conclusion, and references.", "theme": "communication", "type": "definition"},
 {"question": "C'est quoi une lettre de motivation ?", "reponse": "C’est un document qui explique pourquoi vous postulez à une formation, un stage ou un emploi.", "theme": "lettre de motivation", "type": "definition"},
 {"question": "Comment rédiger une lettre de motivation ?", "reponse": "Présente ton profil, explique ta motivation et ce que tu peux apporter à l’organisation.", "theme": "lettre de motivation", "type": "definition"},
 {"question": "Pourquoi faire une lettre de motivation ?", "reponse": "Pour convaincre un recruteur de la cohérence de ton projet et de ton intérêt.", "theme": "lettre de motivation", "type": "definition"},
 {"question": "Définition lettre de motivation ?", "reponse": "Une lettre de motivation présente vos arguments pour obtenir une place ou un emploi.", "theme": "lettre de motivation", "type": "definition"},
-{"question": "What is a cover letter?", "reponse": "A cover letter explains why you are applying and what you can bring to the organization.", "theme": "scales", "type": "definition"},
+{"question": "What is a cover letter?", "reponse": "A cover letter explains why you are applying and what you can bring to the organization.", "theme": "lettre de motivation", "type": "definition"},
 {"question": "How to write a cover letter?", "reponse": "Introduce yourself, explain your motivation, and show your added value.", "theme": "lettre de motivation", "type": "definition"},
-{"question": "C'est quoi un entretien ?", "reponse": "C’est une rencontre orale entre un candidat et un recruteur pour évaluer la compatibilité au poste.", "theme": "scales", "type": "definition"},
-{"question": "Comment préparer un entretien ?", "reponse": "Renseigne-toi sur l’entreprise, anticipe les questions, prépare tes arguments et entraîne-toi.", "theme": "scales", "type": "definition"},
-{"question": "Quelles sont les erreurs à éviter en entretien ?", "reponse": "Ne pas se renseigner sur l’entreprise, manquer d’arguments, être en retard ou négliger la présentation.", "theme": "scales", "type": "definition"},
-{"question": "Définition entretien ?", "reponse": "Un entretien est un échange formel pour évaluer la candidature à un poste ou une formation.", "theme": "scales", "type": "definition"},
-{"question": "What is an interview?", "reponse": "An interview is a meeting between a candidate and a recruiter to assess suitability for a position.", "theme": "scales", "type": "definition"},
-{"question": "How to succeed in an interview?", "reponse": "Prepare well, be confident, and communicate your strengths clearly.", "theme": "scales", "type": "definition"},
+{"question": "C'est quoi un entretien ?", "reponse": "C’est une rencontre orale entre un candidat et un recruteur pour évaluer la compatibilité au poste.", "theme": "entretien", "type": "definition"},
+{"question": "Comment préparer un entretien ?", "reponse": "Renseigne-toi sur l’entreprise, anticipe les questions, prépare tes arguments et entraîne-toi.", "theme": "entretien", "type": "definition"},
+{"question": "Quelles sont les erreurs à éviter en entretien ?", "reponse": "Ne pas se renseigner sur l’entreprise, manquer d’arguments, être en retard ou négliger la présentation.", "theme": "entretien", "type": "definition"},
+{"question": "Définition entretien ?", "reponse": "Un entretien est un échange formel pour évaluer la candidature à un poste ou une formation.", "theme": "entretien", "type": "definition"},
+{"question": "What is an interview?", "reponse": "An interview is a meeting between a candidate and a recruiter to assess suitability for a position.", "theme": "entretien", "type": "definition"},
+{"question": "How to succeed in an interview?", "reponse": "Prepare well, be confident, and communicate your strengths clearly.", "theme": "entretien", "type": "definition"},
 {"question": "Quelles sont les modalités de validation de l’unité Study Skills ?", "reponse": "Pour valider l’unité Study Skills, il faut participer activement, réaliser les tâches demandées et obtenir la note minimale à l’évaluation.", "theme": "scales", "type": "definition"},
 {"question": "Comment valider Study Skills ?", "reponse": "Pour valider l’unité Study Skills, il faut participer activement, réaliser les tâches demandées et obtenir la note minimale à l’évaluation.", "theme": "scales", "type": "definition"},
 {"question": "Validation Study Skills, comment faire ?", "reponse": "Pour valider l’unité Study Skills, il faut participer activement, réaliser les tâches demandées et obtenir la note minimale à l’évaluation.", "theme": "scales", "type": "definition"},
@@ -950,16 +956,16 @@ base = [
 {"question": "How to validate Study Skills unit?", "reponse": "Pour valider l’unité Study Skills, il faut participer activement, réaliser les tâches demandées et obtenir la note minimale à l’évaluation.", "theme": "scales", "type": "definition"},
 {"question": "Study Skills validation process?", "reponse": "Pour valider l’unité Study Skills, il faut participer activement, réaliser les tâches demandées et obtenir la note minimale à l’évaluation.", "theme": "scales", "type": "definition"},
 {"question": "Validation Study Skills ?", "reponse": "Pour valider l’unité Study Skills, il faut participer activement, réaliser les tâches demandées et obtenir la note minimale à l’évaluation.", "theme": "scales", "type": "definition"},
-{"question": "Quels sont les objectifs du module LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
-{"question": "Objectifs de LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
-{"question": "Pourquoi suivre LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
-{"question": "À quoi sert LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
-{"question": "Peux-tu expliquer LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
-{"question": "C'est quoi LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
-{"question": "LAPEX c’est quoi ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
-{"question": "Définition LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
-{"question": "What is LAPEX?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
-{"question": "Why LAPEX?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "scales", "type": "definition"},
+{"question": "Quels sont les objectifs du module LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "LAPEX", "type": "definition"},
+{"question": "Objectifs de LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "LAPEX", "type": "definition"},
+{"question": "Pourquoi suivre LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "LAPEX", "type": "definition"},
+{"question": "À quoi sert LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "LAPEX", "type": "definition"},
+{"question": "Peux-tu expliquer LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "LAPEX", "type": "definition"},
+{"question": "C'est quoi LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "LAPEX", "type": "definition"},
+{"question": "LAPEX c’est quoi ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "LAPEX", "type": "definition"},
+{"question": "Définition LAPEX ?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "LAPEX", "type": "definition"},
+{"question": "What is LAPEX?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "LAPEX", "type": "definition"},
+{"question": "Why LAPEX?", "reponse": "LAPEX permet de progresser dans plusieurs langues et d’obtenir des certifications reconnues.", "theme": "LAPEX", "type": "definition"},
 {"question": "Qu’est-ce que le Skills Portfolio ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "LAPEX", "type": "definition"},
 {"question": "Skills Portfolio, c’est quoi ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "LAPEX", "type": "definition"},
 {"question": "Définition Skills Portfolio ?", "reponse": "Le Skills Portfolio est un dossier récapitulant toutes les compétences validées pendant votre parcours.", "theme": "LAPEX", "type": "definition"},
@@ -995,7 +1001,7 @@ base = [
   {
     "question": "Quelles compétences sont évaluées lors des entretiens simulés chez SCALES ?",
     "reponse": "Communication, attitude pro, gestion du stress, capacité à argumenter et convaincre.",
-    "theme": "scales",
+    "theme": "entretien",
     "type": "definition"
   },
   {
@@ -1397,7 +1403,7 @@ base = [
   {
     "question": "Faut-il mettre une conclusion dans un rapport ou un article ?",
     "reponse": "Oui, elle récapitule les résultats, apporte une réponse à la problématique et ouvre sur des perspectives.",
-    "theme": "entretien",
+    "theme": "communication",
     "type": "definition"
   },
   {
@@ -1575,7 +1581,7 @@ base = [
   {
     "question": "Que développe-t-on dans l’unité WORC ?",
     "reponse": "Écriture et expression orale",
-    "theme": "scales",
+    "theme": "worc",
     "type": "quiz",
     "propositions": [
       "Écriture et expression orale",
@@ -1586,7 +1592,7 @@ base = [
   {
     "question": "Quelle activité est propre à l’unité MILL ?",
     "reponse": "Ciné-débat et production média",
-    "theme": "scales",
+    "theme": "mill",
     "type": "quiz",
     "propositions": [
       "Ciné-débat et production média",
@@ -1597,7 +1603,7 @@ base = [
   {
     "question": "Quel est l’objectif principal de CAP ?",
     "reponse": "Préparer à l’insertion professionnelle",
-    "theme": "scales",
+    "theme": "cap",
     "type": "quiz",
     "propositions": [
       "Préparer à l’insertion professionnelle",
@@ -1608,7 +1614,7 @@ base = [
   {
     "question": "Que faut-il faire pour valider Civic Engagement (CS) ?",
     "reponse": "Réaliser un service citoyen et un feedback écrit",
-    "theme": "scales",
+    "theme": "CS",
     "type": "quiz",
     "propositions": [
       "Réaliser un service citoyen et un feedback écrit",
@@ -1619,7 +1625,7 @@ base = [
   {
     "question": "Quel outil est utilisé dans STADAC ?",
     "reponse": "Python",
-    "theme": "scales",
+    "theme": "STADAC",
     "type": "quiz",
     "propositions": [
       "Python",
@@ -1630,7 +1636,7 @@ base = [
   {
     "question": "Qu’est-ce qu’un projet média dans MILL ?",
     "reponse": "Créer un podcast, vidéo ou interview",
-    "theme": "scales",
+    "theme": "mill",
     "type": "quiz",
     "propositions": [
       "Créer un podcast, vidéo ou interview",
@@ -1663,7 +1669,7 @@ base = [
   {
     "question": "Qu’est-ce que le Skills Portfolio ?",
     "reponse": "Un dossier récapitulant les compétences acquises",
-    "theme": "scales",
+    "theme": "LAPEX",
     "type": "quiz",
     "propositions": [
       "Un dossier récapitulant les compétences acquises",
@@ -1674,7 +1680,7 @@ base = [
   {
     "question": "Quel niveau de langue valide la diplomation à la FGSES ?",
     "reponse": "C1 dans deux langues",
-    "theme": "scales",
+    "theme": "LAPEX",
     "type": "quiz",
     "propositions": [
       "C1 dans deux langues",
@@ -1685,7 +1691,7 @@ base = [
   {
     "question": "Que veut dire la mention LRS sur le relevé de notes ?",
     "reponse": "Exigences linguistiques satisfaites",
-    "theme": "scales",
+    "theme": "LAPEX",
     "type": "quiz",
     "propositions": [
       "Exigences linguistiques satisfaites",
@@ -1696,7 +1702,7 @@ base = [
   {
     "question": "Quelle compétence est un soft skill ?",
     "reponse": "La gestion du temps",
-    "theme": "scales",
+    "theme": "soft skills",
     "type": "quiz",
     "propositions": [
       "La gestion du temps",
@@ -1729,7 +1735,7 @@ base = [
   {
     "question": "Quel module développe la citoyenneté à la FGSES ?",
     "reponse": "Civic Engagement (CS)",
-    "theme": "scales",
+    "theme": "CS",
     "type": "quiz",
     "propositions": [
       "Civic Engagement (CS)",
@@ -1740,7 +1746,7 @@ base = [
   {
     "question": "Qu’est-ce que LAPEX ?",
     "reponse": "Programme pour progresser en langues et s’ouvrir à l’international",
-    "theme": "scales",
+    "theme": "LAPEX",
     "type": "quiz",
     "propositions": [
       "Programme pour progresser en langues et s’ouvrir à l’international",
@@ -1751,7 +1757,7 @@ base = [
   {
     "question": "Quelles langues peut-on apprendre à la FGSES ?",
     "reponse": "Anglais, français, arabe, espagnol, allemand, mandarin",
-    "theme": "scales",
+    "theme": "LAPEX",
     "type": "quiz",
     "propositions": [
       "Anglais, français, arabe, espagnol, allemand, mandarin",
@@ -1762,7 +1768,7 @@ base = [
   {
     "question": "Comment valider l’unité MILL ?",
     "reponse": "Réaliser une activité média ou participer à un ciné-débat",
-    "theme": "scales",
+    "theme": "mill",
     "type": "quiz",
     "propositions": [
       "Réaliser une activité média ou participer à un ciné-débat",
@@ -1773,7 +1779,7 @@ base = [
   {
     "question": "Quel format d’activité n’est pas accepté pour valider Civic Engagement ?",
     "reponse": "Créer un groupe WhatsApp",
-    "theme": "scales",
+    "theme": "CS",
     "type": "quiz",
     "propositions": [
       "Créer un groupe WhatsApp",
@@ -1795,7 +1801,7 @@ base = [
   {
     "question": "Quel outil de programmation apprend-on dans STADAC ?",
     "reponse": "Python",
-    "theme": "scales",
+    "theme": "STADAC",
     "type": "quiz",
     "propositions": [
       "Python",
@@ -1828,7 +1834,7 @@ base = [
   {
     "question": "Comment valider un atelier WORC ?",
     "reponse": "Participer à 5h de rédaction et 5h d’oral",
-    "theme": "scales",
+    "theme": "worc",
     "type": "quiz",
     "propositions": [
       "Participer à 5h de rédaction et 5h d’oral",
@@ -1839,7 +1845,7 @@ base = [
   {
     "question": "Quelle activité n’est pas proposée dans MILL ?",
     "reponse": "Atelier pâtisserie",
-    "theme": "scales",
+    "theme": "mill",
     "type": "quiz",
     "propositions": [
       "Atelier pâtisserie",
@@ -1850,7 +1856,7 @@ base = [
   {
     "question": "Quel est le rôle d’un Library Assistant en Civic Engagement ?",
     "reponse": "Aider à la gestion de la bibliothèque",
-    "theme": "scales",
+    "theme": "CS",
     "type": "quiz",
     "propositions": [
       "Aider à la gestion de la bibliothèque",
@@ -1861,7 +1867,7 @@ base = [
   {
     "question": "Quelle activité ne valide pas l’unité CAP ?",
     "reponse": "Aller à un concert",
-    "theme": "scales",
+    "theme": "cap",
     "type": "quiz",
     "propositions": [
       "Aller à un concert",
@@ -1894,7 +1900,7 @@ base = [
   {
     "question": "Quel est l’ordre logique d’un rapport académique ?",
     "reponse": "Introduction, méthodologie, résultats, conclusion",
-    "theme": "scales",
+    "theme": "communication",
     "type": "quiz",
     "propositions": [
       "Introduction, méthodologie, résultats, conclusion",
@@ -1905,7 +1911,7 @@ base = [
   {
     "question": "Pourquoi faire une bibliographie dans un rapport ?",
     "reponse": "Pour citer les sources utilisées",
-    "theme": "scales",
+    "theme": "communication",
     "type": "quiz",
     "propositions": [
       "Pour citer les sources utilisées",
@@ -1916,7 +1922,7 @@ base = [
   {
     "question": "Que faut-il éviter dans un CV ?",
     "reponse": "Les fautes d’orthographe",
-    "theme": "scales",
+    "theme": "cv",
     "type": "quiz",
     "propositions": [
       "Les fautes d’orthographe",
@@ -2004,7 +2010,7 @@ base = [
 {
   "question": "Que doit-on trouver dans un rapport académique ?",
   "reponse": "Une introduction, un développement et une conclusion",
-  "theme": "rédaction",
+  "theme": "communication",
   "type": "quiz",
   "propositions": [
     "Une introduction, un développement et une conclusion",
@@ -2015,7 +2021,7 @@ base = [
 {
   "question": "Qu’est-il important de faire en rédigeant un rapport ?",
   "reponse": "Soigner la présentation et citer ses sources",
-  "theme": "rédaction",
+  "theme": "communication",
   "type": "quiz",
   "propositions": [
     "Soigner la présentation et citer ses sources",
@@ -2143,6 +2149,12 @@ base = [
   },
   {
     "question": "Définis l'intelligence artificielle.",
+    "reponse": "L'intelligence artificielle regroupe des méthodes permettant à un ordinateur d’imiter l’intelligence humaine.",
+    "theme": "intelligence artificielle",
+    "type": "definition"
+  },
+    {
+    "question": "c'est quoi IA ?",
     "reponse": "L'intelligence artificielle regroupe des méthodes permettant à un ordinateur d’imiter l’intelligence humaine.",
     "theme": "intelligence artificielle",
     "type": "definition"
@@ -2718,11 +2730,11 @@ def extraire_theme(question_user):
     keywords = {
     "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
     "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences","adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
-    "communication": ["communication", "communiquer", "comm"],
+    "communication": ["communication", "communiquer", "comm","rapport","rapport académique","bibliographie","article"],
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
     "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "rédaction", "rubrique", "section", "formation","expérience", "expériences", "compétence", "compétences", "photo", "structure", "résumé", "profil","trou dans le cv", "erreur cv", "modèle cv"],
     "entretien": ["entretien", "recrutement", "oral", "interview","questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile","simulateur", "recrutement", "recruteur","questions difficiles", "présentez-vous", "simulation entretien"],
-    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre"],
+    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre","cover letter"],
     "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
     "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
     "antonyme": ["antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"],
@@ -2730,15 +2742,15 @@ def extraire_theme(question_user):
     "python": ["python", "py", "pyhton", "piton"],
     "r": ["r", "langage r"],
     "data mining": ["data mining", "datamining", "mining", "extraction données"],
-    "scales": ["scales","SCALES","Bootcamps","Study Skills","LCSS",],
+    "scales": ["scales","SCALES","Bootcamps","Study Skills","module Writing and Oratory Skills","plagiat"],
     "mill": ["MILL","mill"],
     "worc": ["Worc","WORC","worc"],
-    "STADAC": ["STADAC","stadac","Stadac"],
-    "CS": ["cs","CS","Community Service"],
+    "STADAC": ["STADAC","stadac","Stadac","outil de programmation"],
+    "CS": ["cs","CS","Community Service","citoyenneté","civic engagement"],
     "cap": ["CAP","cap","IELTS","IP", "IP3"],
-    "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues"],
+    "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues","LCSS","exigences linguistiques","progrès en langues","langues étrangères","OTS"],
     "data science": ["data science", "datascience", "data scientist", "science des données"],
-    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler""recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle", "trouver un emploi"],
+    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler""recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle", "trouver un emploi","recherche d'emploi"],
     "linkedin": ["linkedin", "profil linkedin", "compte linkedin", "ajouter sur linkedin", "réseau linkedin","importance linkedin", "recommandation linkedin", "message linkedin", "partager linkedin"],
     "réseautage professionnel": ["réseau","contacts", "piston", "groupe", "meetup", "relations", "réseautage", "contacts pro"],
     "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
@@ -2838,6 +2850,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
