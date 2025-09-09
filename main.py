@@ -30,7 +30,7 @@ THEMES = {
     "cap": ["CAP","cap","IELTS","IP", "IP3"],
     "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues","LCSS","exigences linguistiques","progrès en langues","langues étrangères","OTS"],
     "data science": ["data science", "datascience", "data scientist", "science des données"],
-    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler""recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle", "trouver un emploi","recherche d'emploi"],
+    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler","recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle","étranger", "trouver un emploi","travail","job","recherche d'emploi"],
     "linkedin": ["linkedin", "profil linkedin", "compte linkedin", "ajouter sur linkedin", "réseau linkedin","importance linkedin", "recommandation linkedin", "message linkedin", "partager linkedin"],
     "réseautage professionnel": ["réseau","contacts", "piston", "groupe", "meetup", "relations", "réseautage", "contacts pro"],
     "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
@@ -42,7 +42,7 @@ THEMES = {
 
 
 base = [
-     # Exemples pour plusieurs thèmes, à enrichir
+
     {
         "question": "C'est quoi l'intelligence artificielle ?",
         "reponse": "C'est la discipline qui vise à faire réaliser à des machines des tâches normalement humaines.",
@@ -2711,7 +2711,613 @@ base = [
     "reponse": "Computer.",
     "theme": "traduction",
     "type": "definition"
-  }
+  },
+    {
+    "question": "Où peut-on trouver un job rapidement ?",
+    "reponse": "Sur les sites d’emploi en ligne (LinkedIn, Indeed, Rekrute, Anapec), via ton réseau professionnel, ou en envoyant des candidatures spontanées directement aux entreprises.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "conseil"
+  },
+  {
+    "question": "Comment trouver un stage en entreprise ?",
+    "reponse": "Prépare un CV ciblé, cherche sur les plateformes spécialisées (LinkedIn, Welcome to the Jungle, sites d’universités), et contacte aussi directement les recruteurs ou responsables RH.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "conseil"
+  },
+  {
+    "question": "Quels sites utiliser pour chercher un emploi ?",
+    "reponse": "LinkedIn, Indeed, Glassdoor, Monster, ainsi que les plateformes locales comme Rekrute ou Anapec.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "liste"
+  },
+  {
+    "question": "Comment décrocher un job sans expérience ?",
+    "reponse": "Mets en avant tes stages, projets scolaires, activités associatives, et compétences transférables. Fais aussi des candidatures spontanées pour montrer ta motivation.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "conseil"
+  },
+  {
+    "question": "Comment utiliser LinkedIn pour trouver un emploi ?",
+    "reponse": "Optimise ton profil (photo pro, résumé clair, compétences), suis des entreprises, active les alertes d’offres, et contacte directement les recruteurs.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "méthode"
+  },
+  {
+    "question": "Comment se démarquer dans une candidature ?",
+    "reponse": "Personnalise ton CV et ta lettre de motivation, mets en avant tes résultats chiffrés, et joins un portfolio ou des exemples concrets de ton travail.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "conseil"
+  },
+  {
+    "question": "Faut-il envoyer des candidatures spontanées ?",
+    "reponse": "Oui, car beaucoup de postes ne sont pas publiés. Cible les entreprises qui t’intéressent et envoie un mail court avec ton CV en expliquant ta valeur ajoutée.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "conseil"
+  },
+  {
+    "question": "Comment augmenter mes chances de décrocher un entretien ?",
+    "reponse": "Adapte ton CV à chaque offre, prépare un pitch de présentation, active ton réseau, et relance poliment après ta candidature.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "méthode"
+  },
+  {
+    "question": "Quels sont les canaux efficaces pour trouver un job ?",
+    "reponse": "Sites d’emploi, réseaux sociaux professionnels, cooptation (amis/collègues), événements de networking, forums emploi et salons de recrutement.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "liste"
+  },
+  {
+    "question": "Comment préparer une recherche d’emploi efficace ?",
+    "reponse": "Définis clairement le type de poste que tu veux, organise ton temps (ex: 2h par jour de candidatures), et tiens un tableau de suivi des offres et contacts.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "méthode"
+  },
+  {
+    "question": "Quels conseils pour décrocher un stage rapidement ?",
+    "reponse": "Commence tôt, contacte tes professeurs et anciens camarades, prépare un mail de motivation clair, et montre ta motivation même pour des missions courtes.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "conseil"
+  },
+  {
+    "question": "Comment relancer après une candidature ?",
+    "reponse": "Envoie un mail court et poli 7 jours après ta candidature, en rappelant ton intérêt et en proposant d’échanger davantage.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "script"
+  },
+    {
+    "question": "Comment rédiger un CV attractif ?",
+    "reponse": "Mets en avant tes expériences avec des résultats chiffrés, garde une mise en page claire, et adapte ton contenu à chaque offre d’emploi.",
+    "theme": "cv",
+    "type": "conseil"
+  },
+  {
+    "question": "Quelles sont les erreurs à éviter dans un CV ?",
+    "reponse": "Éviter les fautes d’orthographe, les informations inutiles (âge, état civil si non requis), les CV trop longs et les formulations vagues.",
+    "theme": "cv",
+    "type": "liste"
+  },
+  {
+    "question": "Combien de pages doit faire un CV ?",
+    "reponse": "En général une seule page suffit pour un jeune diplômé ou un profil junior, deux pages maximum pour un profil confirmé.",
+    "theme": "cv",
+    "type": "conseil"
+  },
+  {
+    "question": "Faut-il mettre une photo sur son CV ?",
+    "reponse": "Cela dépend du pays et du secteur. En France, la photo est encore courante, mais elle doit être professionnelle. Dans certains pays comme le Royaume-Uni ou les États-Unis, elle est déconseillée.",
+    "theme": "cv",
+    "type": "conseil"
+  },
+  {
+    "question": "Comment décrire mes expériences dans le CV ?",
+    "reponse": "Utilise des verbes d’action, précise les missions principales et surtout les résultats obtenus (exemple : 'Augmentation de 15% des ventes grâce à une nouvelle campagne marketing').",
+    "theme": "cv",
+    "type": "méthode"
+  },
+  {
+    "question": "Quels éléments inclure absolument dans un CV ?",
+    "reponse": "Les coordonnées, le titre du poste ciblé, un résumé ou profil professionnel, les expériences clés, les formations et les compétences techniques et linguistiques.",
+    "theme": "cv",
+    "type": "checklist"
+  },
+  {
+    "question": "Dois-je adapter mon CV pour chaque candidature ?",
+    "reponse": "Oui, il est recommandé d’adapter le titre, les compétences mises en avant et l’ordre des expériences selon l’offre visée.",
+    "theme": "cv",
+    "type": "conseil"
+  },
+  {
+    "question": "Comment expliquer un trou dans le CV ?",
+    "reponse": "Reste factuel, indique la raison brièvement (formation, projet personnel, période familiale) et montre ce que tu as appris durant ce temps.",
+    "theme": "cv",
+    "type": "conseil"
+  },
+  {
+    "question": "Qu’est-ce qu’un CV orienté résultats ?",
+    "reponse": "Un CV qui met l’accent sur les réalisations chiffrées plutôt que sur les tâches (exemple : 'Réduction du temps de traitement de 20% en optimisant un processus').",
+    "theme": "cv",
+    "type": "definition"
+  },
+  {
+    "question": "Dois-je mettre mes soft skills dans le CV ?",
+    "reponse": "Oui, mais plutôt de façon subtile : montre-les à travers tes expériences et réalisations plutôt qu’en liste brute.",
+    "theme": "cv",
+    "type": "conseil"
+  },
+  {
+    "question": "Quels outils utiliser pour créer un CV ?",
+    "reponse": "Canva, Word, ou des générateurs en ligne spécialisés. Attention à rester simple et lisible pour passer les systèmes ATS.",
+    "theme": "cv",
+    "type": "liste"
+  },
+  {
+    "question": "Comment rendre mon CV compatible ATS ?",
+    "reponse": "Utilise un format simple (texte, pas d’images ni tableaux complexes), insère des mots-clés de l’offre, et exporte en PDF.",
+    "theme": "cv",
+    "type": "méthode"
+  },
+    {
+    "question": "Je cherche du travail, que faire ?",
+    "reponse": "Commence par cibler le type de poste que tu veux, prépare un CV clair, inscris-toi sur des plateformes d’emploi, et active ton réseau personnel et professionnel.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "conseil"
+  },
+  {
+    "question": "Comment postuler à l’étranger ?",
+    "reponse": "Prépare un CV adapté aux standards du pays (ex : 1 page en anglais sans photo pour le Royaume-Uni ou les États-Unis), améliore ton niveau de langue, et utilise LinkedIn ou les sites internationaux pour postuler.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "méthode"
+  },
+  {
+    "question": "Je ne trouve pas d’emploi, que dois-je faire ?",
+    "reponse": "Diversifie tes recherches : utilise plusieurs sites, envoie aussi des candidatures spontanées, améliore ton CV et demande des retours pour l’optimiser.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "conseil"
+  },
+  {
+    "question": "Comment décrocher un travail sans expérience ?",
+    "reponse": "Mets en avant tes projets scolaires, stages, bénévolat ou activités associatives. Les recruteurs valorisent aussi la motivation et les compétences transférables.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "conseil"
+  },
+  {
+    "question": "Quelles sont les meilleures techniques pour trouver un emploi ?",
+    "reponse": "1) Personnaliser chaque candidature, 2) activer ton réseau et demander des recommandations, 3) publier du contenu pertinent sur LinkedIn, 4) relancer après avoir postulé.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "liste"
+  },
+  {
+    "question": "Je veux trouver un stage, comment faire ?",
+    "reponse": "Cherche sur les plateformes étudiantes et LinkedIn, contacte les entreprises directement, et demande à tes professeurs ou anciens camarades de te recommander.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "conseil"
+  },
+  {
+    "question": "Comment élargir mes chances de trouver du travail ?",
+    "reponse": "Ne te limite pas à un seul canal : combine sites d’emploi, candidatures spontanées, salons de recrutement, et échanges directs avec des professionnels.",
+    "theme": "techniques de recherche d'emploi et stage",
+    "type": "méthode"
+  },
+    {
+    "question": "Quel mot-clé permet de définir une fonction en Python ?",
+    "reponse": "def",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["def", "function", "fun"]
+  },
+  {
+    "question": "Quelle bibliothèque Python est utilisée pour manipuler des tableaux multidimensionnels ?",
+    "reponse": "NumPy",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["NumPy", "Matplotlib", "Requests"]
+  },
+  {
+    "question": "Quelle méthode permet de lire un fichier CSV avec pandas ?",
+    "reponse": "read_csv",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["read_csv", "load_csv", "open_csv"]
+  },
+  {
+    "question": "Quel est le symbole utilisé pour les commentaires en Python ?",
+    "reponse": "#",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["#", "//", "/* */"]
+  },
+  {
+    "question": "Quelle librairie Python est la plus utilisée pour le machine learning ?",
+    "reponse": "scikit-learn",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["scikit-learn", "Flask", "OpenCV"]
+  },
+  {
+    "question": "Quelle fonction Python affiche un texte à l’écran ?",
+    "reponse": "print",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["print", "echo", "display"]
+  },
+  {
+    "question": "Quel type de boucle parcourt une séquence en Python ?",
+    "reponse": "for",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["for", "foreach", "loop"]
+  },
+  {
+    "question": "Quel est le type de données renvoyé par la fonction input() en Python ?",
+    "reponse": "str",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["str", "int", "float"]
+  },
+  {
+    "question": "Quelle fonction retourne la longueur d’une liste en Python ?",
+    "reponse": "len",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["len", "length", "size"]
+  },
+  {
+    "question": "Quelle structure de données Python garantit des clés uniques ?",
+    "reponse": "dictionnaire",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["dictionnaire", "liste", "tuple"]
+  },
+  {
+    "question": "Quelle fonction sert à gérer les exceptions en Python ?",
+    "reponse": "try/except",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["try/except", "catch", "error handling"]
+  },
+  {
+    "question": "Quelle bibliothèque Python est utilisée pour la visualisation de données ?",
+    "reponse": "Matplotlib",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["Matplotlib", "NumPy", "Seaborn"]
+  },
+  {
+    "question": "Quel framework Python est utilisé pour créer des APIs rapides ?",
+    "reponse": "FastAPI",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["FastAPI", "Django", "Flask"]
+  },
+  {
+    "question": "Quelle est la valeur de 2**3 en Python ?",
+    "reponse": "8",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["8", "6", "9"]
+  },
+  {
+    "question": "Quelle méthode permet de supprimer un élément d’une liste Python ?",
+    "reponse": "remove",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["remove", "delete", "pop"]
+  },
+  {
+    "question": "Quelle bibliothèque Python est utilisée pour le deep learning ?",
+    "reponse": "TensorFlow",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["TensorFlow", "Pandas", "BeautifulSoup"]
+  },
+  {
+    "question": "Quelle commande permet d’installer une librairie Python ?",
+    "reponse": "pip install",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["pip install", "python add", "lib install"]
+  },
+  {
+    "question": "Quel mot-clé est utilisé pour créer une classe en Python ?",
+    "reponse": "class",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["class", "object", "define"]
+  },
+  {
+    "question": "Quelle fonction retourne le type d’une variable en Python ?",
+    "reponse": "type",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["type", "typeof", "class"]
+  },
+  {
+    "question": "Quel package Python est utilisé pour le scraping web ?",
+    "reponse": "BeautifulSoup",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["BeautifulSoup", "Seaborn", "scikit-learn"]
+  },
+    {
+    "question": "Quel symbole est utilisé pour assigner une valeur en R ?",
+    "reponse": "<-",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["<-", "=", ":"]
+  },
+  {
+    "question": "Quelle fonction affiche les six premières lignes d’un DataFrame en R ?",
+    "reponse": "head",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["head", "top", "first"]
+  },
+  {
+    "question": "Quel package R est spécialisé dans la visualisation ?",
+    "reponse": "ggplot2",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["ggplot2", "dplyr", "tidyr"]
+  },
+  {
+    "question": "Quelle fonction calcule la moyenne en R ?",
+    "reponse": "mean",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["mean", "avg", "moyenne"]
+  },
+  {
+    "question": "Quel package R est utilisé pour manipuler les données ?",
+    "reponse": "dplyr",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["dplyr", "shiny", "caret"]
+  },
+  {
+    "question": "Quelle fonction R lit un fichier CSV ?",
+    "reponse": "read.csv",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["read.csv", "load.csv", "import.csv"]
+  },
+  {
+    "question": "Quelle fonction calcule la médiane en R ?",
+    "reponse": "median",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["median", "mean", "mode"]
+  },
+  {
+    "question": "Quel package R est utilisé pour le machine learning ?",
+    "reponse": "caret",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["caret", "shiny", "ggplot2"]
+  },
+  {
+    "question": "Quelle fonction affiche la structure d’un objet en R ?",
+    "reponse": "str",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["str", "structure", "summary"]
+  },
+  {
+    "question": "Quel opérateur logique teste l’égalité en R ?",
+    "reponse": "==",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["==", "=", "==="]
+  },
+  {
+    "question": "Quel package R est utilisé pour les applications web interactives ?",
+    "reponse": "shiny",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["shiny", "dplyr", "tidyr"]
+  },
+  {
+    "question": "Quelle fonction renvoie la variance en R ?",
+    "reponse": "var",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["var", "variance", "sd"]
+  },
+  {
+    "question": "Quelle fonction calcule l’écart-type en R ?",
+    "reponse": "sd",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["sd", "stdev", "sqrt"]
+  },
+  {
+    "question": "Quelle fonction combine des vecteurs en R ?",
+    "reponse": "c",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["c", "combine", "concat"]
+  },
+  {
+    "question": "Quelle fonction renvoie les dimensions d’un DataFrame en R ?",
+    "reponse": "dim",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["dim", "size", "shape"]
+  },
+  {
+    "question": "Quel package R est utilisé pour l’imputation de données manquantes ?",
+    "reponse": "mice",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["mice", "tidyr", "caret"]
+  },
+  {
+    "question": "Quel opérateur sert à la concaténation de chaînes en R ?",
+    "reponse": "paste",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["paste", "concat", "join"]
+  },
+  {
+    "question": "Quelle fonction R affiche un résumé statistique des données ?",
+    "reponse": "summary",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["summary", "describe", "info"]
+  },
+  {
+    "question": "Quelle fonction génère des nombres aléatoires suivant une loi normale en R ?",
+    "reponse": "rnorm",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["rnorm", "norm", "randn"]
+  },
+  {
+    "question": "Quel package R est utilisé pour manipuler les données sous forme de tableaux rapides ?",
+    "reponse": "data.table",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["data.table", "dplyr", "tidyr"]
+  },
+    {
+    "question": "Quelle bibliothèque Python est principalement utilisée avec les GPU pour le deep learning ?",
+    "reponse": "PyTorch",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["PyTorch", "scikit-learn", "Seaborn"]
+  },
+  {
+    "question": "Quel est le module de haut niveau de TensorFlow pour créer des réseaux de neurones ?",
+    "reponse": "Keras",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["Keras", "NumPy", "Matplotlib"]
+  },
+  {
+    "question": "Quelle fonction PyTorch est utilisée pour calculer la rétropropagation ?",
+    "reponse": "backward()",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["backward()", "fit()", "train()"]
+  },
+  {
+    "question": "Quel framework Python est utilisé pour traiter de très grands volumes de données distribuées ?",
+    "reponse": "PySpark",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["PySpark", "FastAPI", "TensorFlow"]
+  },
+  {
+    "question": "Quelle bibliothèque Python est spécialisée dans le calcul parallèle sur de grands DataFrames ?",
+    "reponse": "Dask",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["Dask", "Polars", "pandas"]
+  },
+  {
+    "question": "Quel est l’optimiseur par défaut utilisé dans Keras ?",
+    "reponse": "Adam",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["Adam", "SGD", "RMSprop"]
+  },
+  {
+    "question": "Quelle est la fonction d’activation la plus utilisée dans les réseaux de neurones profonds ?",
+    "reponse": "ReLU",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["ReLU", "Sigmoid", "Tanh"]
+  },
+  {
+    "question": "Quel package Python est utilisé pour la visualisation interactive de gros jeux de données ?",
+    "reponse": "Plotly",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["Plotly", "Matplotlib", "Seaborn"]
+  },
+  {
+    "question": "Quel type de réseau neuronal est utilisé pour l’analyse d’images ?",
+    "reponse": "CNN (Convolutional Neural Network)",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["CNN (Convolutional Neural Network)", "RNN (Recurrent Neural Network)", "GAN (Generative Adversarial Network)"]
+  },
+  {
+    "question": "Quel type de réseau est utilisé pour le traitement du langage naturel en deep learning ?",
+    "reponse": "RNN (Recurrent Neural Network)",
+    "theme": "python",
+    "type": "quiz",
+    "propositions": ["RNN (Recurrent Neural Network)", "CNN", "DBN"]
+  },
+     {
+    "question": "Quelle fonction R est utilisée pour effectuer une analyse de variance (ANOVA) ?",
+    "reponse": "aov",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["aov", "anova", "lm"]
+  },
+  {
+    "question": "Quel package R est utilisé pour les modèles de forêts aléatoires ?",
+    "reponse": "randomForest",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["randomForest", "glmnet", "xgboost"]
+  },
+  {
+    "question": "Quel package R est utilisé pour le boosting en apprentissage automatique ?",
+    "reponse": "xgboost",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["xgboost", "caret", "shiny"]
+  },
+  {
+    "question": "Quelle fonction R est utilisée pour ajuster un modèle de régression logistique ?",
+    "reponse": "glm(..., family=binomial)",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["glm(..., family=binomial)", "lm", "logit"]
+  },
+  {
+    "question": "Quel package R est utilisé pour l’analyse de survie ?",
+    "reponse": "survival",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["survival", "lifelines", "timeSeries"]
+  },
+  {
+    "question": "Quelle fonction R est utilisée pour obtenir les valeurs propres d’une matrice ?",
+    "reponse": "eigen",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["eigen", "svd", "values"]
+  },
+  {
+    "question": "Quel package R permet de travailler avec des modèles de séries temporelles avancés ?",
+    "reponse": "forecast",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["forecast", "tsibble", "caret"]
+  },
+  {
+    "question": "Quelle fonction R est utilisée pour effectuer une analyse en composantes principales (ACP) ?",
+    "reponse": "prcomp",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["prcomp", "pca", "princomp"]
+  },
+  {
+    "question": "Quel package R est utilisé pour l’apprentissage profond ?",
+    "reponse": "keras",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["keras", "tensorflow", "torch"]
+  },
+  {
+    "question": "Quelle fonction R permet d’effectuer une régression Ridge ou Lasso ?",
+    "reponse": "glmnet",
+    "theme": "r",
+    "type": "quiz",
+    "propositions": ["glmnet", "lm", "ridge"]
+  },
 ]
 
 def extraire_theme(question_user):
@@ -2750,7 +3356,7 @@ def extraire_theme(question_user):
     "cap": ["CAP","cap","IELTS","IP", "IP3"],
     "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues","LCSS","exigences linguistiques","progrès en langues","langues étrangères","OTS"],
     "data science": ["data science", "datascience", "data scientist", "science des données"],
-    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler""recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle", "trouver un emploi","recherche d'emploi"],
+    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler","recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle","étranger", "trouver un emploi","travail","job","recherche d'emploi"],
     "linkedin": ["linkedin", "profil linkedin", "compte linkedin", "ajouter sur linkedin", "réseau linkedin","importance linkedin", "recommandation linkedin", "message linkedin", "partager linkedin"],
     "réseautage professionnel": ["réseau","contacts", "piston", "groupe", "meetup", "relations", "réseautage", "contacts pro"],
     "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
@@ -2758,6 +3364,7 @@ def extraire_theme(question_user):
     "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
     "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
+        
     }
     for th, mots in keywords.items():
         if any(m in question_user for m in mots):
@@ -2850,6 +3457,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
