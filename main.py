@@ -37,6 +37,7 @@ THEMES = {
     "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement","Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
     "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
     "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
+    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre"],
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
 }
 
@@ -227,7 +228,7 @@ base = [
   {
     "question": "C’est quoi les Bootcamps SCALES ?",
     "reponse": "Bootcamps : sessions courtes pour apprendre rapidement des compétences clés.",
-    "theme": "cap",
+    "theme": "scales",
     "type": "definition"
   },
   {
@@ -3318,6 +3319,119 @@ base = [
     "type": "quiz",
     "propositions": ["glmnet", "lm", "ridge"]
   },
+    {
+    "question": "Qui est le Manager de SCALES ?",
+    "reponse": "Amal Ouyizeme est la Manager de SCALES.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qui dirige SCALES ?",
+    "reponse": "Amal Ouyizeme est la Manager de SCALES.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qui est la responsable de SCALES ?",
+    "reponse": "Amal Ouyizeme est la Manager de SCALES.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+
+  {
+    "question": "Qui est l’Academic Advisor de SCALES ?",
+    "reponse": "Najib Bounahai est l’Academic Advisor de SCALES.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qui occupe le poste d’Academic Advisor ?",
+    "reponse": "Najib Bounahai est l’Academic Advisor de SCALES.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qui conseille académiquement SCALES ?",
+    "reponse": "Najib Bounahai est l’Academic Advisor de SCALES.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+
+  {
+    "question": "Qui est en charge du programme LAPEX et WORC ?",
+    "reponse": "Badreddine Sandid et Oumaima Belmaati sont Program Officers en charge de LAPEX et WORC.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qui gère le programme LAPEX ?",
+    "reponse": "Badreddine Sandid et Oumaima Belmaati sont Program Officers en charge de LAPEX et WORC.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qui s’occupe de WORC ?",
+    "reponse": "Badreddine Sandid et Oumaima Belmaati sont Program Officers en charge de LAPEX et WORC.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+
+  {
+    "question": "Qui est responsable du programme de stages ?",
+    "reponse": "Khadija Alaoui est Senior Operation Officer et responsable des stages (IP, IP3, CAP, MILL, Bootcamps).",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qui encadre les stages IP et IP3 ?",
+    "reponse": "Khadija Alaoui est Senior Operation Officer et responsable des stages (IP, IP3, CAP, MILL, Bootcamps).",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qui gère les Bootcamps à SCALES ?",
+    "reponse": "Khadija Alaoui est Senior Operation Officer et responsable des stages (IP, IP3, CAP, MILL, Bootcamps).",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+
+  {
+    "question": "Qui est responsable du programme STADAC ?",
+    "reponse": "Meryem Bouaalal et Oumaima Dali sont Junior Operation Officers en charge du programme STADAC.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qui s’occupe de STADAC ?",
+    "reponse": "Meryem Bouaalal et Oumaima Dali sont Junior Operation Officers en charge du programme STADAC.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qui gère le programme STADAC à SCALES ?",
+    "reponse": "Meryem Bouaalal et Oumaima Dali sont Junior Operation Officers en charge du programme STADAC.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+
+  {
+    "question": "Qui est responsable du programme Study Skills ?",
+    "reponse": "Ikrame Ennabil est Junior Operation Officer en charge de Study Skills.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qui gère Study Skills à SCALES ?",
+    "reponse": "Ikrame Ennabil est Junior Operation Officer en charge de Study Skills.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+  {
+    "question": "Qui s’occupe du programme Study Skills ?",
+    "reponse": "Ikrame Ennabil est Junior Operation Officer en charge de Study Skills.",
+    "theme": "personnel scales",
+    "type": "definition"
+  }
 ]
 
 def extraire_theme(question_user):
@@ -3363,6 +3477,7 @@ def extraire_theme(question_user):
     "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement","Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
     "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
     "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
+        "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre"],
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
         
     }
@@ -3457,6 +3572,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
