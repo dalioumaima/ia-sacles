@@ -3477,7 +3477,7 @@ def extraire_theme(question_user):
     "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement","Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
     "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
     "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
-        "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre"],
+    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre"],
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
         
     }
@@ -3572,6 +3572,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
