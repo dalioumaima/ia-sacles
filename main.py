@@ -8,7 +8,7 @@ app = Flask(__name__, static_folder="build", static_url_path="/")
 CORS(app)
 
 THEMES = {
-    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
+    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif","IA","AI"],
     "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences","adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
     "communication": ["communication", "communiquer", "comm","rapport","rapport académique","bibliographie","article"],
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
@@ -37,7 +37,7 @@ THEMES = {
     "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement","Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
     "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
     "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
-    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre","programme Study Skills","programme Lapex","lapex","worc","study skills","stadac","langues","programme des langues","LAPEX"],
+    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre","programme Study Skills","programme Lapex","lapex","worc","study skills","stadac","langues","programme des langues","LAPEX","qui t'as crée","programmé"],
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
 }
 
@@ -2369,17 +2369,22 @@ base = [
     "theme": "communication",
     "type": "avantage"
   },
-
   {
     "question": "Qui t'a crée?",
     "reponse": "DALI Oumaima.",
-    "theme": "IA",
+    "theme": "personnel scales",
+    "type": "avantage"
+  },
+    {
+    "question": "Qui t'a programmé ?",
+    "reponse": "DALI Oumaima.",
+    "theme": "personnel scales",
     "type": "avantage"
   },
   {
     "question": "Qui la directrice de Scales?",
     "reponse": "the wonderful Amal",
-    "theme": "IA",
+    "theme": "personnel scales",
     "type": "avantage"
   },
   # --- TRADUCTION ---
@@ -3459,7 +3464,7 @@ def extraire_theme(question_user):
                 best_theme = theme
     # Reconnaissance manuelle en cas d'ambiguïté
     keywords = {
-    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
+    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif","IA","AI"],
     "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences","adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
     "communication": ["communication", "communiquer", "comm","rapport","rapport académique","bibliographie","article"],
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
@@ -3488,7 +3493,7 @@ def extraire_theme(question_user):
     "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement","Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
     "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
     "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
-    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre","programme Study Skills","programme Lapex","lapex","worc","study skills","stadac","langues","programme des langues","LAPEX"],
+    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre","programme Study Skills","programme Lapex","lapex","worc","study skills","stadac","langues","programme des langues","LAPEX","qui t'as crée","programmé"],
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
         
     }
@@ -3583,6 +3588,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
