@@ -37,7 +37,7 @@ THEMES = {
     "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement","Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
     "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
     "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
-    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre","programme Study Skills","programme Lapex","lapex","worc","study skills","stadac","langues"],
+    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre","programme Study Skills","programme Lapex","lapex","worc","study skills","stadac","langues","programme des langues","LAPEX"],
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
 }
 
@@ -3356,7 +3356,6 @@ base = [
     "theme": "personnel scales",
     "type": "definition"
   },
-
   {
     "question": "Qui est responsable du programme LAPEX ?",
     "reponse": "Badreddine Sandid et Oumaima Belmaati sont en charge de LAPEX et WORC.",
@@ -3365,6 +3364,12 @@ base = [
   },
     {
     "question": "Qui est en charge du programme LAPEX et WORC ?",
+    "reponse": "Badreddine Sandid et Oumaima Belmaati sont en charge de LAPEX et WORC.",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
+{
+    "question": "Qui est en charge du programme des langues ?",
     "reponse": "Badreddine Sandid et Oumaima Belmaati sont en charge de LAPEX et WORC.",
     "theme": "personnel scales",
     "type": "definition"
@@ -3454,7 +3459,7 @@ def extraire_theme(question_user):
                 best_theme = theme
     # Reconnaissance manuelle en cas d'ambiguïté
     keywords = {
-     "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
+    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif"],
     "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences","adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
     "communication": ["communication", "communiquer", "comm","rapport","rapport académique","bibliographie","article"],
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
@@ -3483,7 +3488,7 @@ def extraire_theme(question_user):
     "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement","Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
     "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
     "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
-    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre","programme Study Skills","programme Lapex","lapex","worc","study skills","stadac","langues"],
+    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre","programme Study Skills","programme Lapex","lapex","worc","study skills","stadac","langues","programme des langues","LAPEX"],
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
         
     }
@@ -3578,6 +3583,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
