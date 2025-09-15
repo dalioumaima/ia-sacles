@@ -3643,9 +3643,75 @@ def repondre():
 
 @app.route('/quiz', methods=['POST'])
 def quiz():
+    """
+    Comportement:
+    - Si payload contient "question": on cherche la question de quiz la plus proche
+      et on renvoie en format PACK (q/a/correct) pour rester compatible avec le front.
+    - Sinon: on génère un pack de N questions (par thème s'il est fourni).
+    JSON attendu en entrée:
+      {
+        "question": "...",      # optionnel
+        "theme": "cv",          # optionnel (pour générer un pack)
+        "n": 5                  # optionnel (taille pack)
+      }
+    JSON en sortie:
+      { "quiz": [ {"q": str, "a": [str,...], "correct": int }, ... ] }
+    """
     data = request.get_json() or {}
     question = (data.get("question") or "").strip()
-    return jsonify(smart_quiz(question))
+    theme_hint = (data.get("theme") or "").strip()
+    n = int(data.get("n") or 5)
+
+    # --- helper: conversion d'une entrée "quiz" (base) -> item pour le front
+    def to_pack_item(entry):
+        qtxt = entry.get("question", "")
+        correct = entry.get("reponse", "")
+        props = entry.get("propositions", []) or []
+        # garantir présence de la bonne réponse dans les options
+        options = list(dict.fromkeys([correct] + props))
+        # si le front attend 3 options, tronquer/compléter si besoin
+        if len(options) < 3:
+            # on complète (façon simple) avec des leurres génériques
+            fillers = ["Option A", "Option B", "Option C", "Option D"]
+            for f in fillers:
+                if f not in options and len(options) < 3:
+                    options.append(f)
+        elif len(options) > 4:
+            options = options[:4]  # max 4 options si tu préfères
+        random.shuffle(options)
+        correct_idx = options.index(correct) if correct in options else 0
+        return {"q": qtxt, "a": options, "correct": correct_idx}
+
+    # --- cas 1: on a une "question" -> utiliser smart_quiz puis convertir en PACK
+    if question:
+        result = smart_quiz(question)
+        # smart_quiz renvoie {"reponse": "...", "propositions": [...]}
+        # On convertit au format PACK attendu par le front.
+        entry = {
+            "question": question,
+            "reponse": result.get("reponse", ""),
+            "propositions": result.get("propositions", []) or []
+        }
+        return jsonify({"quiz": [to_pack_item(entry)]})
+
+    # --- cas 2: pas de "question" -> générer un pack de quiz (par thème si fourni)
+    # détecter le thème (on utilise ta détection existante)
+    t_norm = _detect_theme_norm(theme_hint) if theme_hint else "general"
+
+    # candidates = uniquement les entrées de type 'quiz'
+    candidates = [e for e in base if (e.get("type","") or "").lower() == "quiz"]
+
+    # si un thème est donné, filtrer par thème normalisé ; sinon, garder global
+    if t_norm != "general":
+        candidates_t = [e for e in candidates if _norm(e.get("theme","")) == t_norm]
+        # si trop peu d'items sur ce thème, fallback au global
+        candidates = candidates_t if len(candidates_t) >= 2 else candidates
+
+    random.shuffle(candidates)
+    pack = [to_pack_item(e) for e in candidates[:max(2, n)]]
+
+    return jsonify({"quiz": pack})
+
     
 # ====== Route spéciale pour servir le React build (doit être tout à la fin) ======
 @app.route('/', defaults={'path': ''})
@@ -3660,6 +3726,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
