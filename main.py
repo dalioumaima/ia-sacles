@@ -3474,31 +3474,31 @@ base = [
   },
   {
     "question": "Qui est responsable du programme LAPEX ?",
-    "reponse": "Badreddine Sandid et Oumaima Belmaati sont en charge de LAPEX et WORC.",
+    "reponse": "Badreddine Sandid est en charge de LAPEX et WORC.",
     "theme": "personnel scales",
     "type": "definition"
   },
     {
     "question": "Qui est en charge du programme LAPEX et WORC ?",
-    "reponse": "Badreddine Sandid et Oumaima Belmaati sont en charge de LAPEX et WORC.",
+    "reponse": "Badreddine Sandid est en charge de LAPEX et WORC.",
     "theme": "personnel scales",
     "type": "definition"
   },
 {
     "question": "Qui est en charge du programme des langues ?",
-    "reponse": "Badreddine Sandid et Oumaima Belmaati sont en charge de LAPEX et WORC.",
+    "reponse": "Badreddine Sandid est en charge de LAPEX et WORC.",
     "theme": "personnel scales",
     "type": "definition"
   },
   {
     "question": "Qui gère le programme LAPEX ?",
-    "reponse": "Badreddine Sandid et Oumaima Belmaati sont en charge de LAPEX et WORC.",
+    "reponse": "Badreddine Sandid est en charge de LAPEX et WORC.",
     "theme": "personnel scales",
     "type": "definition"
   },
   {
     "question": "Qui s’occupe de WORC ?",
-    "reponse": "Badreddine Sandid et Oumaima Belmaati sont en charge de LAPEX et WORC.",
+    "reponse": "Badreddine Sandid est sont en charge de LAPEX et WORC.",
     "theme": "personnel scales",
     "type": "definition"
   },
@@ -3699,6 +3699,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
