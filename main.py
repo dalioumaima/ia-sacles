@@ -3,6 +3,7 @@ from flask_cors import CORS
 import random
 from fuzzywuzzy import fuzz
 import os
+import unicodedata, re
 
 app = Flask(__name__, static_folder="build", static_url_path="/")
 CORS(app)
@@ -3496,199 +3497,153 @@ def extraire_theme(question_user):
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
         
     }
-    for th, mots in keywords.items():
-        if any(m in question_user for m in mots):
-            return th
-    if best_score > 45:
-        return best_theme
-    return None
-
-def simple_reformulation(texte, theme):
-    if texte:
-        alternatives = [
-            lambda s: f"En d'autres termes ({theme}) : {s}",
-            lambda s: f"Autrement dit ({theme}) : " + s.lower(),
-            lambda s: f"On peut résumer ainsi ({theme}) : {s}",
-            lambda s: s.replace("c'est", "cela désigne").replace("C'est", "Cela désigne"),
-            lambda s: f"On pourrait dire que ({theme}) : " + s.lower()
-        ]
-        reformulation = random.choice(alternatives)(texte)
-        if reformulation == texte:
-            reformulation = f"Pour faire simple ({theme}) : " + texte
-        return reformulation
-    else:
-        # Si pas de définition dans la base, essaye de paraphraser la question en réponse
-        return f"Je comprends que tu veux une définition sur le thème '{theme}'. En résumé, c'est un concept clé à approfondir dans ce domaine."
-import re, math, unicodedata
-
-# --- utils texte ---
-_TOKEN_RE = re.compile(r"[A-Za-zÀ-ÖØ-öø-ÿ0-9_]+")
-
-def _normalize(s: str) -> str:
-    s = unicodedata.normalize("NFKC", s or "")
-    s = s.replace("\u00A0", " ").strip()
-    s = re.sub(r"\s+", " ", s)
+   # --- Normalisation (accents/majuscules/espaces) ---
+def _norm(s: str) -> str:
+    s = s or ""
+    s = unicodedata.normalize("NFKC", s)
+    s = s.replace("\u00A0", " ")
+    s = re.sub(r"\s+", " ", s).strip().lower()
+    # supprime les accents
+    s = "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
     return s
 
-def _strip_accents_lower(s: str) -> str:
-    s = _normalize(s).lower()
-    return "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
+# --- Index léger par thème + versions normalisées ---
+_BASE_NORM = []
+for i, item in enumerate(base):
+    q = _norm(item.get("question", ""))
+    r = item.get("reponse", "")
+    theme_raw = item.get("theme", "") or ""
+    theme_norm = _norm(theme_raw)
+    typ = (item.get("type", "") or "").lower()
+    _BASE_NORM.append({
+        "i": i,
+        "q_norm": q,
+        "r": r,
+        "theme": theme_raw,
+        "theme_norm": theme_norm,
+        "type": typ,
+        "orig": item
+    })
 
-def _tok(s: str):
-    return [t.lower() for t in _TOKEN_RE.findall(_normalize(s))]
+# Normalise les mots-clés de THEMES -> {theme_norm: [kw_norm,...]}
+_THEMES_NORM = { _norm(tk): list({ _norm(w) for w in kws }) for tk, kws in THEMES.items() }
 
-# --- BM25 sans dépendances ---
-class _BM25:
-    def __init__(self, docs, k1=1.5, b=0.75):
-        self.k1, self.b = k1, b
-        self.docs = [_tok(d) for d in docs]
-        self.N = len(self.docs)
-        self.df = {}
-        self.avgdl = sum(len(d) for d in self.docs) / (self.N or 1)
-        for d in self.docs:
-            seen = set()
-            for w in d:
-                if w not in seen:
-                    self.df[w] = self.df.get(w, 0) + 1
-                    seen.add(w)
-        self.idf = {w: math.log(1 + (self.N - df + 0.5)/(df + 0.5)) for w, df in self.df.items()}
+# --- Détection du thème probable à partir de la question ---
+def _detect_theme_norm(q: str) -> str:
+    qn = _norm(q)
+    best_theme, best_hit = "general", 0
+    for t_norm, kws in _THEMES_NORM.items():
+        hit = max((1 if kw in qn else 0) for kw in kws) if kws else 0
+        if hit > best_hit:
+            best_theme, best_hit = t_norm, hit
+    return best_theme
 
-    def _score(self, q_tokens, idx):
-        doc = self.docs[idx]; dl = len(doc)
-        freq = {}
-        for w in doc: freq[w] = freq.get(w, 0) + 1
-        s = 0.0
-        for w in q_tokens:
-            if w not in self.idf: 
-                continue
-            f = freq.get(w, 0)
-            if f == 0:
-                continue
-            denom = f + self.k1*(1 - self.b + self.b*dl/(self.avgdl or 1))
-            s += self.idf[w] * (f*(self.k1+1)) / (denom or 1)
-        return s
+# --- Récupère les candidats par thème (filtre souple) ---
+def _candidates_by_theme(q: str):
+    t = _detect_theme_norm(q)
+    if t == "general":
+        return _BASE_NORM  # pas de filtre
+    # accepte les entrées dont le theme_norm == t OU dont la question contient un mot-clé du thème
+    kws = set(_THEMES_NORM.get(t, []))
+    if not kws:
+        return _BASE_NORM
+    res = []
+    qn = _norm(q)
+    for it in _BASE_NORM:
+        if it["theme_norm"] == t:
+            res.append(it)
+        else:
+            # si la question de la base contient un mot-clé du thème détecté, on garde
+            if any(kw and kw in it["q_norm"] for kw in kws):
+                res.append(it)
+    # fallback si trop peu
+    return res if len(res) >= 5 else _BASE_NORM
 
-    def topk(self, query, k=3):
-        q = _tok(query)
-        scores = [(i, self._score(q, i)) for i in range(self.N)]
-        scores.sort(key=lambda x: x[1], reverse=True)
-        return scores[:k]
+# --- Score fuzzy combiné (plus robuste que simple ratio) ---
+def _score(q_norm: str, cand_q_norm: str) -> int:
+    # blend de plusieurs mesures fuzzywuzzy
+    a = fuzz.token_set_ratio(q_norm, cand_q_norm)
+    b = fuzz.partial_ratio(q_norm, cand_q_norm)
+    c = fuzz.token_sort_ratio(q_norm, cand_q_norm)
+    return int(0.5*a + 0.3*b + 0.2*c)
 
-# --- Construction des index à partir de ta variable `base` ---
-# Index global (sur question + reponse)
-_CORPUS = [(i, (e.get("question","") + " " + e.get("reponse","")).strip()) for i, e in enumerate(base)]
-_BM = _BM25([c for _, c in _CORPUS]) if _CORPUS else None
-
-# Index quiz (sur les seules questions de type quiz)
-_QUIZ_ITEMS = [(i, e) for i, e in enumerate(base) if str(e.get("type","")).lower() == "quiz"]
-_QUIZ_CORPUS = [(i, e.get("question","")) for i, e in _QUIZ_ITEMS]
-_QUIZ_BM = _BM25([q for _, q in _QUIZ_CORPUS]) if _QUIZ_CORPUS else None
-
-# Seuils (tu peux ajuster si besoin)
-_BM25_SEUIL = 2.3         # 2.0 → plus “large”, 2.6–3.0 → plus strict
-_BM25_TOPK = 3
-
-# --- Cherche exact (normalisé accents/majuscules) ---
-def _lookup_exact(question: str):
-    qn = _strip_accents_lower(question)
-    for e in base:
-        if _strip_accents_lower(e.get("question","")) == qn:
-            return e
-    return None
-
-# --- Meilleur match BM25 (global) ---
-def _bm25_best(question: str):
-    if not _BM or not _CORPUS:
-        return None, 0.0
-    hits = _BM.topk(question, k=_BM25_TOPK)
-    if not hits:
-        return None, 0.0
-    best_idx, score = hits[0]
-    if score < _BM25_SEUIL:
-        return None, score
-    real_idx = _CORPUS[best_idx][0]
-    return base[real_idx], score
-
-# --- Meilleur match BM25 (quiz uniquement) ---
-def _bm25_best_quiz(question: str):
-    if not _QUIZ_BM or not _QUIZ_CORPUS:
-        return None, 0.0
-    hits = _QUIZ_BM.topk(question, k=max(1, _BM25_TOPK))
-    if not hits:
-        return None, 0.0
-    best_idx, score = hits[0]
-    quiz_threshold = max(1.5, _BM25_SEUIL - 0.5)  # un peu plus tolérant pour les quiz
-    if score < quiz_threshold:
-        return None, score
-    real_idx = _QUIZ_CORPUS[best_idx][0]
-    return _QUIZ_ITEMS[real_idx][1], score
-
-# --- Réponses finales prêtes à appeler depuis tes routes ---
-_FALLBACK = "Je n’ai pas cette info précise dans ma base. Reformule avec un peu plus de contexte (thème/programme) et je t’aide."
-
-def get_answer(question: str) -> str:
+# --- Recherche intelligente (réponse générale) ---
+def smart_answer(question: str) -> str:
     q = (question or "").strip()
     if not q:
         return "Pose ta question et je t’aide 😊"
-    # 1) exact
-    e = _lookup_exact(q)
-    if e:
-        return e.get("reponse","")
-    # 2) BM25 global
-    best, score = _bm25_best(q)
-    if best:
-        return best.get("reponse","")
-    # 3) filet
-    return _FALLBACK
 
-def get_quiz(question: str) -> dict:
+    qn = _norm(q)
+
+    # 1) match exact (normalisé)
+    for it in _BASE_NORM:
+        if qn == it["q_norm"]:
+            return it["r"]
+
+    # 2) candidats guidés par thème
+    cands = _candidates_by_theme(q)
+
+    # 3) fuzzy sur les candidats
+    best = None
+    best_s = -1
+    for it in cands:
+        s = _score(qn, it["q_norm"])
+        if s > best_s:
+            best, best_s = it, s
+
+    # 4) seuils : 90 = quasi sûr, 75 = pertinent, sinon fallback
+    if best and best_s >= 90:
+        return best["r"]
+    if best and best_s >= 75:
+        return best["r"]
+
+    # 5) dernier recours : petite “aide à formuler” mais jamais vide
+    # (Tu peux remplacer par un mini playbook selon le thème détecté)
+    t = _detect_theme_norm(q)
+    if t != "general":
+        return "Je n’ai pas cette info exacte, mais je peux t’aider sur ce thème. Précise ta question (ex : qui, quoi, comment, où) et je détaille."
+    return "Je n’ai pas cette info exacte. Donne un peu plus de contexte (thème/programme/objectif) et je te propose une réponse utile."
+
+# --- Recherche intelligente pour les quiz (ne regarde que type='quiz') ---
+def smart_quiz(question: str):
     q = (question or "").strip()
     if not q:
-        return {"reponse":"Pose une question de quiz.","propositions":[]}
-    # 1) exact sur quiz
-    qn = _strip_accents_lower(q)
-    for e in base:
-        if str(e.get("type","")).lower() == "quiz" and _strip_accents_lower(e.get("question","")) == qn:
-            return {"reponse": e.get("reponse",""), "propositions": e.get("propositions", []) or []}
-    # 2) BM25 sur quiz
-    best, score = _bm25_best_quiz(q)
-    if best:
-        return {"reponse": best.get("reponse",""), "propositions": best.get("propositions", []) or []}
-    # 3) filet
-    return {"reponse": _FALLBACK, "propositions":[]}
-# ===== fin du bloc =====
+        return {"reponse": "Pose une question de quiz.", "propositions": []}
+    qn = _norm(q)
+
+    # 1) exact parmi les quiz
+    for it in _BASE_NORM:
+        if it["type"] == "quiz" and qn == it["q_norm"]:
+            return {
+                "reponse": it["orig"].get("reponse", ""),
+                "propositions": it["orig"].get("propositions", []) or []
+            }
+
+    # 2) fuzzy uniquement sur quiz
+    quiz_cands = [it for it in _BASE_NORM if it["type"] == "quiz"]
+    if not quiz_cands:
+        return {"reponse": "Aucun quiz n’est défini pour l’instant.", "propositions": []}
+
+    best, best_s = None, -1
+    for it in quiz_cands:
+        s = _score(qn, it["q_norm"])
+        if s > best_s:
+            best, best_s = it, s
+
+    if best and best_s >= 80:
+        return {
+            "reponse": best["orig"].get("reponse", ""),
+            "propositions": best["orig"].get("propositions", []) or []
+        }
+
+    return {"reponse": "Je n’ai pas trouvé le quiz exact. Reformule légèrement ta question.", "propositions": []}
+# ===================== fin du bloc =====================
+@app.route('/repondre', methods=['POST'])
 @app.route('/repondre', methods=['POST'])
 def repondre():
-    data = request.get_json()
-    question = data.get('question', '').strip().lower()
-    previous = data.get('previous', None)
-    theme = extraire_theme(question)
-
-    # 1. D'abord, cherche une correspondance quasi exacte de la question !
-    for elem in base:
-        if elem.get("question") and fuzz.token_set_ratio(elem["question"].lower(), question) > 87:
-            return jsonify({"reponse": elem["reponse"]})
-
-    # 2. Si demande de reformulation ou de définition, fait une reformulation intelligente (jamais hors sujet)
-    if any(mot in question for mot in ["reformule", "explique autrement", "définition", "c'est quoi", "definir", "expliquer"]):
-        defs = [elem["reponse"] for elem in base if elem.get("theme") == theme and elem.get("type") == "definition"]
-        if defs:
-            reformu = [d for d in defs if d != previous]
-            if reformu:
-                return jsonify({"reponse": simple_reformulation(random.choice(reformu), theme)})
-            else:
-                return jsonify({"reponse": simple_reformulation(defs[0], theme)})
-        else:
-            return jsonify({"reponse": simple_reformulation(None, theme if theme else "cette thématique")})
-
-    # 3. Sinon, réponse normale (définition prioritaire par thème si rien d'autre trouvé)
-    for elem in base:
-        if elem.get("theme") == theme and elem.get("type") == "definition":
-            return jsonify({"reponse": elem["reponse"]})
-    for elem in base:
-        if elem.get("theme") == theme:
-            return jsonify({"reponse": elem["reponse"]})
-    return jsonify({"reponse": f"Je n'ai pas encore de réponse détaillée pour ce sujet, mais tu peux préciser ta question ou changer la formulation."})
+    data = request.get_json() or {}
+    question = (data.get("question") or "").strip()
+    return jsonify({"reponse": smart_answer(question)})
 
 @app.route('/quiz', methods=['POST'])
 def quiz():
@@ -3724,6 +3679,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
