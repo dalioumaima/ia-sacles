@@ -6,7 +6,118 @@ import os
 
 app = Flask(__name__, static_folder="build", static_url_path="/")
 CORS(app)
+with open("qa_base.json", "r", encoding="utf-8") as f:
+    base = json.load(f)
 
+# ---------------------------
+# Utils : normalisation & tokenisation
+# ---------------------------
+_TOKEN_RE = re.compile(r"[A-Za-zÀ-ÖØ-öø-ÿ0-9_]+")
+
+def normalize(s: str) -> str:
+    s = unicodedata.normalize("NFKC", s or "")
+    s = s.replace("\u00A0", " ").strip()
+    s = re.sub(r"\s+", " ", s)
+    return s
+
+def tokenize(s: str):
+    return [t.lower() for t in _TOKEN_RE.findall(normalize(s))]
+
+# ---------------------------
+# BM25 maison (offline)
+# ---------------------------
+class BM25:
+    def __init__(self, docs, k1=1.5, b=0.75):
+        self.k1, self.b = k1, b
+        self.docs = [tokenize(d) for d in docs]
+        self.N = len(self.docs)
+        self.df = {}
+        self.avgdl = sum(len(d) for d in self.docs) / (self.N or 1)
+        for d in self.docs:
+            seen = set()
+            for w in d:
+                if w not in seen:
+                    self.df[w] = self.df.get(w, 0) + 1
+                    seen.add(w)
+        self.idf = {w: math.log(1 + (self.N - df + 0.5)/(df + 0.5)) for w, df in self.df.items()}
+
+    def _score_one(self, q_tokens, idx):
+        doc = self.docs[idx]; dl = len(doc)
+        freq = {}
+        for w in doc: freq[w] = freq.get(w, 0) + 1
+        score = 0.0
+        for w in q_tokens:
+            if w not in self.idf: continue
+            f = freq.get(w, 0)
+            if f == 0: continue
+            denom = f + self.k1*(1 - self.b + self.b*dl/(self.avgdl or 1))
+            score += self.idf[w] * (f*(self.k1+1)) / (denom or 1)
+        return score
+
+    def topk(self, query, k=3):
+        q_tokens = tokenize(query)
+        scores = [(i, self._score_one(q_tokens, i)) for i in range(self.N)]
+        scores.sort(key=lambda x: x[1], reverse=True)
+        return scores[:k]
+
+# ---------------------------
+# Indexation BM25
+# ---------------------------
+_CORPUS = [(i, (e.get("question","") + " " + e.get("reponse","")).strip()) for i, e in enumerate(base)]
+_BM = BM25([c for _, c in _CORPUS])
+_BM25_SEUIL = 2.3
+_BM25_TOPK = 3
+
+# ---------------------------
+# Fallback si rien trouvé
+# ---------------------------
+def _fallback_offline(user_q: str) -> str:
+    hits = _BM.topk(user_q, k=_BM25_TOPK)
+    if hits and hits[0][1] >= _BM25_SEUIL:
+        best_idx = hits[0][0]
+        real_idx = _CORPUS[best_idx][0]
+        item = base[real_idx]
+        return item.get("reponse","")
+    return (
+        "Je n’ai pas cette info exacte dans ma base, "
+        "mais tu peux préciser ta question (thème, programme, ou langage) pour que je t’aide mieux."
+    )
+
+# ---------------------------
+# Route principale /repondre
+# ---------------------------
+@app.route('/repondre', methods=['POST'])
+def repondre():
+    data = request.get_json()
+    question = data.get("question","").strip()
+
+    # 1) recherche exacte
+    for e in base:
+        if question.lower() == e.get("question","").lower():
+            return jsonify({"reponse": e.get("reponse","")})
+
+    # 2) sinon BM25
+    reponse_fallback = _fallback_offline(question)
+    return jsonify({"reponse": reponse_fallback})
+
+# ---------------------------
+# Route quiz
+# ---------------------------
+@app.route('/quiz', methods=['POST'])
+def quiz():
+    data = request.get_json()
+    q = data.get("question","").strip()
+    for e in base:
+        if e.get("type") == "quiz" and q.lower() == e.get("question","").lower():
+            return jsonify({
+                "reponse": e.get("reponse"),
+                "propositions": e.get("propositions",[])
+            })
+    return jsonify({
+        "reponse": _fallback_offline(q),
+        "propositions": []
+    })
+    
 THEMES = {
     "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif","IA","AI"],
     "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences","adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
@@ -3588,6 +3699,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
