@@ -3,7 +3,7 @@ from flask_cors import CORS
 import random
 from fuzzywuzzy import fuzz
 import os
-import unicodedata, re
+import unicodedata, re, math 
 
 app = Flask(__name__, static_folder="build", static_url_path="/")
 CORS(app)
@@ -3497,143 +3497,144 @@ def extraire_theme(question_user):
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
         
     }
-   # --- Normalisation (accents/majuscules/espaces) ---
+# ===================== INTELLIGENCE OFFLINE =====================
 def _norm(s: str) -> str:
     s = s or ""
     s = unicodedata.normalize("NFKC", s)
     s = s.replace("\u00A0", " ")
     s = re.sub(r"\s+", " ", s).strip().lower()
-    # supprime les accents
-    s = "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
-    return s
+    return "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
 
-# --- Index léger par thème + versions normalisées ---
 _BASE_NORM = []
 for i, item in enumerate(base):
-    q = _norm(item.get("question", ""))
-    r = item.get("reponse", "")
-    theme_raw = item.get("theme", "") or ""
-    theme_norm = _norm(theme_raw)
-    typ = (item.get("type", "") or "").lower()
     _BASE_NORM.append({
         "i": i,
-        "q_norm": q,
-        "r": r,
-        "theme": theme_raw,
-        "theme_norm": theme_norm,
-        "type": typ,
+        "q_norm": _norm(item.get("question", "")),
+        "r": item.get("reponse", ""),
+        "theme": item.get("theme", ""),
+        "theme_norm": _norm(item.get("theme", "")),
+        "type": (item.get("type", "") or "").lower(),
         "orig": item
     })
 
-# Normalise les mots-clés de THEMES -> {theme_norm: [kw_norm,...]}
 _THEMES_NORM = { _norm(tk): list({ _norm(w) for w in kws }) for tk, kws in THEMES.items() }
 
-# --- Détection du thème probable à partir de la question ---
 def _detect_theme_norm(q: str) -> str:
     qn = _norm(q)
     best_theme, best_hit = "general", 0
     for t_norm, kws in _THEMES_NORM.items():
-        hit = max((1 if kw in qn else 0) for kw in kws) if kws else 0
+        hit = 1 if any(kw and kw in qn for kw in kws) else 0
         if hit > best_hit:
             best_theme, best_hit = t_norm, hit
     return best_theme
 
-# --- Récupère les candidats par thème (filtre souple) ---
 def _candidates_by_theme(q: str):
     t = _detect_theme_norm(q)
     if t == "general":
-        return _BASE_NORM  # pas de filtre
-    # accepte les entrées dont le theme_norm == t OU dont la question contient un mot-clé du thème
+        return _BASE_NORM
     kws = set(_THEMES_NORM.get(t, []))
     if not kws:
         return _BASE_NORM
     res = []
     qn = _norm(q)
     for it in _BASE_NORM:
-        if it["theme_norm"] == t:
+        if it["theme_norm"] == t or any(kw and kw in it["q_norm"] for kw in kws):
             res.append(it)
-        else:
-            # si la question de la base contient un mot-clé du thème détecté, on garde
-            if any(kw and kw in it["q_norm"] for kw in kws):
-                res.append(it)
-    # fallback si trop peu
     return res if len(res) >= 5 else _BASE_NORM
 
-# --- Score fuzzy combiné (plus robuste que simple ratio) ---
 def _score(q_norm: str, cand_q_norm: str) -> int:
-    # blend de plusieurs mesures fuzzywuzzy
     a = fuzz.token_set_ratio(q_norm, cand_q_norm)
     b = fuzz.partial_ratio(q_norm, cand_q_norm)
     c = fuzz.token_sort_ratio(q_norm, cand_q_norm)
     return int(0.5*a + 0.3*b + 0.2*c)
 
-# --- Recherche intelligente (réponse générale) ---
+# ===================== THEMATIC KB =====================
+_THEMATIC_KB = {
+    "cv": {
+        "principes": ["1 page claire", "Résultats chiffrés", "Mots-clés de l’offre", "Mise en page simple"],
+        "actions": ["Adapter le titre", "Mettre projets pertinents", "Nettoyer fautes", "Exporter en PDF"]
+    },
+    "techniques de recherche d'emploi et stage": {
+        "principes": ["Cibler offres alignées", "Activer réseau", "Candidatures personnalisées"],
+        "actions": ["Suivre candidatures", "Contacter 2 personnes", "Relancer en J+7"]
+    },
+    "python": {
+        "principes": ["pandas, NumPy", "scikit-learn", "PEP8 + virtualenv"],
+        "actions": ["pd.read_csv()", "pd.merge()", "model.fit()"]
+    },
+    "r": {
+        "principes": ["tidyverse, ggplot2", "lm/glm", "caret"],
+        "actions": ["filter+mutate", "ggplot", "lm() + summary()"]
+    },
+    "intelligence artificielle": {
+        "principes": ["Classification, régression, clustering", "Toujours valider par métriques"],
+        "actions": ["Clarifier la tâche", "Commencer baseline simple"]
+    }
+}
+
+def _generate_thematic_answer(question: str) -> str:
+    t_norm = _detect_theme_norm(question)
+    # map clé
+    def _key_real(norm_key):
+        for k in _THEMATIC_KB.keys():
+            if _norm(k) == norm_key:
+                return k
+        return None
+    real_key = _key_real(t_norm)
+    if not real_key:
+        return "Je n’ai pas cette info exacte. Donne plus de contexte (CV, emploi, Python, R, IA)."
+    kb = _THEMATIC_KB[real_key]
+    lines = [f"Réponse rapide — thème {real_key} :"]
+    if kb.get("principes"):
+        lines.append("Principes clés :")
+        for p in kb["principes"]:
+            lines.append(f"• {p}")
+    if kb.get("actions"):
+        lines.append("Actions concrètes :")
+        for a in kb["actions"]:
+            lines.append(f"• {a}")
+    return "\n".join(lines)
+
+# ===================== SMART ANSWER + QUIZ =====================
 def smart_answer(question: str) -> str:
     q = (question or "").strip()
     if not q:
         return "Pose ta question et je t’aide 😊"
-
     qn = _norm(q)
-
-    # 1) match exact (normalisé)
     for it in _BASE_NORM:
         if qn == it["q_norm"]:
             return it["r"]
-
-    # 2) candidats guidés par thème
     cands = _candidates_by_theme(q)
-
-    # 3) fuzzy sur les candidats
-    best = None
-    best_s = -1
+    best, best_s = None, -1
     for it in cands:
         s = _score(qn, it["q_norm"])
         if s > best_s:
             best, best_s = it, s
+    if best and best_s >= 90: return best["r"]
+    if best and best_s >= 75: return best["r"]
+    return _generate_thematic_answer(q)
 
-    # 4) seuils : 90 = quasi sûr, 75 = pertinent, sinon fallback
-    if best and best_s >= 90:
-        return best["r"]
-    if best and best_s >= 75:
-        return best["r"]
-
-   return _generate_thematic_answer(q)
-
-# --- Recherche intelligente pour les quiz (ne regarde que type='quiz') ---
 def smart_quiz(question: str):
     q = (question or "").strip()
     if not q:
-        return {"reponse": "Pose une question de quiz.", "propositions": []}
+        return {"reponse":"Pose une question de quiz.","propositions":[]}
     qn = _norm(q)
-
-    # 1) exact parmi les quiz
     for it in _BASE_NORM:
         if it["type"] == "quiz" and qn == it["q_norm"]:
-            return {
-                "reponse": it["orig"].get("reponse", ""),
-                "propositions": it["orig"].get("propositions", []) or []
-            }
-
-    # 2) fuzzy uniquement sur quiz
+            return {"reponse": it["orig"].get("reponse",""), "propositions": it["orig"].get("propositions",[])}
     quiz_cands = [it for it in _BASE_NORM if it["type"] == "quiz"]
     if not quiz_cands:
-        return {"reponse": "Aucun quiz n’est défini pour l’instant.", "propositions": []}
-
+        return {"reponse":"Aucun quiz défini.","propositions":[]}
     best, best_s = None, -1
     for it in quiz_cands:
         s = _score(qn, it["q_norm"])
         if s > best_s:
             best, best_s = it, s
-
     if best and best_s >= 80:
-        return {
-            "reponse": best["orig"].get("reponse", ""),
-            "propositions": best["orig"].get("propositions", []) or []
-        }
+        return {"reponse": best["orig"].get("reponse",""), "propositions": best["orig"].get("propositions",[])}
+    return {"reponse":"Quiz introuvable, reformule.","propositions":[]}
 
-    return {"reponse": "Je n’ai pas trouvé le quiz exact. Reformule légèrement ta question.", "propositions": []}
-# ===================== fin du bloc =====================
-@app.route('/repondre', methods=['POST'])
+# ===================== ROUTES =====================
 @app.route('/repondre', methods=['POST'])
 def repondre():
     data = request.get_json() or {}
@@ -3642,54 +3643,10 @@ def repondre():
 
 @app.route('/quiz', methods=['POST'])
 def quiz():
-    data = request.get_json()
-    question = data.get('question', '').lower()
-    theme = extraire_theme(question)
-    quiz = []
-    if theme:
-        candidats = [e for e in base if e.get("theme") == theme and "propositions" in e and len(e["propositions"]) == 3]
-        random.shuffle(candidats)
-        for entry in candidats[:5]:
-            reponses = [entry["reponse"]] + [p for p in entry["propositions"] if p != entry["reponse"]]
-            random.shuffle(reponses)
-            correct_index = reponses.index(entry["reponse"])
-            quiz.append({
-                "q": entry["question"],
-                "a": reponses,
-                "correct": correct_index
-            })
-    return jsonify({"quiz": quiz[:max(2, len(quiz))]})
-
-def _generate_thematic_answer(question: str) -> str:
-    t_norm = _detect_theme_norm(question)
-    # si pas de thème, message général utile
-    if t_norm not in _THEMES_NORM and t_norm not in (_norm(k) for k in _THEMATIC_KB.keys()):
-        return ("Je n’ai pas cette info exacte. Donne un peu plus de contexte (thème/programme/objectif) "
-                "et je te propose une réponse actionnable.")
-    # map norm -> clé réelle de _THEMATIC_KB
-    def _key_real(norm_key):
-        for k in _THEMATIC_KB.keys():
-            if _norm(k) == norm_key:
-                return k
-        return None
-    real_key = _key_real(t_norm) or "cv"  # défaut : cv si jamais
-    kb = _THEMATIC_KB.get(real_key)
-    if not kb:
-        return ("Je peux t’aider si tu précises le thème (CV, emploi, Python, R, IA, SCALES).")
-    lines = []
-    lines.append(f"Réponse rapide — thème {real_key} :")
-    if kb.get("principes"):
-        lines.append("Principes clés :")
-        for p in kb["principes"][:4]:
-            lines.append(f"• {p}")
-    if kb.get("actions"):
-        lines.append("Actions concrètes :")
-        for a in kb["actions"][:4]:
-            lines.append(f"• {a}")
-    # mini-conclusion
-    lines.append("Si tu m’indiques ton objectif et ton niveau, je te donne un plan sur mesure.")
-    return "\n".join(lines)
-
+    data = request.get_json() or {}
+    question = (data.get("question") or "").strip()
+    return jsonify(smart_quiz(question))
+    
 # ====== Route spéciale pour servir le React build (doit être tout à la fin) ======
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -3703,6 +3660,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
