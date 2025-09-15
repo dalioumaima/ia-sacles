@@ -3614,47 +3614,62 @@ def smart_answer(question: str) -> str:
     if best and best_s >= 75: return best["r"]
     return _generate_thematic_answer(q)
 
+# ===================== QUIZ INTELLIGENT (utilisé en interne) =====================
 def smart_quiz(question: str):
     q = (question or "").strip()
     if not q:
-        return {"reponse":"Pose une question de quiz.","propositions":[]}
+        return {"reponse": "Pose une question de quiz.", "propositions": []}
     qn = _norm(q)
+
+    # exact parmi les items de type quiz
     for it in _BASE_NORM:
         if it["type"] == "quiz" and qn == it["q_norm"]:
-            return {"reponse": it["orig"].get("reponse",""), "propositions": it["orig"].get("propositions",[])}
+            return {
+                "reponse": it["orig"].get("reponse", ""),
+                "propositions": it["orig"].get("propositions", []) or []
+            }
+
+    # fuzzy parmi les quiz
     quiz_cands = [it for it in _BASE_NORM if it["type"] == "quiz"]
     if not quiz_cands:
-        return {"reponse":"Aucun quiz défini.","propositions":[]}
+        return {"reponse": "Aucun quiz défini.", "propositions": []}
+
     best, best_s = None, -1
     for it in quiz_cands:
         s = _score(qn, it["q_norm"])
         if s > best_s:
             best, best_s = it, s
-    if best and best_s >= 80:
-        return {"reponse": best["orig"].get("reponse",""), "propositions": best["orig"].get("propositions",[])}
-    return {"reponse":"Quiz introuvable, reformule.","propositions":[]}
 
-# ===================== ROUTES =====================
+    if best and best_s >= 80:
+        return {
+            "reponse": best["orig"].get("reponse", ""),
+            "propositions": best["orig"].get("propositions", []) or []
+        }
+    return {"reponse": "Quiz introuvable, reformule.", "propositions": []}
+
+
+# ===================== ROUTE /repondre (POST uniquement) =====================
 @app.route('/repondre', methods=['POST'])
 def repondre():
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     question = (data.get("question") or "").strip()
     return jsonify({"reponse": smart_answer(question)})
 
-# ---- utilitaire de compatibilité : retrouver le vrai nom de thème tel qu'il existe dans la BD
-# construit un mapping "theme normalisé" -> "theme exact présent dans base"
-_THEME_KEYS_ORIG = sorted({ (e.get("theme") or "").strip() for e in base if e.get("theme") })
-_NORM2ORIG = { _norm(t): t for t in _THEME_KEYS_ORIG if t }
+
+# ===================== OUTILS THEME (compatibilité) =====================
+# mapping "thème normalisé" -> "thème EXACT tel que présent dans la base"
+_THEME_KEYS_ORIG = sorted({(e.get("theme") or "").strip() for e in base if e.get("theme")})
+_NORM2ORIG = {_norm(t): t for t in _THEME_KEYS_ORIG if t}
 
 def _resolve_theme_for_quiz(question_text: str, explicit_theme: str = "") -> str:
     """
-    Retourne un nom de thème EXACT tel qu'il apparaît dans la BD (ou '' si rien).
+    Renvoie un nom de thème EXACT (présent dans la base) ou ''.
     Ordre:
-      1) thème explicite passé dans le payload
-      2) extraire_theme() si ta fonction existe
-      3) détection _detect_theme_norm() -> mappée vers le thème exact via _NORM2ORIG
+      1) thème explicite (payload)
+      2) extraire_theme() (ton ancienne fonction)
+      3) _detect_theme_norm() -> mappée via _NORM2ORIG
     """
-    # 1) Thème explicite (payload)
+    # 1) thème explicite
     if explicit_theme:
         t = explicit_theme.strip()
         if t in _THEME_KEYS_ORIG:
@@ -3663,7 +3678,7 @@ def _resolve_theme_for_quiz(question_text: str, explicit_theme: str = "") -> str
         if tnorm in _NORM2ORIG:
             return _NORM2ORIG[tnorm]
 
-    # 2) Ta fonction historique (si elle existe toujours)
+    # 2) ancienne détection
     try:
         t = extraire_theme(question_text or "")
         if t and t in _THEME_KEYS_ORIG:
@@ -3675,42 +3690,45 @@ def _resolve_theme_for_quiz(question_text: str, explicit_theme: str = "") -> str
     except Exception:
         pass
 
-    # 3) Détection nouvelle génération (normalisée)
+    # 3) nouvelle détection
     tnorm = _detect_theme_norm(question_text or "")
     return _NORM2ORIG.get(tnorm, "")
-    
 
-# ---- ROUTE QUIZ : GET (test) + POST (prod)
-@app.route('/quiz', methods=['GET', 'POST'])
+
+# ===================== ROUTE /quiz (POST uniquement, même format qu'avant) =====================
+@app.route('/quiz', methods=['POST'])
 def quiz():
-    if request.method == 'GET':
-        # utile quand on tape /quiz dans le navigateur : évite la 404
-        return jsonify({"ok": True, "usage": "POST /quiz avec JSON {question: '...'}"})
-
-    # === POST (comportement d'avant) ===
     data = request.get_json(silent=True) or {}
-    question = (data.get('question') or '').lower()
-    theme = extraire_theme(question)
+
+    # Comme avant : la "question" sert à déduire le thème
+    question_raw = (data.get('question') or '').strip()
+    theme_hint   = (data.get('theme') or '').strip()   # optionnel pour forcer un thème
+    # -> utilise le resolve pour être robuste mais garde le même résultat final
+    theme = _resolve_theme_for_quiz(question_raw.lower(), theme_hint)
 
     quiz = []
     if theme:
+        # mêmes filtres que ton ancien code : EXACTEMENT 3 propositions
         candidats = [
             e for e in base
             if e.get("theme") == theme
-            and isinstance(e.get("propositions"), list)
-            and len(e["propositions"]) == 3
+               and isinstance(e.get("propositions"), list)
+               and len(e["propositions"]) == 3
         ]
         random.shuffle(candidats)
         for entry in candidats[:5]:
-            reponses = [entry["reponse"]] + [p for p in entry["propositions"] if p != entry["reponse"]]
+            # même construction de réponses que l'ancien code
+            reponses = [entry.get("reponse", "")] + [
+                p for p in entry.get("propositions", []) if p != entry.get("reponse", "")
+            ]
             reponses = [r for r in reponses if isinstance(r, str) and r.strip()]
             random.shuffle(reponses)
             if not reponses:
                 continue
             try:
-                correct_index = reponses.index(entry["reponse"])
+                correct_index = reponses.index(entry.get("reponse", ""))
             except ValueError:
-                reponses.insert(0, entry["reponse"])
+                reponses.insert(0, entry.get("reponse", ""))
                 correct_index = 0
             quiz.append({
                 "q": entry.get("question", ""),
@@ -3718,13 +3736,22 @@ def quiz():
                 "correct": correct_index
             })
 
+    # même sortie qu'avant (au moins 2 éléments si possible)
     return jsonify({"quiz": quiz[:max(2, len(quiz))]})
-
-
+    
+# ====== Route spéciale pour servir le React build (doit être tout à la fin) ======
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_react(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
