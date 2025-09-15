@@ -3641,82 +3641,97 @@ def repondre():
     question = (data.get("question") or "").strip()
     return jsonify({"reponse": smart_answer(question)})
 
+# ---- utilitaire de compatibilité : retrouver le vrai nom de thème tel qu'il existe dans la BD
+# construit un mapping "theme normalisé" -> "theme exact présent dans base"
+_THEME_KEYS_ORIG = sorted({ (e.get("theme") or "").strip() for e in base if e.get("theme") })
+_NORM2ORIG = { _norm(t): t for t in _THEME_KEYS_ORIG if t }
+
+def _resolve_theme_for_quiz(question_text: str, explicit_theme: str = "") -> str:
+    """
+    Retourne un nom de thème EXACT tel qu'il apparaît dans la BD (ou '' si rien).
+    Ordre:
+      1) thème explicite passé dans le payload
+      2) extraire_theme() si ta fonction existe
+      3) détection _detect_theme_norm() -> mappée vers le thème exact via _NORM2ORIG
+    """
+    # 1) Thème explicite (payload)
+    if explicit_theme:
+        t = explicit_theme.strip()
+        if t in _THEME_KEYS_ORIG:
+            return t
+        tnorm = _norm(t)
+        if tnorm in _NORM2ORIG:
+            return _NORM2ORIG[tnorm]
+
+    # 2) Ta fonction historique (si elle existe toujours)
+    try:
+        t = extraire_theme(question_text or "")
+        if t and t in _THEME_KEYS_ORIG:
+            return t
+        if t:
+            tnorm = _norm(t)
+            if tnorm in _NORM2ORIG:
+                return _NORM2ORIG[tnorm]
+    except Exception:
+        pass
+
+    # 3) Détection nouvelle génération (normalisée)
+    tnorm = _detect_theme_norm(question_text or "")
+    return _NORM2ORIG.get(tnorm, "")
+    
+
+# ---- ROUTE QUIZ : même format qu'avant, robuste aux reformulations
 @app.route('/quiz', methods=['POST'])
 def quiz():
-    """
-    Comportement:
-    - Si payload contient "question": on cherche la question de quiz la plus proche
-      et on renvoie en format PACK (q/a/correct) pour rester compatible avec le front.
-    - Sinon: on génère un pack de N questions (par thème s'il est fourni).
-    JSON attendu en entrée:
-      {
-        "question": "...",      # optionnel
-        "theme": "cv",          # optionnel (pour générer un pack)
-        "n": 5                  # optionnel (taille pack)
-      }
-    JSON en sortie:
-      { "quiz": [ {"q": str, "a": [str,...], "correct": int }, ... ] }
-    """
-    data = request.get_json() or {}
-    question = (data.get("question") or "").strip()
-    theme_hint = (data.get("theme") or "").strip()
-    n = int(data.get("n") or 5)
+    data = request.get_json(silent=True) or {}
+    # on garde ton comportement : la "question" sert à détecter le thème
+    question_raw = (data.get('question') or '').strip()
+    theme_hint   = (data.get('theme') or '').strip()   # optionnel : si tu veux forcer un thème
+    theme = _resolve_theme_for_quiz(question_raw.lower(), theme_hint)
 
-    # --- helper: conversion d'une entrée "quiz" (base) -> item pour le front
-    def to_pack_item(entry):
-        qtxt = entry.get("question", "")
-        correct = entry.get("reponse", "")
-        props = entry.get("propositions", []) or []
-        # garantir présence de la bonne réponse dans les options
-        options = list(dict.fromkeys([correct] + props))
-        # si le front attend 3 options, tronquer/compléter si besoin
-        if len(options) < 3:
-            # on complète (façon simple) avec des leurres génériques
-            fillers = ["Option A", "Option B", "Option C", "Option D"]
-            for f in fillers:
-                if f not in options and len(options) < 3:
-                    options.append(f)
-        elif len(options) > 4:
-            options = options[:4]  # max 4 options si tu préfères
-        random.shuffle(options)
-        correct_idx = options.index(correct) if correct in options else 0
-        return {"q": qtxt, "a": options, "correct": correct_idx}
+    quiz = []
+    # candidats = exactement comme avant (même filtres), mais on protège contre les champs manquants
+    if theme:
+        candidats = [
+            e for e in base
+            if (e.get("theme") == theme) 
+               and ("propositions" in e) 
+               and isinstance(e.get("propositions"), list) 
+               and len(e["propositions"]) == 3
+        ]
+        random.shuffle(candidats)
+        for entry in candidats[:5]:
+            # on reconstruit les réponses comme tu faisais
+            bonnes_mauvaises = [entry.get("reponse","")] + [
+                p for p in entry.get("propositions") if p != entry.get("reponse","")
+            ]
+            # nettoyages basiques + shuffle
+            reponses = [r for r in bonnes_mauvaises if isinstance(r, str) and r.strip()]
+            random.shuffle(reponses)
+            if not reponses:
+                continue
+            correct_index = 0
+            try:
+                correct_index = reponses.index(entry.get("reponse",""))
+            except ValueError:
+                # si pour une raison la réponse n'est pas dans la liste, on force l'indice 0
+                reponses[0:0] = [entry.get("reponse","")]
+                correct_index = 0
+            quiz.append({
+                "q": entry.get("question",""),
+                "a": reponses,
+                "correct": correct_index
+            })
 
-    # --- cas 1: on a une "question" -> utiliser smart_quiz puis convertir en PACK
-    if question:
-        result = smart_quiz(question)
-        # smart_quiz renvoie {"reponse": "...", "propositions": [...]}
-        # On convertit au format PACK attendu par le front.
-        entry = {
-            "question": question,
-            "reponse": result.get("reponse", ""),
-            "propositions": result.get("propositions", []) or []
-        }
-        return jsonify({"quiz": [to_pack_item(entry)]})
-
-    # --- cas 2: pas de "question" -> générer un pack de quiz (par thème si fourni)
-    # détecter le thème (on utilise ta détection existante)
-    t_norm = _detect_theme_norm(theme_hint) if theme_hint else "general"
-
-    # candidates = uniquement les entrées de type 'quiz'
-    candidates = [e for e in base if (e.get("type","") or "").lower() == "quiz"]
-
-    # si un thème est donné, filtrer par thème normalisé ; sinon, garder global
-    if t_norm != "general":
-        candidates_t = [e for e in candidates if _norm(e.get("theme","")) == t_norm]
-        # si trop peu d'items sur ce thème, fallback au global
-        candidates = candidates_t if len(candidates_t) >= 2 else candidates
-
-    random.shuffle(candidates)
-    pack = [to_pack_item(e) for e in candidates[:max(2, n)]]
-
-    return jsonify({"quiz": pack})
+    # comme ton ancien code : renvoyer au moins 2 si possible
+    return jsonify({"quiz": quiz[:max(2, len(quiz))]})
 
 
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
