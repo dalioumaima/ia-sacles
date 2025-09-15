@@ -3680,50 +3680,44 @@ def _resolve_theme_for_quiz(question_text: str, explicit_theme: str = "") -> str
     return _NORM2ORIG.get(tnorm, "")
     
 
-# ---- ROUTE QUIZ : même format qu'avant, robuste aux reformulations
-@app.route('/quiz', methods=['POST'])
+# ---- ROUTE QUIZ : GET (test) + POST (prod)
+@app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
+    if request.method == 'GET':
+        # utile quand on tape /quiz dans le navigateur : évite la 404
+        return jsonify({"ok": True, "usage": "POST /quiz avec JSON {question: '...'}"})
+
+    # === POST (comportement d'avant) ===
     data = request.get_json(silent=True) or {}
-    # on garde ton comportement : la "question" sert à détecter le thème
-    question_raw = (data.get('question') or '').strip()
-    theme_hint   = (data.get('theme') or '').strip()   # optionnel : si tu veux forcer un thème
-    theme = _resolve_theme_for_quiz(question_raw.lower(), theme_hint)
+    question = (data.get('question') or '').lower()
+    theme = extraire_theme(question)
 
     quiz = []
-    # candidats = exactement comme avant (même filtres), mais on protège contre les champs manquants
     if theme:
         candidats = [
             e for e in base
-            if (e.get("theme") == theme) 
-               and ("propositions" in e) 
-               and isinstance(e.get("propositions"), list) 
-               and len(e["propositions"]) == 3
+            if e.get("theme") == theme
+            and isinstance(e.get("propositions"), list)
+            and len(e["propositions"]) == 3
         ]
         random.shuffle(candidats)
         for entry in candidats[:5]:
-            # on reconstruit les réponses comme tu faisais
-            bonnes_mauvaises = [entry.get("reponse","")] + [
-                p for p in entry.get("propositions") if p != entry.get("reponse","")
-            ]
-            # nettoyages basiques + shuffle
-            reponses = [r for r in bonnes_mauvaises if isinstance(r, str) and r.strip()]
+            reponses = [entry["reponse"]] + [p for p in entry["propositions"] if p != entry["reponse"]]
+            reponses = [r for r in reponses if isinstance(r, str) and r.strip()]
             random.shuffle(reponses)
             if not reponses:
                 continue
-            correct_index = 0
             try:
-                correct_index = reponses.index(entry.get("reponse",""))
+                correct_index = reponses.index(entry["reponse"])
             except ValueError:
-                # si pour une raison la réponse n'est pas dans la liste, on force l'indice 0
-                reponses[0:0] = [entry.get("reponse","")]
+                reponses.insert(0, entry["reponse"])
                 correct_index = 0
             quiz.append({
-                "q": entry.get("question",""),
+                "q": entry.get("question", ""),
                 "a": reponses,
                 "correct": correct_index
             })
 
-    # comme ton ancien code : renvoyer au moins 2 si possible
     return jsonify({"quiz": quiz[:max(2, len(quiz))]})
 
 
@@ -3731,6 +3725,7 @@ def quiz():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
