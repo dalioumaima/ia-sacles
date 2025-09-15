@@ -3597,12 +3597,7 @@ def smart_answer(question: str) -> str:
     if best and best_s >= 75:
         return best["r"]
 
-    # 5) dernier recours : petite “aide à formuler” mais jamais vide
-    # (Tu peux remplacer par un mini playbook selon le thème détecté)
-    t = _detect_theme_norm(q)
-    if t != "general":
-        return "Je n’ai pas cette info exacte, mais je peux t’aider sur ce thème. Précise ta question (ex : qui, quoi, comment, où) et je détaille."
-    return "Je n’ai pas cette info exacte. Donne un peu plus de contexte (thème/programme/objectif) et je te propose une réponse utile."
+   return _generate_thematic_answer(q)
 
 # --- Recherche intelligente pour les quiz (ne regarde que type='quiz') ---
 def smart_quiz(question: str):
@@ -3665,6 +3660,35 @@ def quiz():
             })
     return jsonify({"quiz": quiz[:max(2, len(quiz))]})
 
+def _generate_thematic_answer(question: str) -> str:
+    t_norm = _detect_theme_norm(question)
+    # si pas de thème, message général utile
+    if t_norm not in _THEMES_NORM and t_norm not in (_norm(k) for k in _THEMATIC_KB.keys()):
+        return ("Je n’ai pas cette info exacte. Donne un peu plus de contexte (thème/programme/objectif) "
+                "et je te propose une réponse actionnable.")
+    # map norm -> clé réelle de _THEMATIC_KB
+    def _key_real(norm_key):
+        for k in _THEMATIC_KB.keys():
+            if _norm(k) == norm_key:
+                return k
+        return None
+    real_key = _key_real(t_norm) or "cv"  # défaut : cv si jamais
+    kb = _THEMATIC_KB.get(real_key)
+    if not kb:
+        return ("Je peux t’aider si tu précises le thème (CV, emploi, Python, R, IA, SCALES).")
+    lines = []
+    lines.append(f"Réponse rapide — thème {real_key} :")
+    if kb.get("principes"):
+        lines.append("Principes clés :")
+        for p in kb["principes"][:4]:
+            lines.append(f"• {p}")
+    if kb.get("actions"):
+        lines.append("Actions concrètes :")
+        for a in kb["actions"][:4]:
+            lines.append(f"• {a}")
+    # mini-conclusion
+    lines.append("Si tu m’indiques ton objectif et ton niveau, je te donne un plan sur mesure.")
+    return "\n".join(lines)
 
 # ====== Route spéciale pour servir le React build (doit être tout à la fin) ======
 @app.route('/', defaults={'path': ''})
@@ -3679,6 +3703,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
