@@ -4,7 +4,6 @@ import random
 from fuzzywuzzy import fuzz
 import os
 import unicodedata, re, math 
-import numpy as np
 
 app = Flask(__name__, static_folder="build", static_url_path="/")
 CORS(app)
@@ -3607,51 +3606,7 @@ def _generate_thematic_answer(question: str) -> str:
         for a in kb["actions"]:
             lines.append(f"• {a}")
     return "\n".join(lines)
-# Permet de désactiver le RAG à chaud si besoin
-DISABLE_RAG = os.getenv("DISABLE_RAG", "0") == "1"
 
-try:
-    if not DISABLE_RAG:
-        import faiss
-        from sentence_transformers import SentenceTransformer
-
-        EMB_MODEL = os.getenv("EMB_MODEL", "sentence-transformers/paraphrase-multilingual-MiniLM-L3-v2")
-        _EMB = SentenceTransformer(EMB_MODEL)
-
-        # Corpus = question + réponse (donne plus de contexte sémantique)
-        _DOCS = [(i, (e.get("question","") + " " + e.get("reponse","")).strip()) for i, e in enumerate(base)]
-        if _DOCS:
-            _EMB_VECS = _EMB.encode([d for _, d in _DOCS],
-                                    normalize_embeddings=True,
-                                    show_progress_bar=False).astype("float32")
-            _FAISS = faiss.IndexFlatIP(_EMB_VECS.shape[1])  # cos sim (dot product avec vecteurs normalisés)
-            _FAISS.add(_EMB_VECS)
-        else:
-            _EMB = None; _FAISS = None; _DOCS = []
-    else:
-        _EMB = None; _FAISS = None; _DOCS = []
-except Exception as _rag_err:
-    # Si l'init échoue (RAM, build, wheel), on retombe automatiquement sur fuzzy + thématique
-    _EMB = None; _FAISS = None; _DOCS = []
-
-# Seuils/taille recherche (surchargeables par env)
-_SEM_TOPK    = int(os.getenv("SEM_TOPK", "3"))
-_SEM_MIN_SIM = float(os.getenv("SEM_MIN_SIM", "0.52"))
-
-def semantic_answer(user_q: str):
-    """
-    Renvoie (reponse, score) si la similarité sémantique est suffisante,
-    sinon (None, 0.0). 100% offline après téléchargement du modèle.
-    """
-    if _FAISS is None or _EMB is None or not _DOCS:
-        return None, 0.0
-    qv = _EMB.encode([user_q], normalize_embeddings=True, show_progress_bar=False).astype("float32")
-    sims, idxs = _FAISS.search(qv, _SEM_TOPK)
-    best_sim = float(sims[0][0]); best_idx = int(idxs[0][0])
-    if best_sim >= _SEM_MIN_SIM and 0 <= best_idx < len(_DOCS):
-        real_idx = _DOCS[best_idx][0]
-        return base[real_idx].get("reponse",""), best_sim
-    return None, 0.0
 # ===================== SMART ANSWER + QUIZ =====================
 def smart_answer(question: str) -> str:
     q = (question or "").strip()
@@ -3667,17 +3622,8 @@ def smart_answer(question: str) -> str:
         s = _score(qn, it["q_norm"])
         if s > best_s:
             best, best_s = it, s
-   if best and best_s >= 90: 
-        return best["r"]
-    if best and best_s >= 75: 
-        return best["r"]
-
-    # 4) RAG sémantique
-    rep_sem, sim = semantic_answer(q)
-    if rep_sem:
-        return rep_sem
-
-    # 5) Fallback thématique (toujours une réponse)
+    if best and best_s >= 90: return best["r"]
+    if best and best_s >= 75: return best["r"]
     return _generate_thematic_answer(q)
 
 # ===================== QUIZ INTELLIGENT (utilisé en interne) =====================
@@ -3814,19 +3760,9 @@ def serve_react(path):
     else:
         return send_from_directory(app.static_folder, 'index.html')
 
-@app.route("/", methods=["GET"])
-def root():
-    return "OK", 200
-
-@app.route("/ping", methods=["GET"])
-def ping():
-    return "pong", 200
-
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
-
-
 
 
 
