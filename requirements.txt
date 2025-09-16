@@ -3,3 +3,6 @@ fuzzywuzzy
 python-Levenshtein
 flask_cors
 gunicorn
+faiss-cpu
+sentence-transformers
+
