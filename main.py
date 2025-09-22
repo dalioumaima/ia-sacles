@@ -6,6 +6,35 @@ import os
 import unicodedata, re, math 
 from web_booster import web_answer
 
+def _patch_front_bundle_remove_localhost():
+    # On cherche n'importe quel main.*.js (par ex. /static/js/main.d6e23b65.js)
+    root = os.path.dirname(__file__)
+    patched = 0
+    for dirpath, _, filenames in os.walk(root):
+        for name in filenames:
+            if name.startswith("main.") and name.endswith(".js"):
+                path = os.path.join(dirpath, name)
+                try:
+                    with io.open(path, "r", encoding="utf-8", errors="ignore") as f:
+                        content = f.read()
+                    if "http://127.0.0.1:5001" in content:
+                        content = content.replace("http://127.0.0.1:5001", "")
+                        with io.open(path, "w", encoding="utf-8", errors="ignore") as f:
+                            f.write(content)
+                        patched += 1
+                except Exception:
+                    pass
+    if patched:
+        print(f"[patch] URLs localhost supprimées dans {patched} fichier(s) main.*.js")
+
+# appelle le patch au démarrage (une seule fois)
+try:
+    _patch_front_bundle_remove_localhost()
+except Exception as _e:
+    print("[patch] skip:", _e)
+# --- FIN PATCH ---
+
+
 app = Flask(__name__, static_folder="build", static_url_path="/")
 CORS(app)
 THEMES = {
@@ -3814,6 +3843,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
