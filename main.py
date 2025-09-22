@@ -4,6 +4,7 @@ import random
 from fuzzywuzzy import fuzz
 import os
 import unicodedata, re, math 
+from web_booster import web_answer
 
 app = Flask(__name__, static_folder="build", static_url_path="/")
 CORS(app)
@@ -3756,7 +3757,16 @@ def quiz():
 
     # même sortie qu'avant (au moins 2 éléments si possible)
     return jsonify({"quiz": quiz[:max(2, len(quiz))]})
-    
+
+@app.route("/web_answer", methods=["POST"])
+def web_answer_route():
+    data = request.get_json(silent=True) or {}
+    q = (data.get("question") or data.get("message") or "").strip()
+    if not q:
+        return jsonify({"answer": "Pose ta question et je t’aide 😊", "sources": []})
+    res = web_answer(q)
+    return jsonify(res)
+
 # ====== Route spéciale pour servir le React build (doit être tout à la fin) ======
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -3769,6 +3779,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
