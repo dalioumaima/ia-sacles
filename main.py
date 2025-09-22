@@ -3398,6 +3398,12 @@ base = [
     "theme": "personnel scales",
     "type": "definition"
   },
+     {
+    "question": "Qui est responsable des stages ?",
+    "reponse": "Khadija Alaoui est Senior Operation Officer et responsable des stages (IP, IP3, CAP, MILL, Bootcamps).",
+    "theme": "personnel scales",
+    "type": "definition"
+  },
     {
     "question": "Qui est responsable des programme d'IP, IP3, CAP, MILL, Bootcamps ?",
     "reponse": "Khadija Alaoui est Senior Operation Officer et responsable des stages (IP, IP3, CAP, MILL, Bootcamps).",
@@ -3763,6 +3769,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
