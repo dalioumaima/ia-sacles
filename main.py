@@ -3671,23 +3671,43 @@ def smart_quiz(question: str):
 @app.route('/repondre', methods=['POST'])
 def repondre():
     data = request.get_json(silent=True) or {}
-    question = (data.get("question") or "").strip()
-    # Fallback web si la réponse est vide/faible
-def _is_poor(ans: str) -> bool:
-    if not ans: return True
-    s = ans.strip().lower()
-    if len(s) < 40: return True
-    if s in {"je ne sais pas", "je ne peux pas répondre", "désolé je ne comprends pas"}:
-        return True
-    return False
+    question = (data.get("question") or data.get("message") or "").strip()
 
-if _is_poor(reponse):   # <-- adapte "reponse" au nom de ta variable si différent
-    web = web_answer(question)   # <-- adapte "question" au nom de ta variable
-    if web.get("answer"):
-        sources_txt = "\n\nSources:\n" + "\n".join(f"- {s['domain']}: {s['url']}" for s in web.get("sources", []))
-        reponse = web["answer"] + sources_txt
+    # 1) Réponse principale (ta logique existante)
+    try:
+        reponse = smart_answer(question)  # garde ton appel existant
+    except Exception:
+        reponse = ""
 
-    return jsonify({"reponse": smart_answer(question)})
+    # 2) Fonction d'évaluation de la qualité (DANS la fonction)
+    def _is_poor(ans: str) -> bool:
+        if not ans:
+            return True
+        s = ans.strip().lower()
+        if len(s) < 40:
+            return True
+        if s in {"je ne sais pas", "je ne peux pas répondre", "désolé je ne comprends pas"}:
+            return True
+        return False
+
+    # 3) (Optionnel) Fallback web si la réponse est faible
+    if _is_poor(reponse):
+        try:
+            # nécessite: from web_booster import web_answer (en haut de main.py)
+            web = web_answer(question)
+            if web.get("answer"):
+                sources_txt = "\n\nSources:\n" + "\n".join(
+                    f"- {s['domain']}: {s['url']}" for s in web.get("sources", [])
+                )
+                reponse = web["answer"] + sources_txt
+        except Exception:
+            # même si le booster web échoue, on renvoie quelque chose
+            if not reponse:
+                reponse = "Je n’ai pas pu compléter la réponse pour l’instant."
+
+    # 4) TOUJOURS retourner depuis l'intérieur de la fonction
+    return jsonify({"reponse": reponse})
+
 
 
 # ===================== OUTILS THEME (compatibilité) =====================
@@ -3794,6 +3814,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
