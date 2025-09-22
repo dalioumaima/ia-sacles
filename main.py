@@ -3672,6 +3672,21 @@ def smart_quiz(question: str):
 def repondre():
     data = request.get_json(silent=True) or {}
     question = (data.get("question") or "").strip()
+    # Fallback web si la réponse est vide/faible
+def _is_poor(ans: str) -> bool:
+    if not ans: return True
+    s = ans.strip().lower()
+    if len(s) < 40: return True
+    if s in {"je ne sais pas", "je ne peux pas répondre", "désolé je ne comprends pas"}:
+        return True
+    return False
+
+if _is_poor(reponse):   # <-- adapte "reponse" au nom de ta variable si différent
+    web = web_answer(question)   # <-- adapte "question" au nom de ta variable
+    if web.get("answer"):
+        sources_txt = "\n\nSources:\n" + "\n".join(f"- {s['domain']}: {s['url']}" for s in web.get("sources", []))
+        reponse = web["answer"] + sources_txt
+
     return jsonify({"reponse": smart_answer(question)})
 
 
@@ -3779,6 +3794,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
