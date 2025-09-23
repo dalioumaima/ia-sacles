@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import random
 from fuzzywuzzy import fuzz
+import requests
 import os
 import unicodedata, re, math 
 from web_booster import web_answer
@@ -3839,6 +3840,25 @@ def web_answer_route():
         return jsonify({"answer": "Pose ta question et je t’aide 😊", "sources": []})
     res = web_answer(q)
     return jsonify(res)
+@app.route("/diag_web")
+def diag_web():
+    info = {"DISABLE_WEB": os.environ.get("DISABLE_WEB", "0")}
+    # duckduckgo_search installé ?
+    try:
+        import duckduckgo_search  # noqa
+        info["duckduckgo_search_installed"] = True
+    except Exception as e:
+        info["duckduckgo_search_installed"] = False
+        info["duckduckgo_search_err"] = str(e)
+    # HTTP sortant OK ?
+    try:
+        r = requests.get("https://duckduckgo.com", timeout=5)
+        info["requests_ok"] = (r.status_code == 200)
+        info["requests_status"] = r.status_code
+    except Exception as e:
+        info["requests_ok"] = False
+        info["requests_err"] = str(e)
+    return jsonify(info)
 
 # ====== Route spéciale pour servir le React build (doit être tout à la fin) ======
 @app.route('/', defaults={'path': ''})
@@ -3852,6 +3872,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
