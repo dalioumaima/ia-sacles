@@ -3716,16 +3716,24 @@ def repondre():
     txt = ""
     found = False
     try:
-        reponse_bd = smart_answer(question)
+        reponse_bd = smart_answer(question)  # <-- ta logique/BD
         if isinstance(reponse_bd, dict):
             txt = (reponse_bd.get('text') or '').strip()
             found = bool(reponse_bd.get('found', False))
         else:
             txt = (reponse_bd or '').strip()
+            # Phrases signalant "pas trouvé" par la BD (ajoute les tiennes si besoin)
             bad = {
-                "non trouvé", "je ne sais pas", "je n’ai pas cette info exacte",
-                "désolé je ne comprends pas", "question non trouvée",
-                "aucune réponse", "aucune reponse"
+                "non trouvé",
+                "je ne sais pas",
+                "je n’ai pas cette info exacte",
+                "je n ai pas cette info exacte",
+                "désolé je ne comprends pas",
+                "question non trouvée",
+                "aucune réponse",
+                "aucune reponse",
+                "pas trouvé dans la base",
+                "information introuvable"
             }
             found = bool(txt) and (txt.lower() not in bad)
         print(f"[db] found={found} len={len(txt)}")
@@ -3733,12 +3741,15 @@ def repondre():
         print("[db] error:", e)
         txt, found = "", False
 
-    # 2) Web seulement si BD ne trouve pas OU réponse très courte
+    # 2) Web seulement si BD ne trouve pas OU réponse trop courte
     def need_web(s: str, ok: bool) -> bool:
         if os.environ.get("DISABLE_WEB", "0") == "1":
             return False
-        if not ok: return True
-        if not s or len(s.strip()) < 20: return True
+        if not ok:
+            return True
+        # ⇩ seuil à 40 caractères (ajuste à 20/60 selon ton besoin)
+        if not s or len(s.strip()) < 40:
+            return True
         return False
 
     # 3) Fallback web
@@ -3755,9 +3766,9 @@ def repondre():
                 print("[web] empty")
         except Exception as e:
             print("[web] error:", e)
+            # on garde la réponse BD (même si vide) pour éviter du hors-sujet
 
     return jsonify({"reponse": txt})
-
 
 # ===================== OUTILS THEME (compatibilité) =====================
 # mapping "thème normalisé" -> "thème EXACT tel que présent dans la base"
@@ -3892,6 +3903,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
