@@ -3710,69 +3710,43 @@ def smart_quiz(question: str):
 @app.route('/repondre', methods=['POST'])
 def repondre():
     data = request.get_json(silent=True) or {}
-    question = (data.get('question') or data.get('message') or '').strip()
+    question = (data.get("question") or "").strip()
 
-    MIN_LEN = int(os.environ.get("MIN_LEN", "80"))     # seuil “réponse faible”
-    DISABLE_WEB = (os.environ.get("DISABLE_WEB","0") == "1")
-    DEBUG_API = (os.environ.get("DEBUG_API","0") == "1")
-    logs = []
+    txt = ""
+    found = False
 
-    # --- 1) BD d'abord ---
-    txt, found = "", False
+    # 1) Réponse depuis la BD locale
     try:
-        r = smart_answer(question)     # ← TA fonction
-        # normalisation de tous les formats possibles
-        if isinstance(r, dict):
-            txt = (r.get("text") or "").strip()
-            found = bool(r.get("found", False))
-        elif isinstance(r, (list, tuple)):
-            txt = " ".join(map(lambda x: str(x).strip(), r)).strip()
-            found = len(txt) >= MIN_LEN
+        reponse_bd = smart_answer(question)
+        if isinstance(reponse_bd, dict):
+            txt = (reponse_bd.get("text") or "").strip()
+            found = bool(reponse_bd.get("found", False))
         else:
-            txt = (r or "").strip()
-            found = len(txt) >= MIN_LEN
-        # marqueurs "non trouvé" (ajoute les phrases exactes de TA BD ici si besoin)
-        BAD = {
-            "non trouvé","pas trouvé","aucune réponse","aucune reponse",
-            "je ne sais pas","je n’ai pas cette info exacte","je n ai pas cette info exacte",
-            "désolé je ne comprends pas","question non trouvée","introuvable",
-            "pas d'information","pas d info","inconnu"
-        }
-        s_low = txt.lower()
-        if any(b in s_low for b in BAD):
-            found = False
-        logs.append(f"db_found={found} len={len(txt)}")
+            txt = (reponse_bd or "").strip()
+            found = bool(txt) and txt.lower() not in {
+                "non trouvé", "je ne sais pas", "désolé je ne comprends pas",
+                "aucune réponse", "aucune reponse"
+            }
     except Exception as e:
-        logs.append(f"db_error={e}")
-        txt, found = "", False
+        print("[db] error:", e)
 
-    # --- 2) Décider si on déclenche le web ---
-    def need_web(s: str, ok: bool) -> bool:
-        if DISABLE_WEB:
-            logs.append("web_disabled=1");  return False
-        if not ok:
-            logs.append("reason=bd_not_found");  return True
-        if not s or len(s.strip()) < MIN_LEN:
-            logs.append(f"reason=too_short<{MIN_LEN}");  return True
-        return False
-
-    # --- 3) Fallback Web ---
-    if need_web(txt, found):
+    # 2) Si pas trouvé en BD -> fallback OpenAI
+    if not found:
         try:
-            res = web_answer(question)
-            ans = (res or {}).get("answer","")
-            if ans:
-                srcs = (res or {}).get("sources", [])
-                srcs_txt = ("\n\nSources:\n" + "\n".join(f"- {s.get('domain','?')}: {s.get('url','')}" for s in srcs)) if srcs else ""
-                txt = ans + srcs_txt
-                logs.append(f"web_ok srcs={len(srcs)}")
-            else:
-                logs.append("web_empty")
-        except Exception as e:
-            logs.append(f"web_error={e}")
-            # on garde txt (même vide) pour éviter du hors-sujet
+            import openai, os
+            openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-    return jsonify({"reponse": txt, **({"_debug": logs} if DEBUG_API else {})})
+            resp = openai.ChatCompletion.create(
+                model=os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
+                messages=[{"role": "user", "content": question}]
+            )
+            txt = resp["choices"][0]["message"]["content"].strip()
+            print("[openai] utilisé")
+        except Exception as e:
+            print("[openai] error:", e)
+            txt = "Désolé, je n’ai pas trouvé de réponse."
+
+    return jsonify({"reponse": txt})
 
 # ===================== OUTILS THEME (compatibilité) =====================
 # mapping "thème normalisé" -> "thème EXACT tel que présent dans la base"
@@ -3919,6 +3893,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
