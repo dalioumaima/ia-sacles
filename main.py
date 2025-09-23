@@ -3702,41 +3702,50 @@ def repondre():
     data = request.get_json(silent=True) or {}
     question = (data.get("question") or data.get("message") or "").strip()
 
-    # 1) Réponse principale (ta logique existante)
+    # 1) Réponse depuis ta base / logique existante
     try:
-        reponse = smart_answer(question)  # garde ton appel existant
-    except Exception:
+        reponse = smart_answer(question)  # <-- garde ton moteur actuel
+    except Exception as e:
+        print("[smart_answer] error:", e)
         reponse = ""
 
-    # 2) Fonction d'évaluation de la qualité (DANS la fonction)
+    # 2) Heuristique : réponse "faible" => on déclenche la recherche web
     def _is_poor(ans: str) -> bool:
         if not ans:
             return True
-        s = ans.strip().lower()
+        s = ans.strip()
         if len(s) < 40:
             return True
-        if s in {"je ne sais pas", "je ne peux pas répondre", "désolé je ne comprends pas"}:
-            return True
-        return False
+        s_low = s.lower()
+        bad = {
+            "je ne sais pas",
+            "je ne peux pas répondre",
+            "désolé je ne comprends pas",
+            "question non trouvée",
+            "aucune reponse",
+            "aucune réponse",
+        }
+        return s_low in bad
 
-    # 3) (Optionnel) Fallback web si la réponse est faible
+    # 3) Fallback web AUTOMATIQUE (sans taper "web:")
     if _is_poor(reponse):
         try:
-            # nécessite: from web_booster import web_answer (en haut de main.py)
-            web = web_answer(question)
-            if web.get("answer"):
-                sources_txt = "\n\nSources:\n" + "\n".join(
-                    f"- {s['domain']}: {s['url']}" for s in web.get("sources", [])
-                )
-                reponse = web["answer"] + sources_txt
-        except Exception:
-            # même si le booster web échoue, on renvoie quelque chose
-            if not reponse:
-                reponse = "Je n’ai pas pu compléter la réponse pour l’instant."
+            res = web_answer(question)  # <-- va chercher sur le web
+            if res.get("answer"):
+                srcs = res.get("sources", [])
+                sources_txt = ""
+                if srcs:
+                    sources_txt = "\n\nSources:\n" + "\n".join(
+                        f"- {s['domain']}: {s['url']}" for s in srcs
+                    )
+                reponse = res["answer"] + sources_txt
+                print("[fallback-web] used")
+        except Exception as e:
+            print("[fallback-web] error:", e)
+            if _is_poor(reponse):
+                reponse = "Désolé, je n'ai pas trouvé l'information pour l'instant."
 
-    # 4) TOUJOURS retourner depuis l'intérieur de la fonction
     return jsonify({"reponse": reponse})
-
 
 
 # ===================== OUTILS THEME (compatibilité) =====================
@@ -3843,6 +3852,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
