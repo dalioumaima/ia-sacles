@@ -6,7 +6,7 @@ import requests
 import os
 import unicodedata, re, math 
 from web_booster import web_answer
-
+from openai import OpenAI
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def _autopatch_js_remove_localhost():
     root = os.path.dirname(__file__)
@@ -3981,6 +3981,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
