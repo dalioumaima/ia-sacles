@@ -3709,59 +3709,58 @@ def smart_quiz(question: str):
 # ===================== ROUTE /repondre (POST uniquement) =====================
 @app.route('/repondre', methods=['POST'])
 def repondre():
-    import os
     data = request.get_json(silent=True) or {}
-    question = (data.get("question") or data.get("message") or "").strip()
+    question = (data.get('question') or data.get('message') or '').strip()
 
-    log = []  # <- on renvoie un petit log de debug dans la réponse
-    force_web = (os.environ.get("FORCE_WEB","0") == "1")
-    min_len = int(os.environ.get("MIN_LEN","120"))
-
-    # 1) logique existante (ta “BD”)
+    # 1) Réponse depuis ta BD / logique
     try:
-        reponse = smart_answer(question)
-        log.append(f"smart_ok len={len(reponse) if reponse else 0}")
+        reponse_bd = smart_answer(question)
     except Exception as e:
-        reponse = ""
-        log.append(f"smart_err={e}")
+        print('[smart_answer] error:', e)
+        reponse_bd = ''
 
-    # 2) qualité (déclencheur du fallback)
-    def _is_poor(ans: str) -> bool:
-        if not ans:
-            log.append("poor:none")
-            return True
-        s = ans.strip()
-        if len(s) < min_len:
-            log.append(f"poor:short<{min_len}")
-            return True
-        bad = {
-            "je ne sais pas", "je ne peux pas répondre", "désolé je ne comprends pas",
-            "question non trouvée", "aucune réponse", "aucune reponse",
-            "je n’ai pas cette info exacte"
+    # Normalisation : accepte string ou dict(text=..., found=...)
+    if isinstance(reponse_bd, dict):
+        txt = (reponse_bd.get('text') or '').strip()
+        found = bool(reponse_bd.get('found', False))
+    else:
+        txt = (reponse_bd or '').strip()
+        # Heuristique "pas trouvé" : mets ici les phrases que TON smart_answer renvoie
+        bad_markers = {
+            "je n’ai pas cette info exacte",
+            "je n ai pas cette info exacte",
+            "je ne sais pas",
+            "non trouvé",
+            "aucune réponse",
+            "aucune reponse",
+            "désolé je ne comprends pas",
+            "question non trouvée",
         }
-        if s.lower() in bad:
-            log.append("poor:badset")
+        found = bool(txt) and (txt.lower() not in bad_markers)
+
+    def _need_web(s: str, was_found: bool) -> bool:
+        if os.environ.get('DISABLE_WEB', '0') == '1':
+            return False
+        if not was_found:
+            return True
+        if not s or len(s.strip()) < 20:  # seuil très bas : évite les déclenchements intempestifs
             return True
         return False
 
-    # 3) Fallback web (ou forcé)
-    if force_web or _is_poor(reponse):
+    # 2) Fallback web UNIQUEMENT si nécessaire
+    if _need_web(txt, found):
         try:
             res = web_answer(question)
-            ans = res.get("answer","")
-            srcs = res.get("sources", [])
-            src_txt = ("\n\nSources:\n" + "\n".join(f"- {s['domain']}: {s['url']}" for s in srcs)) if srcs else ""
-            if ans:
-                reponse = ans + src_txt
-                log.append(f"web_ok sources={len(srcs)}")
-            else:
-                log.append("web_empty")
+            if res.get('answer'):
+                srcs = res.get('sources', [])
+                srcs_txt = ("\n\nSources:\n" + "\n".join(f"- {s['domain']}: {s['url']}" for s in srcs)) if srcs else ""
+                txt = res['answer'] + srcs_txt
+                print('[fallback-web] used')
         except Exception as e:
-            log.append(f"web_err={e}")
-            if not reponse:
-                reponse = "Désolé, je n'ai pas trouvé l'information pour l'instant."
+            print('[fallback-web] error:', e)
+            # on garde txt (même si vide), pas de hors-sujet
 
-    return jsonify({"reponse": reponse, "_debug": log})
+    return jsonify({'reponse': txt})
 
 # ===================== OUTILS THEME (compatibilité) =====================
 # mapping "thème normalisé" -> "thème EXACT tel que présent dans la base"
@@ -3896,6 +3895,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
