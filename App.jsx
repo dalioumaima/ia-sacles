@@ -6,8 +6,10 @@ import logoUM6P from "./assets/logo_um6p.png";
 import robotIA from "./assets/robot_ia.png";
 
 function App() {
-  // 1. Variable d'environnement pour l'URL du backend
-  const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:5001";
+const API_URL =
+  (typeof import !== "undefined" && typeof import.meta !== "undefined" && import.meta.env?.VITE_API_URL)
+  || (typeof process !== "undefined" && process.env?.REACT_APP_API_URL)
+  || "";
 
   const [question, setQuestion] = useState("");
   const [reponse, setReponse] = useState("Bonjour 👋 ! Pose-moi une question.");
@@ -342,3 +344,4 @@ function App() {
 }
 
 export default App;
+
