@@ -3712,45 +3712,36 @@ def repondre():
     data = request.get_json(silent=True) or {}
     question = (data.get('question') or data.get('message') or '').strip()
 
-    # 1) BD d'abord (ta logique existante)
+    # 1) BD d'abord
     txt = ""
     found = False
     try:
-        reponse_bd = smart_answer(question)   # <-- NE PAS CHANGER
-        # Normaliser: accepte string OU dict {"text":..., "found":...}
+        reponse_bd = smart_answer(question)
         if isinstance(reponse_bd, dict):
             txt = (reponse_bd.get('text') or '').strip()
             found = bool(reponse_bd.get('found', False))
         else:
             txt = (reponse_bd or '').strip()
-            # Marqueurs "non trouvé" (mets ici EXACTEMENT les phrases que ta BD renvoie quand elle ne trouve pas)
             bad = {
-                "non trouvé",
-                "je ne sais pas",
-                "je n’ai pas cette info exacte",
-                "désolé je ne comprends pas",
-                "question non trouvée",
-                "aucune réponse",
-                "aucune reponse",
+                "non trouvé", "je ne sais pas", "je n’ai pas cette info exacte",
+                "désolé je ne comprends pas", "question non trouvée",
+                "aucune réponse", "aucune reponse"
             }
             found = bool(txt) and (txt.lower() not in bad)
         print(f"[db] found={found} len={len(txt)}")
     except Exception as e:
         print("[db] error:", e)
-        txt = ""
-        found = False
+        txt, found = "", False
 
-    # 2) Décider s'il faut le web (seuil très bas pour éviter le hors-sujet)
+    # 2) Web seulement si BD ne trouve pas OU réponse très courte
     def need_web(s: str, ok: bool) -> bool:
         if os.environ.get("DISABLE_WEB", "0") == "1":
             return False
-        if not ok:
-            return True
-        if not s or len(s.strip()) < 20:  # <- si réponse BD trop courte, on complète par le web
-            return True
+        if not ok: return True
+        if not s or len(s.strip()) < 20: return True
         return False
 
-    # 3) Fallback Web (UNIQUEMENT si nécessaire)
+    # 3) Fallback web
     if need_web(txt, found):
         try:
             res = web_answer(question)
@@ -3764,7 +3755,6 @@ def repondre():
                 print("[web] empty")
         except Exception as e:
             print("[web] error:", e)
-            # On garde la réponse BD (même si vide) pour éviter le hors-sujet
 
     return jsonify({"reponse": txt})
 
@@ -3902,6 +3892,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
