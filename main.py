@@ -7,6 +7,7 @@ import os
 import unicodedata, re, math 
 from web_booster import web_answer
 
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def _autopatch_js_remove_localhost():
     root = os.path.dirname(__file__)
     # on remplace toutes ces formes:
@@ -3733,6 +3734,43 @@ def smart_quiz(question: str):
         }
     return {"reponse": "Quiz introuvable, reformule.", "propositions": []}
 
+def get_answer(question: str):
+    # 1. Chercher dans la base locale
+    for item in base:
+        try:
+            from rapidfuzz import fuzz
+            score = fuzz.ratio(question.lower(), item["question"].lower())
+            if score > 80:  # seuil de similarité
+                return item["reponse"]
+        except Exception:
+            if question.lower() in item["question"].lower():
+                return item["reponse"]
+
+    # 2. Si aucune réponse trouvée → fallback OpenAI
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",   # modèle recommandé (rapide + pas cher)
+            messages=[
+                {"role": "system", "content": "Tu es un professeur qui répond de façon pédagogique et claire."},
+                {"role": "user", "content": question}
+            ],
+            max_tokens=300,
+            temperature=0.3
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        print("[openai] error:", e)
+        return "Désolé, je n’ai pas trouvé de réponse pour le moment."
+
+
+
+
+@app.route('/repondre', methods=['POST'])
+def repondre():
+    data = request.get_json(silent=True) or {}
+    question = (data.get('question') or data.get('message') or '').strip()
+    reponse = get_answer(question)
+    return jsonify({"reponse": reponse})
 
 # ===================== ROUTE /repondre (POST uniquement) =====================
 @app.route('/repondre', methods=['POST'])
@@ -3943,6 +3981,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
