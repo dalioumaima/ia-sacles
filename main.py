@@ -3712,55 +3712,62 @@ def repondre():
     data = request.get_json(silent=True) or {}
     question = (data.get('question') or data.get('message') or '').strip()
 
-    # 1) Réponse depuis ta BD / logique
+    # 1) BD d'abord (ta logique existante)
+    txt = ""
+    found = False
     try:
-        reponse_bd = smart_answer(question)
+        reponse_bd = smart_answer(question)   # <-- NE PAS CHANGER
+        # Normaliser: accepte string OU dict {"text":..., "found":...}
+        if isinstance(reponse_bd, dict):
+            txt = (reponse_bd.get('text') or '').strip()
+            found = bool(reponse_bd.get('found', False))
+        else:
+            txt = (reponse_bd or '').strip()
+            # Marqueurs "non trouvé" (mets ici EXACTEMENT les phrases que ta BD renvoie quand elle ne trouve pas)
+            bad = {
+                "non trouvé",
+                "je ne sais pas",
+                "je n’ai pas cette info exacte",
+                "désolé je ne comprends pas",
+                "question non trouvée",
+                "aucune réponse",
+                "aucune reponse",
+            }
+            found = bool(txt) and (txt.lower() not in bad)
+        print(f"[db] found={found} len={len(txt)}")
     except Exception as e:
-        print('[smart_answer] error:', e)
-        reponse_bd = ''
+        print("[db] error:", e)
+        txt = ""
+        found = False
 
-    # Normalisation : accepte string ou dict(text=..., found=...)
-    if isinstance(reponse_bd, dict):
-        txt = (reponse_bd.get('text') or '').strip()
-        found = bool(reponse_bd.get('found', False))
-    else:
-        txt = (reponse_bd or '').strip()
-        # Heuristique "pas trouvé" : mets ici les phrases que TON smart_answer renvoie
-        bad_markers = {
-            "je n’ai pas cette info exacte",
-            "je n ai pas cette info exacte",
-            "je ne sais pas",
-            "non trouvé",
-            "aucune réponse",
-            "aucune reponse",
-            "désolé je ne comprends pas",
-            "question non trouvée",
-        }
-        found = bool(txt) and (txt.lower() not in bad_markers)
-
-    def _need_web(s: str, was_found: bool) -> bool:
-        if os.environ.get('DISABLE_WEB', '0') == '1':
+    # 2) Décider s'il faut le web (seuil très bas pour éviter le hors-sujet)
+    def need_web(s: str, ok: bool) -> bool:
+        if os.environ.get("DISABLE_WEB", "0") == "1":
             return False
-        if not was_found:
+        if not ok:
             return True
-        if not s or len(s.strip()) < 20:  # seuil très bas : évite les déclenchements intempestifs
+        if not s or len(s.strip()) < 20:  # <- si réponse BD trop courte, on complète par le web
             return True
         return False
 
-    # 2) Fallback web UNIQUEMENT si nécessaire
-    if _need_web(txt, found):
+    # 3) Fallback Web (UNIQUEMENT si nécessaire)
+    if need_web(txt, found):
         try:
             res = web_answer(question)
-            if res.get('answer'):
-                srcs = res.get('sources', [])
+            ans = res.get("answer", "")
+            if ans:
+                srcs = res.get("sources", [])
                 srcs_txt = ("\n\nSources:\n" + "\n".join(f"- {s['domain']}: {s['url']}" for s in srcs)) if srcs else ""
-                txt = res['answer'] + srcs_txt
-                print('[fallback-web] used')
+                txt = ans + srcs_txt
+                print("[web] used")
+            else:
+                print("[web] empty")
         except Exception as e:
-            print('[fallback-web] error:', e)
-            # on garde txt (même si vide), pas de hors-sujet
+            print("[web] error:", e)
+            # On garde la réponse BD (même si vide) pour éviter le hors-sujet
 
-    return jsonify({'reponse': txt})
+    return jsonify({"reponse": txt})
+
 
 # ===================== OUTILS THEME (compatibilité) =====================
 # mapping "thème normalisé" -> "thème EXACT tel que présent dans la base"
@@ -3895,6 +3902,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
