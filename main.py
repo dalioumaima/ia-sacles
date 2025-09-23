@@ -3763,78 +3763,41 @@ def get_answer(question: str):
         return "Désolé, je n’ai pas trouvé de réponse pour le moment."
 
 
+# --- Fonction OpenAI ---
+def ask_openai(prompt: str) -> str:
+    try:
+        response = client.chat.completions.create(
+            model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
+            messages=[
+                {"role": "system", "content": "Tu es un professeur qui répond de façon pédagogique et claire."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=int(os.getenv("OPENAI_MAX_OUTPUT", "300")),
+            temperature=0.3
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        print("[openai] error:", e)
+        return "Désolé, je n’ai pas pu obtenir de réponse d’OpenAI."
 
+# --- Fonction qui choisit la réponse ---
+def get_answer(question: str) -> str:
+    # 1) Chercher dans la base locale
+    for item in base:
+        score = fuzz.ratio(question.lower(), item["question"].lower())
+        if score > 80:  # seuil de similarité
+            return item["reponse"]
 
+    # 2) Sinon → fallback OpenAI
+    return ask_openai(question)
+
+# --- Route unique /repondre ---
 @app.route('/repondre', methods=['POST'])
 def repondre():
     data = request.get_json(silent=True) or {}
-    question = (data.get('question') or data.get('message') or '').strip()
+    question = (data.get("question") or data.get("message") or "").strip()
     reponse = get_answer(question)
     return jsonify({"reponse": reponse})
-
-# ===================== ROUTE /repondre (POST uniquement) =====================
-@app.route('/repondre', methods=['POST'])
-def repondre():
-    data = request.get_json(silent=True) or {}
-    question = (data.get('question') or data.get('message') or '').strip()
-
-    txt = ""
-    found = False
-
-    # 1) Réponse BD locale
-    try:
-        reponse_bd = smart_answer(question)
-        if isinstance(reponse_bd, dict):
-            txt = (reponse_bd.get('text') or '').strip()
-            found = bool(reponse_bd.get('found', False))
-        else:
-            txt = (reponse_bd or '').strip()
-            bad = {
-                "non trouvé", "je ne sais pas", "je n’ai pas cette info exacte",
-                "désolé je ne comprends pas", "question non trouvée",
-                "aucune réponse", "aucune reponse"
-            }
-            found = bool(txt) and (txt.lower() not in bad)
-        print(f"[db] found={found} len={len(txt)}")
-    except Exception as e:
-        print("[db] error:", e)
-        txt, found = "", False
-
-    # 2) Web fallback
-    def need_web(s: str, ok: bool) -> bool:
-        if os.environ.get("DISABLE_WEB","0") == "1":
-            return False
-        if not ok: return True
-        if not s or len(s.strip()) < int(os.environ.get("MIN_LEN","20")):
-            return True
-        return False
-
-    if need_web(txt, found):
-        try:
-            res = web_answer(question)
-            ans = res.get("answer", "")
-            if ans:
-                srcs = res.get("sources", [])
-                srcs_txt = ("\n\nSources:\n" + "\n".join(f"- {s['domain']}: {s['url']}" for s in srcs)) if srcs else ""
-                txt = ans + srcs_txt
-                found = True
-                print("[web] used")
-            else:
-                print("[web] empty")
-        except Exception as e:
-            print("[web] error:", e)
-
-    # 3) OpenAI fallback
-    if (not txt.strip()) and os.environ.get("ENABLE_OPENAI","0") == "1":
-        try:
-            ans = openai_answer(question)
-            if ans:
-                txt = ans
-                print("[openai] used")
-        except Exception as e:
-            print("[openai] error:", e)
-
-    return jsonify({"reponse": txt})
 
 # ===================== OUTILS THEME (compatibilité) =====================
 # mapping "thème normalisé" -> "thème EXACT tel que présent dans la base"
@@ -3981,6 +3944,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
