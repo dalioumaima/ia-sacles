@@ -9,6 +9,7 @@ requests>=2.32.0
 duckduckgo_search>=6.2.6
 beautifulsoup4>=4.12.2
 requests>=2.32.0
+flask
 openai>=1.0.0
 sentence-transformers
 torch
