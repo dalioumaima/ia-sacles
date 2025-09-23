@@ -3712,42 +3712,31 @@ def repondre():
     data = request.get_json(silent=True) or {}
     question = (data.get("question") or data.get("message") or "").strip()
 
-    # 1) Réponse depuis ta base / logique existante
+    # 1) ta logique existante
     try:
-        reponse = smart_answer(question)  # <-- garde ton moteur actuel
+        reponse = smart_answer(question)
     except Exception as e:
         print("[smart_answer] error:", e)
         reponse = ""
 
-    # 2) Heuristique : réponse "faible" => on déclenche la recherche web
+    # 2) déclencheur plus strict pour utiliser le web si la réponse est "faible"
     def _is_poor(ans: str) -> bool:
-        if not ans:
-            return True
+        if not ans: return True
         s = ans.strip()
-        if len(s) < 40:
-            return True
-        s_low = s.lower()
-        bad = {
-            "je ne sais pas",
-            "je ne peux pas répondre",
-            "désolé je ne comprends pas",
-            "question non trouvée",
-            "aucune reponse",
-            "aucune réponse",
+        if len(s) < 120: return True  # ← hausse le seuil si besoin
+        return s.lower() in {
+            "je ne sais pas","je ne peux pas répondre","désolé je ne comprends pas",
+            "question non trouvée","aucune réponse","aucune reponse",
+            "je n’ai pas cette info exacte"
         }
-        return s_low in bad
 
-    # 3) Fallback web AUTOMATIQUE (sans taper "web:")
+    # 3) fallback web automatique
     if _is_poor(reponse):
         try:
-            res = web_answer(question)  # <-- va chercher sur le web
+            res = web_answer(question)
             if res.get("answer"):
                 srcs = res.get("sources", [])
-                sources_txt = ""
-                if srcs:
-                    sources_txt = "\n\nSources:\n" + "\n".join(
-                        f"- {s['domain']}: {s['url']}" for s in srcs
-                    )
+                sources_txt = ("\n\nSources:\n" + "\n".join(f"- {s['domain']}: {s['url']}" for s in srcs)) if srcs else ""
                 reponse = res["answer"] + sources_txt
                 print("[fallback-web] used")
         except Exception as e:
@@ -3869,6 +3858,16 @@ def diag_web():
         info["requests_err"] = str(e)
     return jsonify(info)
 
+
+@app.after_request
+def _no_cache_for_static(resp):
+    ct = resp.headers.get("Content-Type", "")
+    # on évite que le navigateur garde l'ancien bundle js
+    if "javascript" in ct:
+        resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        resp.headers["Pragma"] = "no-cache"
+    return resp
+
 # ====== Route spéciale pour servir le React build (doit être tout à la fin) ======
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -3881,6 +3880,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
