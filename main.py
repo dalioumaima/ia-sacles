@@ -3709,43 +3709,59 @@ def smart_quiz(question: str):
 # ===================== ROUTE /repondre (POST uniquement) =====================
 @app.route('/repondre', methods=['POST'])
 def repondre():
+    import os
     data = request.get_json(silent=True) or {}
     question = (data.get("question") or data.get("message") or "").strip()
 
-    # 1) ta logique existante
+    log = []  # <- on renvoie un petit log de debug dans la réponse
+    force_web = (os.environ.get("FORCE_WEB","0") == "1")
+    min_len = int(os.environ.get("MIN_LEN","120"))
+
+    # 1) logique existante (ta “BD”)
     try:
         reponse = smart_answer(question)
+        log.append(f"smart_ok len={len(reponse) if reponse else 0}")
     except Exception as e:
-        print("[smart_answer] error:", e)
         reponse = ""
+        log.append(f"smart_err={e}")
 
-    # 2) déclencheur plus strict pour utiliser le web si la réponse est "faible"
+    # 2) qualité (déclencheur du fallback)
     def _is_poor(ans: str) -> bool:
-        if not ans: return True
+        if not ans:
+            log.append("poor:none")
+            return True
         s = ans.strip()
-        if len(s) < 120: return True  # ← hausse le seuil si besoin
-        return s.lower() in {
-            "je ne sais pas","je ne peux pas répondre","désolé je ne comprends pas",
-            "question non trouvée","aucune réponse","aucune reponse",
+        if len(s) < min_len:
+            log.append(f"poor:short<{min_len}")
+            return True
+        bad = {
+            "je ne sais pas", "je ne peux pas répondre", "désolé je ne comprends pas",
+            "question non trouvée", "aucune réponse", "aucune reponse",
             "je n’ai pas cette info exacte"
         }
+        if s.lower() in bad:
+            log.append("poor:badset")
+            return True
+        return False
 
-    # 3) fallback web automatique
-    if _is_poor(reponse):
+    # 3) Fallback web (ou forcé)
+    if force_web or _is_poor(reponse):
         try:
             res = web_answer(question)
-            if res.get("answer"):
-                srcs = res.get("sources", [])
-                sources_txt = ("\n\nSources:\n" + "\n".join(f"- {s['domain']}: {s['url']}" for s in srcs)) if srcs else ""
-                reponse = res["answer"] + sources_txt
-                print("[fallback-web] used")
+            ans = res.get("answer","")
+            srcs = res.get("sources", [])
+            src_txt = ("\n\nSources:\n" + "\n".join(f"- {s['domain']}: {s['url']}" for s in srcs)) if srcs else ""
+            if ans:
+                reponse = ans + src_txt
+                log.append(f"web_ok sources={len(srcs)}")
+            else:
+                log.append("web_empty")
         except Exception as e:
-            print("[fallback-web] error:", e)
-            if _is_poor(reponse):
+            log.append(f"web_err={e}")
+            if not reponse:
                 reponse = "Désolé, je n'ai pas trouvé l'information pour l'instant."
 
-    return jsonify({"reponse": reponse})
-
+    return jsonify({"reponse": reponse, "_debug": log})
 
 # ===================== OUTILS THEME (compatibilité) =====================
 # mapping "thème normalisé" -> "thème EXACT tel que présent dans la base"
@@ -3880,6 +3896,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
