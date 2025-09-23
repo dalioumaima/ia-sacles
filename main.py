@@ -3783,12 +3783,21 @@ def ask_openai(prompt: str) -> str:
 # --- Fonction qui choisit la réponse ---
 def get_answer(question: str) -> str:
     # 1) Chercher dans la base locale
+    best_score = 0
+    best_answer = None
     for item in base:
         score = fuzz.ratio(question.lower(), item["question"].lower())
-        if score > 80:  # seuil de similarité
-            return item["reponse"]
+        if score > best_score:
+            best_score = score
+            best_answer = item["reponse"]
 
-    # 2) Sinon → fallback OpenAI
+    # 2) Si un match correct trouvé → répondre depuis la BD
+    if best_score >= 75:   # seuil ajustable (75 = assez tolérant)
+        print(f"[db] réponse trouvée (score={best_score})")
+        return best_answer
+
+    # 3) Sinon → fallback OpenAI
+    print("[openai] fallback (aucune réponse BD)")
     return ask_openai(question)
 
 # --- Route unique /repondre ---
@@ -3944,6 +3953,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
