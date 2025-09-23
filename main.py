@@ -3707,52 +3707,62 @@ def smart_quiz(question: str):
 
 
 # ===================== ROUTE /repondre (POST uniquement) =====================
+# en haut de main.py, assure-toi d'avoir :
+import os
+from web_booster import web_answer
+
 @app.route('/repondre', methods=['POST'])
 def repondre():
     data = request.get_json(silent=True) or {}
     question = (data.get('question') or data.get('message') or '').strip()
 
-    # 1) BD d'abord
+    logs = []  # debug léger renvoyé au client si DEBUG_API=1
+    MIN_LEN = int(os.environ.get("MIN_LEN", "80"))            # seuil de “réponse faible”
+    FORCE_WEB = (os.environ.get("FORCE_WEB", "0") == "1")     # pour forcer le web si besoin
+
+    # --- 1) BD d'abord ---
     txt = ""
     found = False
     try:
-        reponse_bd = smart_answer(question)  # <-- ta logique/BD
+        reponse_bd = smart_answer(question)  # TA logique/BD
         if isinstance(reponse_bd, dict):
             txt = (reponse_bd.get('text') or '').strip()
             found = bool(reponse_bd.get('found', False))
         else:
             txt = (reponse_bd or '').strip()
-            # Phrases signalant "pas trouvé" par la BD (ajoute les tiennes si besoin)
-            bad = {
-                "non trouvé",
-                "je ne sais pas",
-                "je n’ai pas cette info exacte",
-                "je n ai pas cette info exacte",
-                "désolé je ne comprends pas",
-                "question non trouvée",
-                "aucune réponse",
-                "aucune reponse",
-                "pas trouvé dans la base",
-                "information introuvable"
+            # Marqueurs “pas trouvé” renvoyés par ta BD (ajoute tes phrases EXACTES si besoin)
+            BAD_MARKERS = {
+                "non trouvé", "pas trouvé", "aucune reponse", "aucune réponse",
+                "je ne sais pas", "je n’ai pas cette info exacte", "je n ai pas cette info exacte",
+                "désolé je ne comprends pas", "question non trouvée", "introuvable",
+                "pas d'information", "pas d info", "inconnu"
             }
-            found = bool(txt) and (txt.lower() not in bad)
-        print(f"[db] found={found} len={len(txt)}")
+            s_low = txt.lower()
+            is_bad_phrase = s_low in BAD_MARKERS or any(m in s_low for m in BAD_MARKERS)
+            # non-informatif = très court OU phrase “pas trouvé”
+            found = bool(txt) and (not is_bad_phrase) and (len(txt.strip()) >= MIN_LEN)
+        logs.append(f"db_found={found} db_len={len(txt)}")
     except Exception as e:
-        print("[db] error:", e)
+        logs.append(f"db_error={e}")
         txt, found = "", False
 
-    # 2) Web seulement si BD ne trouve pas OU réponse trop courte
+    # --- 2) Décider s'il faut le Web ---
     def need_web(s: str, ok: bool) -> bool:
         if os.environ.get("DISABLE_WEB", "0") == "1":
+            logs.append("web_disabled=1")
             return False
-        if not ok:
+        if FORCE_WEB:
+            logs.append("force_web=1")
             return True
-        # ⇩ seuil à 40 caractères (ajuste à 20/60 selon ton besoin)
-        if not s or len(s.strip()) < 40:
+        if not ok:
+            logs.append("reason=bd_not_found")
+            return True
+        if not s or len(s.strip()) < MIN_LEN:
+            logs.append(f"reason=too_short<{MIN_LEN}")
             return True
         return False
 
-    # 3) Fallback web
+    # --- 3) Fallback Web (seulement si nécessaire) ---
     if need_web(txt, found):
         try:
             res = web_answer(question)
@@ -3761,13 +3771,15 @@ def repondre():
                 srcs = res.get("sources", [])
                 srcs_txt = ("\n\nSources:\n" + "\n".join(f"- {s['domain']}: {s['url']}" for s in srcs)) if srcs else ""
                 txt = ans + srcs_txt
-                print("[web] used")
+                logs.append(f"web_ok srcs={len(srcs)}")
             else:
-                print("[web] empty")
+                logs.append("web_empty")
         except Exception as e:
-            print("[web] error:", e)
-            # on garde la réponse BD (même si vide) pour éviter du hors-sujet
+            logs.append(f"web_error={e}")
 
+    # --- 4) Réponse + debug optionnel ---
+    if os.environ.get("DEBUG_API", "0") == "1":
+        return jsonify({"reponse": txt, "_debug": logs})
     return jsonify({"reponse": txt})
 
 # ===================== OUTILS THEME (compatibilité) =====================
@@ -3903,6 +3915,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
