@@ -3671,7 +3671,35 @@ def smart_answer(question: str) -> str:
     if best and best_s >= 90: return best["r"]
     if best and best_s >= 75: return best["r"]
     return _generate_thematic_answer(q)
+_client_openai = None
+def _get_openai_client():
+    global _client_openai
+    if _client_openai is None:
+        key = os.environ.get("OPENAI_API_KEY", "").strip()
+        if not key:
+            return None
+        _client_openai = OpenAI(api_key=key)
+    return _client_openai
 
+def openai_answer(question: str) -> str:
+    if os.environ.get("ENABLE_OPENAI","0") != "1":
+        return ""
+    client = _get_openai_client()
+    if not client:
+        return ""
+    model = os.environ.get("OPENAI_MODEL","gpt-4o-mini")
+    max_output = int(os.environ.get("OPENAI_MAX_OUTPUT","300"))
+    try:
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[{"role":"user","content":question}],
+            max_tokens=max_output,
+            temperature=0.2
+        )
+        return resp.choices[0].message.content.strip()
+    except Exception as e:
+        print("[openai] error:", e)
+        return ""
 # ===================== QUIZ INTELLIGENT (utilisé en interne) =====================
 def smart_quiz(question: str):
     q = (question or "").strip()
@@ -3710,41 +3738,63 @@ def smart_quiz(question: str):
 @app.route('/repondre', methods=['POST'])
 def repondre():
     data = request.get_json(silent=True) or {}
-    question = (data.get("question") or "").strip()
+    question = (data.get('question') or data.get('message') or '').strip()
 
     txt = ""
     found = False
 
-    # 1) Réponse depuis la BD locale
+    # 1) Réponse BD locale
     try:
         reponse_bd = smart_answer(question)
         if isinstance(reponse_bd, dict):
-            txt = (reponse_bd.get("text") or "").strip()
-            found = bool(reponse_bd.get("found", False))
+            txt = (reponse_bd.get('text') or '').strip()
+            found = bool(reponse_bd.get('found', False))
         else:
-            txt = (reponse_bd or "").strip()
-            found = bool(txt) and txt.lower() not in {
-                "non trouvé", "je ne sais pas", "désolé je ne comprends pas",
+            txt = (reponse_bd or '').strip()
+            bad = {
+                "non trouvé", "je ne sais pas", "je n’ai pas cette info exacte",
+                "désolé je ne comprends pas", "question non trouvée",
                 "aucune réponse", "aucune reponse"
             }
+            found = bool(txt) and (txt.lower() not in bad)
+        print(f"[db] found={found} len={len(txt)}")
     except Exception as e:
         print("[db] error:", e)
+        txt, found = "", False
 
-    # 2) Si pas trouvé en BD -> fallback OpenAI
-    if not found:
+    # 2) Web fallback
+    def need_web(s: str, ok: bool) -> bool:
+        if os.environ.get("DISABLE_WEB","0") == "1":
+            return False
+        if not ok: return True
+        if not s or len(s.strip()) < int(os.environ.get("MIN_LEN","20")):
+            return True
+        return False
+
+    if need_web(txt, found):
         try:
-            import openai, os
-            openai.api_key = os.environ.get("OPENAI_API_KEY")
+            res = web_answer(question)
+            ans = res.get("answer", "")
+            if ans:
+                srcs = res.get("sources", [])
+                srcs_txt = ("\n\nSources:\n" + "\n".join(f"- {s['domain']}: {s['url']}" for s in srcs)) if srcs else ""
+                txt = ans + srcs_txt
+                found = True
+                print("[web] used")
+            else:
+                print("[web] empty")
+        except Exception as e:
+            print("[web] error:", e)
 
-            resp = openai.ChatCompletion.create(
-                model=os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
-                messages=[{"role": "user", "content": question}]
-            )
-            txt = resp["choices"][0]["message"]["content"].strip()
-            print("[openai] utilisé")
+    # 3) OpenAI fallback
+    if (not txt.strip()) and os.environ.get("ENABLE_OPENAI","0") == "1":
+        try:
+            ans = openai_answer(question)
+            if ans:
+                txt = ans
+                print("[openai] used")
         except Exception as e:
             print("[openai] error:", e)
-            txt = "Désolé, je n’ai pas trouvé de réponse."
 
     return jsonify({"reponse": txt})
 
@@ -3893,6 +3943,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
