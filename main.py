@@ -7,9 +7,8 @@ import os
 import unicodedata, re, math 
 from web_booster import web_answer
 from openai import OpenAI
-from sentence_transformers import SentenceTransformer, util
-
-embedder = SentenceTransformer("all-MiniLM-L6-v2")
+import numpy as np
+client = OpenAI()
 
 # Encoder toutes les questions de la BD une seule fois
 bd_questions = [item["question"] for item in base]
@@ -3662,52 +3661,58 @@ def _generate_thematic_answer(question: str) -> str:
     return "\n".join(lines)
 
 # ===================== SMART ANSWER + QUIZ =====================
-def smart_answer(question: str) -> str:
-    q = (question or "").strip()
-    if not q:
-        return "Pose ta question et je t’aide 😊"
-    qn = _norm(q)
-    for it in _BASE_NORM:
-        if qn == it["q_norm"]:
-            return it["r"]
-    cands = _candidates_by_theme(q)
-    best, best_s = None, -1
-    for it in cands:
-        s = _score(qn, it["q_norm"])
-        if s > best_s:
-            best, best_s = it, s
-    if best and best_s >= 90: return best["r"]
-    if best and best_s >= 75: return best["r"]
-    return _generate_thematic_answer(q)
-_client_openai = None
-def _get_openai_client():
-    global _client_openai
-    if _client_openai is None:
-        key = os.environ.get("OPENAI_API_KEY", "").strip()
-        if not key:
-            return None
-        _client_openai = OpenAI(api_key=key)
-    return _client_openai
+def get_embedding(text: str):
+    """Créer un embedding avec OpenAI"""
+    try:
+        resp = client.embeddings.create(
+            input=text,
+            model="text-embedding-3-small"
+        )
+        return resp.data[0].embedding
+    except Exception as e:
+        print("[embedding error]", e)
+        return None
 
-def openai_answer(question: str) -> str:
-    if os.environ.get("ENABLE_OPENAI","0") != "1":
-        return ""
-    client = _get_openai_client()
-    if not client:
-        return ""
-    model = os.environ.get("OPENAI_MODEL","gpt-4o-mini")
-    max_output = int(os.environ.get("OPENAI_MAX_OUTPUT","300"))
+def cosine_similarity(vec1, vec2):
+    """Calculer la similarité cosinus"""
+    v1, v2 = np.array(vec1), np.array(vec2)
+    return float(np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2) + 1e-10))
+
+def smart_answer(question: str) -> str:
+    """
+    1. Vérifie la BD avec embeddings
+    2. Si trouvé -> réponse BD
+    3. Sinon -> GPT-4 fallback
+    """
+    q_emb = get_embedding(question)
+    if q_emb is None:
+        return "Erreur : impossible de générer l’embedding."
+
+    best_key, best_score = None, -1
+    for key, val in _THEMATIC_KB.items():
+        emb = get_embedding(key)
+        if emb:
+            score = cosine_similarity(q_emb, emb)
+            if score > best_score:
+                best_key, best_score = key, score
+
+    # Seuil de confiance (ajuste selon tes tests)
+    if best_score > 0.70:
+        return f"(BD) { _THEMATIC_KB[best_key] }"
+
+    # Sinon fallback GPT-4
     try:
         resp = client.chat.completions.create(
-            model=model,
-            messages=[{"role":"user","content":question}],
-            max_tokens=max_output,
-            temperature=0.2
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "Tu es un professeur intelligent."},
+                {"role": "user", "content": question}
+            ]
         )
-        return resp.choices[0].message.content.strip()
+        return f"(GPT) {resp.choices[0].message.content.strip()}"
     except Exception as e:
-        print("[openai] error:", e)
-        return ""
+        print("[openai error]", e)
+        return "Erreur GPT OpenAI."
 # ===================== QUIZ INTELLIGENT (utilisé en interne) =====================
 def smart_quiz(question: str):
     q = (question or "").strip()
@@ -3950,6 +3955,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
