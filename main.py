@@ -7,34 +7,43 @@ import os
 import unicodedata, re, math 
 from web_booster import web_answer
 
-def _patch_front_bundle_remove_localhost():
-    # On cherche n'importe quel main.*.js (par ex. /static/js/main.d6e23b65.js)
+def _autopatch_js_remove_localhost():
     root = os.path.dirname(__file__)
+    # on remplace toutes ces formes:
+    patterns = (
+        "http://127.0.0.1:5001",
+        "https://127.0.0.1:5001",
+        "http://localhost:5001",
+        "https://localhost:5001",
+    )
     patched = 0
+    patched_files = []
+
     for dirpath, _, filenames in os.walk(root):
         for name in filenames:
-            if name.startswith("main.") and name.endswith(".js"):
+            if name.endswith(".js"):  # <-- plus large que "main.*.js"
                 path = os.path.join(dirpath, name)
                 try:
                     with io.open(path, "r", encoding="utf-8", errors="ignore") as f:
-                        content = f.read()
-                    if "http://127.0.0.1:5001" in content:
-                        content = content.replace("http://127.0.0.1:5001", "")
+                        s = f.read()
+                    orig = s
+                    for p in patterns:
+                        s = s.replace(p, "")
+                    if s != orig:
                         with io.open(path, "w", encoding="utf-8", errors="ignore") as f:
-                            f.write(content)
+                            f.write(s)
                         patched += 1
+                        patched_files.append(os.path.relpath(path, root))
                 except Exception:
                     pass
+
     if patched:
-        print(f"[patch] URLs localhost supprimées dans {patched} fichier(s) main.*.js")
-
-# appelle le patch au démarrage (une seule fois)
-try:
-    _patch_front_bundle_remove_localhost()
-except Exception as _e:
-    print("[patch] skip:", _e)
-# --- FIN PATCH ---
-
+        print(f"[autopatch] URLs localhost supprimées dans {patched} fichier(s) .js :")
+        for pf in patched_files[:20]:
+            print("  -", pf)
+        if patched > 20:
+            print("  ... (tronqué)")
+# --- FIN AUTO-PATCH ---
 
 app = Flask(__name__, static_folder="build", static_url_path="/")
 CORS(app)
@@ -3872,6 +3881,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
