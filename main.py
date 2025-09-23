@@ -3707,80 +3707,72 @@ def smart_quiz(question: str):
 
 
 # ===================== ROUTE /repondre (POST uniquement) =====================
-# en haut de main.py, assure-toi d'avoir :
-import os
-from web_booster import web_answer
-
 @app.route('/repondre', methods=['POST'])
 def repondre():
     data = request.get_json(silent=True) or {}
     question = (data.get('question') or data.get('message') or '').strip()
 
-    logs = []  # debug léger renvoyé au client si DEBUG_API=1
-    MIN_LEN = int(os.environ.get("MIN_LEN", "80"))            # seuil de “réponse faible”
-    FORCE_WEB = (os.environ.get("FORCE_WEB", "0") == "1")     # pour forcer le web si besoin
+    MIN_LEN = int(os.environ.get("MIN_LEN", "80"))     # seuil “réponse faible”
+    DISABLE_WEB = (os.environ.get("DISABLE_WEB","0") == "1")
+    DEBUG_API = (os.environ.get("DEBUG_API","0") == "1")
+    logs = []
 
     # --- 1) BD d'abord ---
-    txt = ""
-    found = False
+    txt, found = "", False
     try:
-        reponse_bd = smart_answer(question)  # TA logique/BD
-        if isinstance(reponse_bd, dict):
-            txt = (reponse_bd.get('text') or '').strip()
-            found = bool(reponse_bd.get('found', False))
+        r = smart_answer(question)     # ← TA fonction
+        # normalisation de tous les formats possibles
+        if isinstance(r, dict):
+            txt = (r.get("text") or "").strip()
+            found = bool(r.get("found", False))
+        elif isinstance(r, (list, tuple)):
+            txt = " ".join(map(lambda x: str(x).strip(), r)).strip()
+            found = len(txt) >= MIN_LEN
         else:
-            txt = (reponse_bd or '').strip()
-            # Marqueurs “pas trouvé” renvoyés par ta BD (ajoute tes phrases EXACTES si besoin)
-            BAD_MARKERS = {
-                "non trouvé", "pas trouvé", "aucune reponse", "aucune réponse",
-                "je ne sais pas", "je n’ai pas cette info exacte", "je n ai pas cette info exacte",
-                "désolé je ne comprends pas", "question non trouvée", "introuvable",
-                "pas d'information", "pas d info", "inconnu"
-            }
-            s_low = txt.lower()
-            is_bad_phrase = s_low in BAD_MARKERS or any(m in s_low for m in BAD_MARKERS)
-            # non-informatif = très court OU phrase “pas trouvé”
-            found = bool(txt) and (not is_bad_phrase) and (len(txt.strip()) >= MIN_LEN)
-        logs.append(f"db_found={found} db_len={len(txt)}")
+            txt = (r or "").strip()
+            found = len(txt) >= MIN_LEN
+        # marqueurs "non trouvé" (ajoute les phrases exactes de TA BD ici si besoin)
+        BAD = {
+            "non trouvé","pas trouvé","aucune réponse","aucune reponse",
+            "je ne sais pas","je n’ai pas cette info exacte","je n ai pas cette info exacte",
+            "désolé je ne comprends pas","question non trouvée","introuvable",
+            "pas d'information","pas d info","inconnu"
+        }
+        s_low = txt.lower()
+        if any(b in s_low for b in BAD):
+            found = False
+        logs.append(f"db_found={found} len={len(txt)}")
     except Exception as e:
         logs.append(f"db_error={e}")
         txt, found = "", False
 
-    # --- 2) Décider s'il faut le Web ---
+    # --- 2) Décider si on déclenche le web ---
     def need_web(s: str, ok: bool) -> bool:
-        if os.environ.get("DISABLE_WEB", "0") == "1":
-            logs.append("web_disabled=1")
-            return False
-        if FORCE_WEB:
-            logs.append("force_web=1")
-            return True
+        if DISABLE_WEB:
+            logs.append("web_disabled=1");  return False
         if not ok:
-            logs.append("reason=bd_not_found")
-            return True
+            logs.append("reason=bd_not_found");  return True
         if not s or len(s.strip()) < MIN_LEN:
-            logs.append(f"reason=too_short<{MIN_LEN}")
-            return True
+            logs.append(f"reason=too_short<{MIN_LEN}");  return True
         return False
 
-    # --- 3) Fallback Web (seulement si nécessaire) ---
+    # --- 3) Fallback Web ---
     if need_web(txt, found):
         try:
             res = web_answer(question)
-            ans = res.get("answer", "")
+            ans = (res or {}).get("answer","")
             if ans:
-                srcs = res.get("sources", [])
-                srcs_txt = ("\n\nSources:\n" + "\n".join(f"- {s['domain']}: {s['url']}" for s in srcs)) if srcs else ""
+                srcs = (res or {}).get("sources", [])
+                srcs_txt = ("\n\nSources:\n" + "\n".join(f"- {s.get('domain','?')}: {s.get('url','')}" for s in srcs)) if srcs else ""
                 txt = ans + srcs_txt
                 logs.append(f"web_ok srcs={len(srcs)}")
             else:
                 logs.append("web_empty")
         except Exception as e:
             logs.append(f"web_error={e}")
+            # on garde txt (même vide) pour éviter du hors-sujet
 
-    # --- 4) Réponse + debug optionnel ---
-    if os.environ.get("DEBUG_API", "0") == "1":
-        return jsonify({"reponse": txt, "_debug": logs})
-    return jsonify({"reponse": txt})
+    return jsonify({"reponse": txt, **({"_debug": logs} if DEBUG_API else {})})
 
 # ===================== OUTILS THEME (compatibilité) =====================
 # mapping "thème normalisé" -> "thème EXACT tel que présent dans la base"
@@ -3875,23 +3867,35 @@ def web_answer_route():
     return jsonify(res)
 @app.route("/diag_web")
 def diag_web():
-    info = {"DISABLE_WEB": os.environ.get("DISABLE_WEB", "0")}
-    # duckduckgo_search installé ?
+    info = {"DISABLE_WEB": os.environ.get("DISABLE_WEB","0")}
     try:
-        import duckduckgo_search  # noqa
+        import duckduckgo_search
         info["duckduckgo_search_installed"] = True
     except Exception as e:
         info["duckduckgo_search_installed"] = False
         info["duckduckgo_search_err"] = str(e)
-    # HTTP sortant OK ?
     try:
-        r = requests.get("https://duckduckgo.com", timeout=5)
+        r = requests.get("https://duckduckgo.com", timeout=6)
         info["requests_ok"] = (r.status_code == 200)
         info["requests_status"] = r.status_code
     except Exception as e:
         info["requests_ok"] = False
         info["requests_err"] = str(e)
     return jsonify(info)
+
+@app.route("/diag_db", methods=["POST"])
+def diag_db():
+    q = (request.get_json(silent=True) or {}).get("question","").strip()
+    try:
+        r = smart_answer(q)
+        if isinstance(r, dict):
+            return jsonify({"ok": True, "kind": "dict", "text": r.get("text",""), "found": bool(r.get("found", False))})
+        if isinstance(r, (list, tuple)):
+            return jsonify({"ok": True, "kind": "seq", "text": " ".join(map(str,r))})
+        return jsonify({"ok": True, "kind": "str", "text": r or ""})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
 
 
 @app.after_request
@@ -3915,6 +3919,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
