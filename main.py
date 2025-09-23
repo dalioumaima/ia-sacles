@@ -7,6 +7,13 @@ import os
 import unicodedata, re, math 
 from web_booster import web_answer
 from openai import OpenAI
+from sentence_transformers import SentenceTransformer, util
+
+embedder = SentenceTransformer("all-MiniLM-L6-v2")
+
+# Encoder toutes les questions de la BD une seule fois
+bd_questions = [item["question"] for item in base]
+bd_embeddings = embedder.encode(bd_questions, convert_to_tensor=True)
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def _autopatch_js_remove_localhost():
     root = os.path.dirname(__file__)
@@ -3734,33 +3741,23 @@ def smart_quiz(question: str):
         }
     return {"reponse": "Quiz introuvable, reformule.", "propositions": []}
 
-def get_answer(question: str):
-    # 1. Chercher dans la base locale
-    for item in base:
-        try:
-            from rapidfuzz import fuzz
-            score = fuzz.ratio(question.lower(), item["question"].lower())
-            if score > 80:  # seuil de similarité
-                return item["reponse"]
-        except Exception:
-            if question.lower() in item["question"].lower():
-                return item["reponse"]
+def get_answer(question: str) -> str:
+    # 1. Encoder la question utilisateur
+    q_embedding = embedder.encode(question, convert_to_tensor=True)
 
-    # 2. Si aucune réponse trouvée → fallback OpenAI
-    try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",   # modèle recommandé (rapide + pas cher)
-            messages=[
-                {"role": "system", "content": "Tu es un professeur qui répond de façon pédagogique et claire."},
-                {"role": "user", "content": question}
-            ],
-            max_tokens=300,
-            temperature=0.3
-        )
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        print("[openai] error:", e)
-        return "Désolé, je n’ai pas trouvé de réponse pour le moment."
+    # 2. Calculer similarité cosinus avec la BD
+    scores = util.pytorch_cos_sim(q_embedding, bd_embeddings)[0]
+    best_idx = int(scores.argmax())
+    best_score = float(scores[best_idx])
+
+    # 3. Vérifier si la correspondance est assez bonne
+    if best_score >= 0.75:  # seuil ajustable
+        print(f"[db] réponse trouvée (score={best_score:.2f})")
+        return base[best_idx]["reponse"]
+
+    # 4. Sinon → fallback GPT
+    print("[openai] fallback (aucune réponse BD assez proche)")
+    return ask_openai(question)
 
 
 # --- Fonction OpenAI ---
@@ -3953,6 +3950,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
