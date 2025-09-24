@@ -6,7 +6,7 @@ import logoUM6P from "./assets/logo_um6p.png";
 import robotIA from "./assets/robot_ia.png";
 
 function App() {
-  // URL de l’API (Vite -> VITE_API_URL, CRA -> REACT_APP_API_URL, sinon même domaine)
+  // -------- URL Backend (sans casser ton ancien setup) --------
   const API_URL =
     (typeof import !== "undefined" &&
       typeof import.meta !== "undefined" &&
@@ -22,37 +22,40 @@ function App() {
   const [chargement, setChargement] = useState(false);
   const [robotAnim, setRobotAnim] = useState(false);
 
-  // ------ FORMATTAGE RÉPONSE (insère des retours à la ligne sans changer le design) ------
+  // ---------- Formatage propre des réponses ----------
   const formatAnswer = (s) => {
     if (!s) return "";
-    // normaliser fins de lignes
-    let t = s.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    let t = String(s);
 
-    // Transformer des "###" en sauts de ligne (titres)
-    t = t.replace(/#{2,}/g, "\n\n");
+    // Normalisation fins de ligne & espaces
+    t = t.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    t = t.replace(/\u00A0/g, " ");      // espaces insécables -> espaces
+    t = t.replace(/[ \t]+/g, " ");      // espaces multiples -> 1
+    t = t.trim();
 
-    // Mettre un saut de ligne + puce quand on a des " - " (ou " – ")
-    // Cas 1: après une ponctuation
-    t = t.replace(/([.:!?])\s*[-–]\s+/g, "$1\n• ");
-    // Cas 2: partout où on a " - " en tant que séparateur
-    t = t.replace(/\s[-–]\s+/g, "\n• ");
+    // Titres Markdown ### -> double saut de ligne
+    t = t.replace(/#{2,}\s*/g, "\n\n");
 
-    // Saut de ligne après un point suivi d’une majuscule si c’est clairement une nouvelle phrase sans retour
-    t = t.replace(/([a-zàâçéèêëîïôûùüÿñ])\.\s+([A-ZÉÈÊÂÎÔÛÀÇ])/g, "$1.\n$2");
+    // Listes à puces : transformer " - " / " – " / " — " (même collés) en puces
+    t = t.replace(/([.:!?])\s*[-–—]\s+/g, "$1\n• ");
+    t = t.replace(/\s*[-–—]\s+/g, "\n• ");
 
-    // Nettoyage des multiples lignes vides
+    // Nouvelle phrase → retour à la ligne après un point suivi d'une maj / chiffre
+    t = t.replace(/\. (?=[A-ZÉÈÊÂÎÔÛÀÇ0-9])/g, ".\n");
+
+    // Nettoyage des multiples retours
     t = t.replace(/\n{3,}/g, "\n\n");
 
     return t.trim();
   };
 
-  // Animation robot
+  // ---------- Anim du robot ----------
   const animateRobot = () => {
     setRobotAnim(true);
     setTimeout(() => setRobotAnim(false), 600);
   };
 
-  // Lecture (TTS)
+  // ---------- TTS ----------
   const speak = (text) => {
     if ("speechSynthesis" in window) {
       const synth = window.speechSynthesis;
@@ -64,15 +67,13 @@ function App() {
     }
   };
 
-  // Pose une question au backend
+  // ---------- Appel backend /repondre ----------
   const poserQuestion = async () => {
-    if (!question.trim()) return;
     setChargement(true);
     setQuiz([]);
     setQuizUser([]);
     setQuizResult(null);
     animateRobot();
-
     try {
       const res = await fetch(`${API_URL}/repondre`, {
         method: "POST",
@@ -80,8 +81,7 @@ function App() {
         body: JSON.stringify({ question }),
       });
       const data = await res.json();
-      const txt = formatAnswer(data?.reponse || "");
-      setReponse(txt || "Je n’ai pas pu générer de réponse.");
+      setReponse(formatAnswer(data.reponse));
     } catch (err) {
       setReponse(
         "Erreur de connexion au serveur Professeur IA. Vérifie que le backend Python est bien lancé."
@@ -90,9 +90,8 @@ function App() {
     setChargement(false);
   };
 
-  // Reformulation intelligente
+  // ---------- Reformuler via même route ----------
   const reformuler = async () => {
-    if (!question.trim() && !reponse) return;
     setChargement(true);
     animateRobot();
     try {
@@ -100,15 +99,12 @@ function App() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          question:
-            (question || "").trim() +
-            " Reformule ou explique autrement en gardant une mise en forme claire avec des retours à la ligne.",
+          question: question + " Reformule ou explique autrement.",
           previous: reponse,
         }),
       });
       const data = await res.json();
-      const txt = formatAnswer(data?.reponse || "");
-      setReponse(txt || "Je n’ai pas pu reformuler.");
+      setReponse(formatAnswer(data.reponse));
     } catch (err) {
       setReponse(
         "Erreur de connexion au serveur Professeur IA pour la reformulation."
@@ -117,9 +113,8 @@ function App() {
     setChargement(false);
   };
 
-  // Génère quiz
+  // ---------- Générer quiz ----------
   const lancerQuiz = async () => {
-    if (!question.trim()) return;
     setQuiz([]);
     setQuizUser([]);
     setQuizResult(null);
@@ -131,7 +126,8 @@ function App() {
         body: JSON.stringify({ question }),
       });
       const data = await res.json();
-      const quizGen = data?.quiz?.length ? data.quiz : [];
+      const quizGen =
+        data && data.quiz && data.quiz.length > 0 ? data.quiz : [];
       setQuiz(quizGen);
       setQuizUser(Array(quizGen.length).fill(null));
       setQuizResult(null);
@@ -159,7 +155,7 @@ function App() {
     setQuizResult({ score, total: quiz.length });
   };
 
-  // Export PDF
+  // ---------- Export PDF ----------
   const exportPDF = () => {
     const doc = new jsPDF();
     doc.setFontSize(11);
@@ -176,9 +172,7 @@ function App() {
         y += 6;
       });
       doc.text(
-        `Bonne réponse : (${String.fromCharCode(65 + q.correct)}) ${
-          q.a[q.correct]
-        }`,
+        `Bonne réponse : (${String.fromCharCode(65 + q.correct)}) ${q.a[q.correct]}`,
         12,
         y
       );
@@ -252,6 +246,7 @@ function App() {
                 height: 74,
                 width: 74,
                 borderRadius: "50%",
+                boxShadow: "0 2px 14px #333",
                 objectFit: "cover",
                 background: "#111",
                 transition: "transform 0.4s, box-shadow 0.3s",
@@ -276,7 +271,7 @@ function App() {
                 <span style={{ color: "#ff8800" }}>SCALES</span>
               </h1>
 
-              {/* Zone de réponse : pre-wrap pour garder les retours à la ligne */}
+              {/* Zone de réponse avec mise en forme multi-lignes */}
               <div
                 style={{
                   background: "rgba(255,255,255,0.13)",
@@ -286,32 +281,19 @@ function App() {
                   fontSize: 19,
                   fontWeight: 500,
                   boxShadow: "0 2px 10px #2222",
+                  whiteSpace: "pre-wrap",
+                  lineHeight: 1.45,
                 }}
               >
-                <span
-                  style={{
-                    color: "#fff",
-                    fontWeight: 600,
-                    whiteSpace: "pre-wrap",   // <= rend les \n visibles
-                    wordBreak: "break-word",
-                    overflowWrap: "anywhere",
-                    lineHeight: 1.35,
-                  }}
-                >
-                  <b>Professeur IA :</b>{" "}
-                  {chargement ? "⏳ Je réfléchis..." : reponse}
+                <span style={{ color: "#fff", fontWeight: 600 }}>
+                  <b>Professeur IA :</b> {reponse}
                 </span>
               </div>
             </div>
           </div>
 
           <form
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              marginBottom: 12,
-            }}
+            style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}
             onSubmit={(e) => {
               e.preventDefault();
               poserQuestion();
@@ -343,12 +325,10 @@ function App() {
                 border: "none",
                 fontWeight: "bold",
                 fontSize: 17,
-                opacity: chargement ? 0.7 : 1,
               }}
               disabled={chargement || question.trim() === ""}
-              title={API_URL ? `API: ${API_URL}` : "Même domaine"}
             >
-              {chargement ? "En cours..." : "Envoyer"}
+              Envoyer
             </button>
             <button
               type="button"
@@ -362,7 +342,7 @@ function App() {
                 fontSize: 17,
               }}
               onClick={() => speak(reponse)}
-              disabled={!reponse || chargement}
+              disabled={!reponse}
               title="Écouter la réponse"
             >
               <span role="img" aria-label="Ecouter">
@@ -381,8 +361,7 @@ function App() {
                 fontSize: 17,
               }}
               onClick={reformuler}
-              disabled={chargement}
-              title="Reformuler la réponse"
+              disabled={chargement || !reponse}
             >
               Reformuler
             </button>
@@ -415,7 +394,6 @@ function App() {
                 border: "none",
                 fontWeight: "bold",
                 fontSize: 17,
-                opacity: chargement ? 0.7 : 1,
               }}
               onClick={lancerQuiz}
               disabled={chargement || !question}
@@ -454,8 +432,7 @@ function App() {
                           marginLeft: 18,
                           fontSize: 16,
                           color: "#fff",
-                          background:
-                            quizUser[idx] === repIdx ? "#ff8800" : "transparent",
+                          background: quizUser[idx] === repIdx ? "#ff8800" : "transparent",
                           padding: "2px 6px",
                           borderRadius: 6,
                           cursor: "pointer",
