@@ -8,10 +8,8 @@ import unicodedata, re, math
 from web_booster import web_answer
 from openai import OpenAI
 import numpy as np
+
 client = OpenAI()
-
-
-
 app = Flask(__name__, static_folder="build", static_url_path="/")
 CORS(app)
 THEMES = {
@@ -47,7 +45,6 @@ THEMES = {
     "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre","programme Study Skills","programme Lapex","lapex","worc","study skills","stadac","langues","programme des langues","LAPEX","qui t'as crée","programmé"],
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
 }
-
 base = [
 
     {
@@ -3473,6 +3470,70 @@ base = [
     "type": "definition"
   }
 ]
+# Encoder toutes les questions de la BD une seule fois
+bd_questions = [item["question"] for item in base]
+bd_embeddings = embedder.encode(bd_questions, convert_to_tensor=True)
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+def _autopatch_js_remove_localhost():
+    root = os.path.dirname(__file__)
+    # on remplace toutes ces formes:
+    patterns = (
+        "http://127.0.0.1:5001",
+        "https://127.0.0.1:5001",
+        "http://localhost:5001",
+        "https://localhost:5001",
+    )
+    patched = 0
+    patched_files = []
+
+    for dirpath, _, filenames in os.walk(root):
+        for name in filenames:
+            if name.endswith(".js"):  # <-- plus large que "main.*.js"
+                path = os.path.join(dirpath, name)
+                try:
+                    with io.open(path, "r", encoding="utf-8", errors="ignore") as f:
+                        s = f.read()
+                    orig = s
+                    for p in patterns:
+                        s = s.replace(p, "")
+                    if s != orig:
+                        with io.open(path, "w", encoding="utf-8", errors="ignore") as f:
+                            f.write(s)
+                        patched += 1
+                        patched_files.append(os.path.relpath(path, root))
+                except Exception:
+                    pass
+
+    if patched:
+        print(f"[autopatch] URLs localhost supprimées dans {patched} fichier(s) .js :")
+        for pf in patched_files[:20]:
+            print("  -", pf)
+        if patched > 20:
+            print("  ... (tronqué)")
+# --- FIN AUTO-PATCH ---
+def _generate_thematic_answer(question: str) -> str:
+    t_norm = _detect_theme_norm(question)
+    # map clé
+    def _key_real(norm_key): 
+        for k in _THEMATIC_KB.keys():
+            if _norm(k) == norm_key:
+                return k
+        return None
+    real_key = _key_real(t_norm)
+    if not real_key:
+        return "Je n’ai pas cette info exacte. Donne plus de contexte (CV, emploi, Python, R, IA)."
+    kb = _THEMATIC_KB[real_key]
+    lines = [f"Réponse rapide — thème {real_key} :"]
+    if kb.get("principes"):
+        lines.append("Principes clés :")
+        for p in kb["principes"]:
+            lines.append(f"• {p}")
+    if kb.get("actions"):
+        lines.append("Actions concrètes :")
+        for a in kb["actions"]:
+            lines.append(f"• {a}")
+    return "\n".join(lines)
+
 
 def extraire_theme(question_user):
     question_user = question_user.lower()
@@ -3486,43 +3547,7 @@ def extraire_theme(question_user):
             if score > best_score:
                 best_score = score
                 best_theme = theme
-    # Reconnaissance manuelle en cas d'ambiguïté
-    keywords = {
-    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif","IA","AI"],
-    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences","adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
-    "communication": ["communication", "communiquer", "comm","rapport","rapport académique","bibliographie","article"],
-    "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
-    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "rédaction", "rubrique", "section", "formation","expérience", "expériences", "compétence", "compétences", "photo", "structure", "résumé", "profil","trou dans le cv", "erreur cv", "modèle cv"],
-    "entretien": ["entretien", "recrutement", "oral", "interview","questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile","simulateur", "recrutement", "recruteur","questions difficiles", "présentez-vous", "simulation entretien","entretien technique"],
-    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre","cover letter"],
-    "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
-    "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
-    "antonyme": ["antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"],
-    "conjugaison": ["conjugaison", "conjuguer", "verbe", "temps", "présent", "imparfait", "passé", "futur"],
-    "python": ["python", "py", "pyhton", "piton"],
-    "r": ["r", "langage r"],
-    "data mining": ["data mining", "datamining", "mining", "extraction données"],
-    "scales": ["scales","SCALES","Bootcamps","Study Skills","module Writing and Oratory Skills","plagiat"],
-    "mill": ["MILL","mill"],
-    "worc": ["Worc","WORC","worc"],
-    "STADAC": ["STADAC","stadac","Stadac","outil de programmation"],
-    "CS": ["cs","CS","Community Service","citoyenneté","civic engagement"],
-    "cap": ["CAP","cap","IELTS","IP", "IP3"],
-    "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues","LCSS","exigences linguistiques","progrès en langues","langues étrangères","OTS"],
-    "data science": ["data science", "datascience", "data scientist", "science des données"],
-    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler","recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle","étranger", "trouver un emploi","travail","job","recherche d'emploi"],
-    "linkedin": ["linkedin", "profil linkedin", "compte linkedin", "ajouter sur linkedin", "réseau linkedin","importance linkedin", "recommandation linkedin", "message linkedin", "partager linkedin"],
-    "réseautage professionnel": ["réseau","contacts", "piston", "groupe", "meetup", "relations", "réseautage", "contacts pro"],
-    "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
-    "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement","Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
-    "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
-    "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
-    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre","programme Study Skills","programme Lapex","lapex","worc","study skills","stadac","langues","programme des langues","LAPEX","qui t'as crée","programmé"],
-    "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
-        
-    }
-# ===================== INTELLIGENCE OFFLINE =====================
-def _norm(s: str) -> str:
+                def _norm(s: str) -> str:
     s = s or ""
     s = unicodedata.normalize("NFKC", s)
     s = s.replace("\u00A0", " ")
@@ -3572,6 +3597,42 @@ def _score(q_norm: str, cand_q_norm: str) -> int:
     c = fuzz.token_sort_ratio(q_norm, cand_q_norm)
     return int(0.5*a + 0.3*b + 0.2*c)
 
+    # Reconnaissance manuelle en cas d'ambiguïté
+    keywords = {
+    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif","IA","AI"],
+    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences","adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
+    "communication": ["communication", "communiquer", "comm","rapport","rapport académique","bibliographie","article"],
+    "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
+    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "rédaction", "rubrique", "section", "formation","expérience", "expériences", "compétence", "compétences", "photo", "structure", "résumé", "profil","trou dans le cv", "erreur cv", "modèle cv"],
+    "entretien": ["entretien", "recrutement", "oral", "interview","questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile","simulateur", "recrutement", "recruteur","questions difficiles", "présentez-vous", "simulation entretien","entretien technique"],
+    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre","cover letter"],
+    "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
+    "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
+    "antonyme": ["antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"],
+    "conjugaison": ["conjugaison", "conjuguer", "verbe", "temps", "présent", "imparfait", "passé", "futur"],
+    "python": ["python", "py", "pyhton", "piton"],
+    "r": ["r", "langage r"],
+    "data mining": ["data mining", "datamining", "mining", "extraction données"],
+    "scales": ["scales","SCALES","Bootcamps","Study Skills","module Writing and Oratory Skills","plagiat"],
+    "mill": ["MILL","mill"],
+    "worc": ["Worc","WORC","worc"],
+    "STADAC": ["STADAC","stadac","Stadac","outil de programmation"],
+    "CS": ["cs","CS","Community Service","citoyenneté","civic engagement"],
+    "cap": ["CAP","cap","IELTS","IP", "IP3"],
+    "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues","LCSS","exigences linguistiques","progrès en langues","langues étrangères","OTS"],
+    "data science": ["data science", "datascience", "data scientist", "science des données"],
+    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler","recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle","étranger", "trouver un emploi","travail","job","recherche d'emploi"],
+    "linkedin": ["linkedin", "profil linkedin", "compte linkedin", "ajouter sur linkedin", "réseau linkedin","importance linkedin", "recommandation linkedin", "message linkedin", "partager linkedin"],
+    "réseautage professionnel": ["réseau","contacts", "piston", "groupe", "meetup", "relations", "réseautage", "contacts pro"],
+    "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
+    "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement","Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
+    "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
+    "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
+    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre","programme Study Skills","programme Lapex","lapex","worc","study skills","stadac","langues","programme des langues","LAPEX","qui t'as crée","programmé"],
+    "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
+        
+    }
+
 # ===================== THEMATIC KB =====================
 _THEMATIC_KB = {
     "cv": {
@@ -3595,70 +3656,6 @@ _THEMATIC_KB = {
         "actions": ["Clarifier la tâche", "Commencer baseline simple"]
     }
 }
-# Encoder toutes les questions de la BD une seule fois
-bd_questions = [item["question"] for item in base]
-bd_embeddings = embedder.encode(bd_questions, convert_to_tensor=True)
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-def _autopatch_js_remove_localhost():
-    root = os.path.dirname(__file__)
-    # on remplace toutes ces formes:
-    patterns = (
-        "http://127.0.0.1:5001",
-        "https://127.0.0.1:5001",
-        "http://localhost:5001",
-        "https://localhost:5001",
-    )
-    patched = 0
-    patched_files = []
-
-    for dirpath, _, filenames in os.walk(root):
-        for name in filenames:
-            if name.endswith(".js"):  # <-- plus large que "main.*.js"
-                path = os.path.join(dirpath, name)
-                try:
-                    with io.open(path, "r", encoding="utf-8", errors="ignore") as f:
-                        s = f.read()
-                    orig = s
-                    for p in patterns:
-                        s = s.replace(p, "")
-                    if s != orig:
-                        with io.open(path, "w", encoding="utf-8", errors="ignore") as f:
-                            f.write(s)
-                        patched += 1
-                        patched_files.append(os.path.relpath(path, root))
-                except Exception:
-                    pass
-
-    if patched:
-        print(f"[autopatch] URLs localhost supprimées dans {patched} fichier(s) .js :")
-        for pf in patched_files[:20]:
-            print("  -", pf)
-        if patched > 20:
-            print("  ... (tronqué)")
-# --- FIN AUTO-PATCH ---
-def _generate_thematic_answer(question: str) -> str:
-    t_norm = _detect_theme_norm(question)
-    # map clé
-    def _key_real(norm_key):
-        for k in _THEMATIC_KB.keys():
-            if _norm(k) == norm_key:
-                return k
-        return None
-    real_key = _key_real(t_norm)
-    if not real_key:
-        return "Je n’ai pas cette info exacte. Donne plus de contexte (CV, emploi, Python, R, IA)."
-    kb = _THEMATIC_KB[real_key]
-    lines = [f"Réponse rapide — thème {real_key} :"]
-    if kb.get("principes"):
-        lines.append("Principes clés :")
-        for p in kb["principes"]:
-            lines.append(f"• {p}")
-    if kb.get("actions"):
-        lines.append("Actions concrètes :")
-        for a in kb["actions"]:
-            lines.append(f"• {a}")
-    return "\n".join(lines)
-
 # ===================== SMART ANSWER + QUIZ =====================
 def get_embedding(text: str):
     """Créer un embedding avec OpenAI"""
@@ -3954,6 +3951,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
