@@ -3621,17 +3621,41 @@ except Exception as _e:
 # 6) OPENAI HELPERS
 # ======================
 def ask_openai(prompt: str) -> str:
+    """
+    Appel OpenAI rapide, réponse courte et bien formatée (avec retours à la ligne).
+    """
     try:
         response = client.chat.completions.create(
             model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
             messages=[
-                {"role": "system", "content": "Tu es un professeur qui répond de façon pédagogique et claire."},
+                {
+                    "role": "system",
+                    "content": (
+                        "Tu es un professeur clair et concis. "
+                        "Réponds en français avec des titres courts et des listes à puces. "
+                        "Utilise des sauts de ligne explicites, pas de gros pavés. "
+                        "Limite la réponse à 8 puces maximum, va à l’essentiel."
+                    )
+                },
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=int(os.getenv("OPENAI_MAX_OUTPUT", "300")),
-            temperature=0.3
+            # plus petit = plus rapide et évite les réponses roman
+            max_tokens=int(os.getenv("OPENAI_MAX_OUTPUT", "220")),
+            temperature=0.2
         )
-        return response.choices[0].message.content.strip()
+
+        # texte brut
+        txt = (response.choices[0].message.content or "")
+
+        # post-traitement léger pour un affichage propre
+        txt = txt.replace("\r\n", "\n").replace("\r", "\n")
+        txt = txt.replace("###", "\n\n")  # titres markdown → saut de ligne visible
+        txt = txt.replace("**", "")       # enlever gras markdown pour éviter l'effet “***”
+        # compactage des lignes en gardant les vrais retours
+        lines = [l.strip() for l in txt.split("\n")]
+        txt = "\n".join([l for l in lines if l != ""])
+
+        return txt.strip()
     except Exception as e:
         print("[openai] error:", e)
         return "Désolé, je n’ai pas pu obtenir de réponse d’OpenAI."
@@ -3810,3 +3834,4 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
