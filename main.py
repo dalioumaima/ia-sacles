@@ -1,50 +1,27 @@
+# -*- coding: utf-8 -*-
+import os, io, re, unicodedata, random, math
+import numpy as np
+import requests
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-import random
 from fuzzywuzzy import fuzz
-import requests
-import os
-import unicodedata, re, math 
-from web_booster import web_answer
 from openai import OpenAI
-import numpy as np
 
-client = OpenAI()
+# Si tu utilises ton booster web local
+from web_booster import web_answer  # doit exister dans ton projet
+
+# ======================
+# 0) INIT FLASK & OPENAI
+# ======================
 app = Flask(__name__, static_folder="build", static_url_path="/")
 CORS(app)
-THEMES = {
-    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif","IA","AI"],
-    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences","adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
-    "communication": ["communication", "communiquer", "comm","rapport","rapport académique","bibliographie","article"],
-    "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
-    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "rédaction", "rubrique", "section", "formation","expérience", "expériences", "compétence", "compétences", "photo", "structure", "résumé", "profil","trou dans le cv", "erreur cv", "modèle cv"],
-    "entretien": ["entretien", "recrutement", "oral", "interview","questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile","simulateur", "recrutement", "recruteur","questions difficiles", "présentez-vous", "simulation entretien","entretien technique"],
-    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre","cover letter"],
-    "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
-    "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
-    "antonyme": ["antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"],
-    "conjugaison": ["conjugaison", "conjuguer", "verbe", "temps", "présent", "imparfait", "passé", "futur"],
-    "python": ["python", "py", "pyhton", "piton"],
-    "r": ["r", "langage r"],
-    "data mining": ["data mining", "datamining", "mining", "extraction données"],
-    "scales": ["scales","SCALES","Bootcamps","Study Skills","module Writing and Oratory Skills","plagiat"],
-    "mill": ["MILL","mill"],
-    "worc": ["Worc","WORC","worc"],
-    "STADAC": ["STADAC","stadac","Stadac","outil de programmation"],
-    "CS": ["cs","CS","Community Service","citoyenneté","civic engagement"],
-    "cap": ["CAP","cap","IELTS","IP", "IP3"],
-    "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues","LCSS","exigences linguistiques","progrès en langues","langues étrangères","OTS"],
-    "data science": ["data science", "datascience", "data scientist", "science des données"],
-    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler","recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle","étranger", "trouver un emploi","travail","job","recherche d'emploi"],
-    "linkedin": ["linkedin", "profil linkedin", "compte linkedin", "ajouter sur linkedin", "réseau linkedin","importance linkedin", "recommandation linkedin", "message linkedin", "partager linkedin"],
-    "réseautage professionnel": ["réseau","contacts", "piston", "groupe", "meetup", "relations", "réseautage", "contacts pro"],
-    "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
-    "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement","Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
-    "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
-    "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
-    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre","programme Study Skills","programme Lapex","lapex","worc","study skills","stadac","langues","programme des langues","LAPEX","qui t'as crée","programmé"],
-    "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
-}
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# ======================
+# 1) BASE DE DONNÉES (IMPORTANT)
+# ======================
+# ⚠️ Laisse "base" comme nom de ta BD. Mets ici TOUT ton contenu de BD:
+# Exemple minimal (remplace par ta vraie BD complète):
 base = [
 
     {
@@ -3470,142 +3447,18 @@ base = [
     "type": "definition"
   }
 ]
-# Encoder toutes les questions de la BD une seule fois
-bd_questions = [item["question"] for item in base]
-bd_embeddings = embedder.encode(bd_questions, convert_to_tensor=True)
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-def _autopatch_js_remove_localhost():
-    root = os.path.dirname(__file__)
-    # on remplace toutes ces formes:
-    patterns = (
-        "http://127.0.0.1:5001",
-        "https://127.0.0.1:5001",
-        "http://localhost:5001",
-        "https://localhost:5001",
-    )
-    patched = 0
-    patched_files = []
 
-    for dirpath, _, filenames in os.walk(root):
-        for name in filenames:
-            if name.endswith(".js"):  # <-- plus large que "main.*.js"
-                path = os.path.join(dirpath, name)
-                try:
-                    with io.open(path, "r", encoding="utf-8", errors="ignore") as f:
-                        s = f.read()
-                    orig = s
-                    for p in patterns:
-                        s = s.replace(p, "")
-                    if s != orig:
-                        with io.open(path, "w", encoding="utf-8", errors="ignore") as f:
-                            f.write(s)
-                        patched += 1
-                        patched_files.append(os.path.relpath(path, root))
-                except Exception:
-                    pass
-
-    if patched:
-        print(f"[autopatch] URLs localhost supprimées dans {patched} fichier(s) .js :")
-        for pf in patched_files[:20]:
-            print("  -", pf)
-        if patched > 20:
-            print("  ... (tronqué)")
-# --- FIN AUTO-PATCH ---
-def _generate_thematic_answer(question: str) -> str:
-    t_norm = _detect_theme_norm(question)
-    # map clé
-    def _key_real(norm_key): 
-        for k in _THEMATIC_KB.keys():
-            if _norm(k) == norm_key:
-                return k
-        return None
-    real_key = _key_real(t_norm)
-    if not real_key:
-        return "Je n’ai pas cette info exacte. Donne plus de contexte (CV, emploi, Python, R, IA)."
-    kb = _THEMATIC_KB[real_key]
-    lines = [f"Réponse rapide — thème {real_key} :"]
-    if kb.get("principes"):
-        lines.append("Principes clés :")
-        for p in kb["principes"]:
-            lines.append(f"• {p}")
-    if kb.get("actions"):
-        lines.append("Actions concrètes :")
-        for a in kb["actions"]:
-            lines.append(f"• {a}")
-    return "\n".join(lines)
-
-
-def extraire_theme(question_user):
-    question_user = question_user.lower()
-    best_theme = None
-    best_score = 0
-    for theme, mots in THEMES.items():
-        for mot in mots:
-            if mot in question_user or fuzz.ratio(mot, question_user) > 80:
-                return theme
-            score = fuzz.partial_ratio(mot, question_user)
-            if score > best_score:
-                best_score = score
-                best_theme = theme
-                def _norm(s: str) -> str:
-    s = s or ""
-    s = unicodedata.normalize("NFKC", s)
-    s = s.replace("\u00A0", " ")
-    s = re.sub(r"\s+", " ", s).strip().lower()
-    return "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
-
-_BASE_NORM = []
-for i, item in enumerate(base):
-    _BASE_NORM.append({
-        "i": i,
-        "q_norm": _norm(item.get("question", "")),
-        "r": item.get("reponse", ""),
-        "theme": item.get("theme", ""),
-        "theme_norm": _norm(item.get("theme", "")),
-        "type": (item.get("type", "") or "").lower(),
-        "orig": item
-    })
-
-_THEMES_NORM = { _norm(tk): list({ _norm(w) for w in kws }) for tk, kws in THEMES.items() }
-
-def _detect_theme_norm(q: str) -> str:
-    qn = _norm(q)
-    best_theme, best_hit = "general", 0
-    for t_norm, kws in _THEMES_NORM.items():
-        hit = 1 if any(kw and kw in qn for kw in kws) else 0
-        if hit > best_hit:
-            best_theme, best_hit = t_norm, hit
-    return best_theme
-
-def _candidates_by_theme(q: str):
-    t = _detect_theme_norm(q)
-    if t == "general":
-        return _BASE_NORM
-    kws = set(_THEMES_NORM.get(t, []))
-    if not kws:
-        return _BASE_NORM
-    res = []
-    qn = _norm(q)
-    for it in _BASE_NORM:
-        if it["theme_norm"] == t or any(kw and kw in it["q_norm"] for kw in kws):
-            res.append(it)
-    return res if len(res) >= 5 else _BASE_NORM
-
-def _score(q_norm: str, cand_q_norm: str) -> int:
-    a = fuzz.token_set_ratio(q_norm, cand_q_norm)
-    b = fuzz.partial_ratio(q_norm, cand_q_norm)
-    c = fuzz.token_sort_ratio(q_norm, cand_q_norm)
-    return int(0.5*a + 0.3*b + 0.2*c)
-
-    # Reconnaissance manuelle en cas d'ambiguïté
-    keywords = {
-    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif","IA","AI"],
-    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences","adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
-    "communication": ["communication", "communiquer", "comm","rapport","rapport académique","bibliographie","article"],
+# ======================
+# 2) THEMES & KB
+# ======================
+THEMES = {
+    "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif", "IA", "AI"],
+    "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences", "adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
+    "communication": ["communication", "communiquer", "comm", "rapport", "rapport académique", "bibliographie", "article"],
     "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
-    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "rédaction", "rubrique", "section", "formation","expérience", "expériences", "compétence", "compétences", "photo", "structure", "résumé", "profil","trou dans le cv", "erreur cv", "modèle cv"],
-    "entretien": ["entretien", "recrutement", "oral", "interview","questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile","simulateur", "recrutement", "recruteur","questions difficiles", "présentez-vous", "simulation entretien","entretien technique"],
-    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation","normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre","cover letter"],
+    "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "rédaction", "rubrique", "section", "formation", "expérience", "expériences", "compétence", "compétences", "photo", "structure", "résumé", "profil", "trou dans le cv", "erreur cv", "modèle cv"],
+    "entretien": ["entretien", "recrutement", "oral", "interview", "questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile", "simulateur", "recruteur", "questions difficiles", "présentez-vous", "simulation entretien", "entretien technique"],
+    "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation", "normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre", "cover letter"],
     "traduction": ["traduction", "translate", "traduire", "traduit", "comment dit-on", "comment dire"],
     "synonyme": ["synonyme", "syno", "donne un synonyme", "autre mot pour"],
     "antonyme": ["antonyme", "anton", "contraires", "contraire", "opposé", "donne un antonyme"],
@@ -3613,27 +3466,25 @@ def _score(q_norm: str, cand_q_norm: str) -> int:
     "python": ["python", "py", "pyhton", "piton"],
     "r": ["r", "langage r"],
     "data mining": ["data mining", "datamining", "mining", "extraction données"],
-    "scales": ["scales","SCALES","Bootcamps","Study Skills","module Writing and Oratory Skills","plagiat"],
-    "mill": ["MILL","mill"],
-    "worc": ["Worc","WORC","worc"],
-    "STADAC": ["STADAC","stadac","Stadac","outil de programmation"],
-    "CS": ["cs","CS","Community Service","citoyenneté","civic engagement"],
-    "cap": ["CAP","cap","IELTS","IP", "IP3"],
-    "LAPEX": ["lapex","LAPEX","Study Skills","LCSS","Skills Portfolio","Portfolio","LRS","langues","LCSS","exigences linguistiques","progrès en langues","langues étrangères","OTS"],
+    "scales": ["scales", "SCALES", "Bootcamps", "Study Skills", "module Writing and Oratory Skills", "plagiat"],
+    "mill": ["MILL", "mill"],
+    "worc": ["Worc", "WORC", "worc"],
+    "STADAC": ["STADAC", "stadac", "Stadac", "outil de programmation"],
+    "CS": ["cs", "CS", "Community Service", "citoyenneté", "civic engagement"],
+    "cap": ["CAP", "cap", "IELTS", "IP", "IP3"],
+    "LAPEX": ["lapex", "LAPEX", "Study Skills", "LCSS", "Skills Portfolio", "Portfolio", "LRS", "langues", "LCSS", "exigences linguistiques", "progrès en langues", "langues étrangères", "OTS"],
     "data science": ["data science", "datascience", "data scientist", "science des données"],
-    "techniques de recherche d'emploi et stage": ["offres", "plateforme","candidature spontanée", "postuler","recherche", "stage", "emploi", "postuler", "candidature", "offre d'emploi","plateforme emploi", "jobteaser", "indeed", "welcome to the jungle","étranger", "trouver un emploi","travail","job","recherche d'emploi"],
-    "linkedin": ["linkedin", "profil linkedin", "compte linkedin", "ajouter sur linkedin", "réseau linkedin","importance linkedin", "recommandation linkedin", "message linkedin", "partager linkedin"],
-    "réseautage professionnel": ["réseau","contacts", "piston", "groupe", "meetup", "relations", "réseautage", "contacts pro"],
+    "techniques de recherche d'emploi et stage": ["offres", "plateforme", "candidature spontanée", "postuler", "recherche", "stage", "emploi", "candidature", "offre d'emploi", "jobteaser", "indeed", "welcome to the jungle", "étranger", "trouver un emploi", "travail", "job", "recherche d'emploi"],
+    "linkedin": ["linkedin", "profil linkedin", "compte linkedin", "ajouter sur linkedin", "réseau linkedin", "importance linkedin", "recommandation linkedin", "message linkedin", "partager linkedin"],
+    "réseautage professionnel": ["réseau", "contacts", "piston", "groupe", "meetup", "relations", "réseautage", "contacts pro"],
     "orientation professionnelle": ["projet professionnel", "orientation", "carrière", "m2", "positionnement", "grand groupe", "startup", "PME"],
-    "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement","Meet & Greet", "événements","Meet & Greet","Meet&Greet","Meet and Greet"],
+    "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement", "Meet & Greet", "Meet&Greet", "Meet and Greet"],
     "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
     "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
-    "personnel scales": ["personnel","staff","responsable","manager","academic advisor","program officer","operation officer","qui est","responsable de","en charge de","dirige","encadre","programme Study Skills","programme Lapex","lapex","worc","study skills","stadac","langues","programme des langues","LAPEX","qui t'as crée","programmé"],
+    "personnel scales": ["personnel", "staff", "responsable", "manager", "academic advisor", "program officer", "operation officer", "qui est", "responsable de", "en charge de", "dirige", "encadre", "programme Study Skills", "programme Lapex", "lapex", "worc", "study skills", "stadac", "langues", "programme des langues", "LAPEX", "qui t'as crée", "programmé"],
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
-        
-    }
+}
 
-# ===================== THEMATIC KB =====================
 _THEMATIC_KB = {
     "cv": {
         "principes": ["1 page claire", "Résultats chiffrés", "Mots-clés de l’offre", "Mise en page simple"],
@@ -3656,60 +3507,171 @@ _THEMATIC_KB = {
         "actions": ["Clarifier la tâche", "Commencer baseline simple"]
     }
 }
-# ===================== SMART ANSWER + QUIZ =====================
-def get_embedding(text: str):
-    """Créer un embedding avec OpenAI"""
-    try:
-        resp = client.embeddings.create(
-            input=text,
-            model="text-embedding-3-small"
-        )
-        return resp.data[0].embedding
-    except Exception as e:
-        print("[embedding error]", e)
-        return None
 
-def cosine_similarity(vec1, vec2):
-    """Calculer la similarité cosinus"""
-    v1, v2 = np.array(vec1), np.array(vec2)
-    return float(np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2) + 1e-10))
+# ======================
+# 3) UTILS NORMALISATION & THEMES
+# ======================
+def _norm(s: str) -> str:
+    s = s or ""
+    s = unicodedata.normalize("NFKC", s)
+    s = s.replace("\u00A0", " ")
+    s = re.sub(r"\s+", " ", s).strip().lower()
+    return "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
 
-def smart_answer(question: str) -> str:
-    """
-    1. Vérifie la BD avec embeddings
-    2. Si trouvé -> réponse BD
-    3. Sinon -> GPT-4 fallback
-    """
-    q_emb = get_embedding(question)
-    if q_emb is None:
-        return "Erreur : impossible de générer l’embedding."
+_THEMES_NORM = { _norm(tk): list({ _norm(w) for w in kws }) for tk, kws in THEMES.items() }
 
-    best_key, best_score = None, -1
-    for key, val in _THEMATIC_KB.items():
-        emb = get_embedding(key)
-        if emb:
-            score = cosine_similarity(q_emb, emb)
+def _detect_theme_norm(q: str) -> str:
+    qn = _norm(q)
+    best_theme, best_hit = "general", 0
+    for t_norm, kws in _THEMES_NORM.items():
+        hit = 1 if any(kw and kw in qn for kw in kws) else 0
+        if hit > best_hit:
+            best_theme, best_hit = t_norm, hit
+    return best_theme
+
+def extraire_theme(question_user: str) -> str:
+    question_user = (question_user or "").lower()
+    best_theme, best_score = None, 0
+    for theme, mots in THEMES.items():
+        for mot in mots:
+            if mot in question_user or fuzz.ratio(mot, question_user) > 80:
+                return theme
+            score = fuzz.partial_ratio(mot, question_user)
             if score > best_score:
-                best_key, best_score = key, score
+                best_score, best_theme = score, theme
+    return best_theme or "généralités et questions fréquentes"
 
-    # Seuil de confiance (ajuste selon tes tests)
-    if best_score > 0.70:
-        return f"(BD) { _THEMATIC_KB[best_key] }"
+# ======================
+# 4) INDEX BD NORMALISÉ (construit une fois)
+# ======================
+_BASE_NORM = []
+for i, item in enumerate(base):
+    _BASE_NORM.append({
+        "i": i,
+        "q_norm": _norm(item.get("question", "")),
+        "r": item.get("reponse", ""),
+        "theme": item.get("theme", ""),
+        "theme_norm": _norm(item.get("theme", "")),
+        "type": (item.get("type", "") or "").lower(),
+        "orig": item
+    })
 
-    # Sinon fallback GPT-4
+def _candidates_by_theme(q: str):
+    t = _detect_theme_norm(q)
+    if t == "general":
+        return _BASE_NORM
+    kws = set(_THEMES_NORM.get(t, []))
+    if not kws:
+        return _BASE_NORM
+    res = []
+    for it in _BASE_NORM:
+        if it["theme_norm"] == t or any(kw and kw in it["q_norm"] for kw in kws):
+            res.append(it)
+    return res if len(res) >= 5 else _BASE_NORM
+
+def _score(q_norm: str, cand_q_norm: str) -> int:
+    a = fuzz.token_set_ratio(q_norm, cand_q_norm)
+    b = fuzz.partial_ratio(q_norm, cand_q_norm)
+    c = fuzz.token_sort_ratio(q_norm, cand_q_norm)
+    return int(0.5*a + 0.3*b + 0.2*c)
+
+# ======================
+# 5) PATCH FRONT (supprime URLs localhost dans les .js)
+# ======================
+def _autopatch_js_remove_localhost():
+    root = os.path.dirname(__file__)
+    patterns = (
+        "http://127.0.0.1:5001",
+        "https://127.0.0.1:5001",
+        "http://localhost:5001",
+        "https://localhost:5001",
+    )
+    patched = 0
+    patched_files = []
+    for dirpath, _, filenames in os.walk(root):
+        for name in filenames:
+            if name.endswith(".js"):
+                path = os.path.join(dirpath, name)
+                try:
+                    with io.open(path, "r", encoding="utf-8", errors="ignore") as f:
+                        s = f.read()
+                    orig = s
+                    for p in patterns:
+                        s = s.replace(p, "")
+                    if s != orig:
+                        with io.open(path, "w", encoding="utf-8", errors="ignore") as f:
+                            f.write(s)
+                        patched += 1
+                        patched_files.append(os.path.relpath(path, root))
+                except Exception:
+                    pass
+    if patched:
+        print(f"[autopatch] URLs localhost supprimées dans {patched} fichier(s) .js :")
+        for pf in patched_files[:20]:
+            print("  -", pf)
+        if patched > 20:
+            print("  ... (tronqué)")
+
+try:
+    _autopatch_js_remove_localhost()
+except Exception as _e:
+    print("[autopatch] skip:", _e)
+
+# ======================
+# 6) OPENAI HELPERS
+# ======================
+def ask_openai(prompt: str) -> str:
     try:
-        resp = client.chat.completions.create(
-            model="gpt-4o-mini",
+        response = client.chat.completions.create(
+            model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
             messages=[
-                {"role": "system", "content": "Tu es un professeur intelligent."},
-                {"role": "user", "content": question}
-            ]
+                {"role": "system", "content": "Tu es un professeur qui répond de façon pédagogique et claire."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=int(os.getenv("OPENAI_MAX_OUTPUT", "300")),
+            temperature=0.3
         )
-        return f"(GPT) {resp.choices[0].message.content.strip()}"
+        return response.choices[0].message.content.strip()
     except Exception as e:
-        print("[openai error]", e)
-        return "Erreur GPT OpenAI."
-# ===================== QUIZ INTELLIGENT (utilisé en interne) =====================
+        print("[openai] error:", e)
+        return "Désolé, je n’ai pas pu obtenir de réponse d’OpenAI."
+
+# ======================
+# 7) SMART ANSWER (BD prioritaire -> GPT fallback)
+# ======================
+def smart_answer(question: str) -> str:
+    q = (question or "").strip()
+    if not q:
+        return "Pose une question."
+
+    qn = _norm(q)
+
+    # a) Fuzzy direct exact-ish
+    for it in _BASE_NORM:
+        if fuzz.ratio(qn, it["q_norm"]) >= 90:
+            print("[db] exact-ish match")
+            return it["r"]
+
+    # b) Candidats via thème + meilleur score
+    cands = _candidates_by_theme(q)
+    best, best_s = None, -1
+    for it in cands:
+        s = _score(qn, it["q_norm"])
+        if s > best_s:
+            best, best_s = it, s
+
+    # seuil assez tolérant
+    if best and best_s >= 75:
+        print(f"[db] réponse trouvée (score={best_s})")
+        return best["r"]
+
+    # c) fallback OpenAI
+    print("[openai] fallback (aucune réponse BD)")
+    return ask_openai(q)
+
+# ======================
+# 8) QUIZ
+# ======================
 def smart_quiz(question: str):
     q = (question or "").strip()
     if not q:
@@ -3724,7 +3686,6 @@ def smart_quiz(question: str):
                 "propositions": it["orig"].get("propositions", []) or []
             }
 
-    # fuzzy parmi les quiz
     quiz_cands = [it for it in _BASE_NORM if it["type"] == "quiz"]
     if not quiz_cands:
         return {"reponse": "Aucun quiz défini.", "propositions": []}
@@ -3742,123 +3703,27 @@ def smart_quiz(question: str):
         }
     return {"reponse": "Quiz introuvable, reformule.", "propositions": []}
 
-def get_answer(question: str) -> str:
-    # 1. Encoder la question utilisateur
-    q_embedding = embedder.encode(question, convert_to_tensor=True)
-
-    # 2. Calculer similarité cosinus avec la BD
-    scores = util.pytorch_cos_sim(q_embedding, bd_embeddings)[0]
-    best_idx = int(scores.argmax())
-    best_score = float(scores[best_idx])
-
-    # 3. Vérifier si la correspondance est assez bonne
-    if best_score >= 0.75:  # seuil ajustable
-        print(f"[db] réponse trouvée (score={best_score:.2f})")
-        return base[best_idx]["reponse"]
-
-    # 4. Sinon → fallback GPT
-    print("[openai] fallback (aucune réponse BD assez proche)")
-    return ask_openai(question)
-
-
-# --- Fonction OpenAI ---
-def ask_openai(prompt: str) -> str:
-    try:
-        response = client.chat.completions.create(
-            model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
-            messages=[
-                {"role": "system", "content": "Tu es un professeur qui répond de façon pédagogique et claire."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=int(os.getenv("OPENAI_MAX_OUTPUT", "300")),
-            temperature=0.3
-        )
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        print("[openai] error:", e)
-        return "Désolé, je n’ai pas pu obtenir de réponse d’OpenAI."
-
-# --- Fonction qui choisit la réponse ---
-def get_answer(question: str) -> str:
-    # 1) Chercher dans la base locale
-    best_score = 0
-    best_answer = None
-    for item in base:
-        score = fuzz.ratio(question.lower(), item["question"].lower())
-        if score > best_score:
-            best_score = score
-            best_answer = item["reponse"]
-
-    # 2) Si un match correct trouvé → répondre depuis la BD
-    if best_score >= 75:   # seuil ajustable (75 = assez tolérant)
-        print(f"[db] réponse trouvée (score={best_score})")
-        return best_answer
-
-    # 3) Sinon → fallback OpenAI
-    print("[openai] fallback (aucune réponse BD)")
-    return ask_openai(question)
-
-# --- Route unique /repondre ---
+# ======================
+# 9) ROUTES API
+# ======================
 @app.route('/repondre', methods=['POST'])
 def repondre():
     data = request.get_json(silent=True) or {}
     question = (data.get("question") or data.get("message") or "").strip()
-    reponse = get_answer(question)
+    reponse = smart_answer(question)
     return jsonify({"reponse": reponse})
 
-# ===================== OUTILS THEME (compatibilité) =====================
-# mapping "thème normalisé" -> "thème EXACT tel que présent dans la base"
-_THEME_KEYS_ORIG = sorted({(e.get("theme") or "").strip() for e in base if e.get("theme")})
-_NORM2ORIG = {_norm(t): t for t in _THEME_KEYS_ORIG if t}
-
-def _resolve_theme_for_quiz(question_text: str, explicit_theme: str = "") -> str:
-    """
-    Renvoie un nom de thème EXACT (présent dans la base) ou ''.
-    Ordre:
-      1) thème explicite (payload)
-      2) extraire_theme() (ton ancienne fonction)
-      3) _detect_theme_norm() -> mappée via _NORM2ORIG
-    """
-    # 1) thème explicite
-    if explicit_theme:
-        t = explicit_theme.strip()
-        if t in _THEME_KEYS_ORIG:
-            return t
-        tnorm = _norm(t)
-        if tnorm in _NORM2ORIG:
-            return _NORM2ORIG[tnorm]
-
-    # 2) ancienne détection
-    try:
-        t = extraire_theme(question_text or "")
-        if t and t in _THEME_KEYS_ORIG:
-            return t
-        if t:
-            tnorm = _norm(t)
-            if tnorm in _NORM2ORIG:
-                return _NORM2ORIG[tnorm]
-    except Exception:
-        pass
-
-    # 3) nouvelle détection
-    tnorm = _detect_theme_norm(question_text or "")
-    return _NORM2ORIG.get(tnorm, "")
-
-
-# ===================== ROUTE /quiz (POST uniquement, même format qu'avant) =====================
 @app.route('/quiz', methods=['POST'])
 def quiz():
     data = request.get_json(silent=True) or {}
-
-    # Comme avant : la "question" sert à déduire le thème
     question_raw = (data.get('question') or '').strip()
-    theme_hint   = (data.get('theme') or '').strip()   # optionnel pour forcer un thème
-    # -> utilise le resolve pour être robuste mais garde le même résultat final
-    theme = _resolve_theme_for_quiz(question_raw.lower(), theme_hint)
+    # thème déduit (optionnel : tu peux forcer via data['theme'])
+    theme_hint = (data.get('theme') or '').strip()
 
+    # sélection par thème EXACT présent dans la base
+    theme = theme_hint or extraire_theme(question_raw.lower())
     quiz = []
     if theme:
-        # mêmes filtres que ton ancien code : EXACTEMENT 3 propositions
         candidats = [
             e for e in base
             if e.get("theme") == theme
@@ -3867,7 +3732,6 @@ def quiz():
         ]
         random.shuffle(candidats)
         for entry in candidats[:5]:
-            # même construction de réponses que l'ancien code
             reponses = [entry.get("reponse", "")] + [
                 p for p in entry.get("propositions", []) if p != entry.get("reponse", "")
             ]
@@ -3885,8 +3749,6 @@ def quiz():
                 "a": reponses,
                 "correct": correct_index
             })
-
-    # même sortie qu'avant (au moins 2 éléments si possible)
     return jsonify({"quiz": quiz[:max(2, len(quiz))]})
 
 @app.route("/web_answer", methods=["POST"])
@@ -3897,6 +3759,7 @@ def web_answer_route():
         return jsonify({"answer": "Pose ta question et je t’aide 😊", "sources": []})
     res = web_answer(q)
     return jsonify(res)
+
 @app.route("/diag_web")
 def diag_web():
     info = {"DISABLE_WEB": os.environ.get("DISABLE_WEB","0")}
@@ -3920,26 +3783,22 @@ def diag_db():
     q = (request.get_json(silent=True) or {}).get("question","").strip()
     try:
         r = smart_answer(q)
-        if isinstance(r, dict):
-            return jsonify({"ok": True, "kind": "dict", "text": r.get("text",""), "found": bool(r.get("found", False))})
-        if isinstance(r, (list, tuple)):
-            return jsonify({"ok": True, "kind": "seq", "text": " ".join(map(str,r))})
-        return jsonify({"ok": True, "kind": "str", "text": r or ""})
+        return jsonify({"ok": True, "text": r})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
 
-
-
+# Cache busting pour JS
 @app.after_request
 def _no_cache_for_static(resp):
     ct = resp.headers.get("Content-Type", "")
-    # on évite que le navigateur garde l'ancien bundle js
     if "javascript" in ct:
         resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
         resp.headers["Pragma"] = "no-cache"
     return resp
 
-# ====== Route spéciale pour servir le React build (doit être tout à la fin) ======
+# ======================
+# 10) SERVE REACT BUILD
+# ======================
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_react(path):
@@ -3951,70 +3810,3 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
