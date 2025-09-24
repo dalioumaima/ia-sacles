@@ -6,10 +6,13 @@ import logoUM6P from "./assets/logo_um6p.png";
 import robotIA from "./assets/robot_ia.png";
 
 function App() {
-const API_URL =
-  (typeof import !== "undefined" && typeof import.meta !== "undefined" && import.meta.env?.VITE_API_URL)
-  || (typeof process !== "undefined" && process.env?.REACT_APP_API_URL)
-  || "";
+  // URL de l’API (détecte Vite ou CRA, sinon même host)
+  const API_URL =
+    (typeof import !== "undefined" &&
+      typeof import.meta !== "undefined" &&
+      import.meta.env?.VITE_API_URL) ||
+    (typeof process !== "undefined" && process.env?.REACT_APP_API_URL) ||
+    "";
 
   const [question, setQuestion] = useState("");
   const [reponse, setReponse] = useState("Bonjour 👋 ! Pose-moi une question.");
@@ -25,7 +28,7 @@ const API_URL =
     setTimeout(() => setRobotAnim(false), 600);
   };
 
-  // Synthèse vocale
+  // Lecture de la réponse (TTS)
   const speak = (text) => {
     if ("speechSynthesis" in window) {
       const synth = window.speechSynthesis;
@@ -39,11 +42,13 @@ const API_URL =
 
   // Pose une question au backend
   const poserQuestion = async () => {
+    if (!question.trim()) return;
     setChargement(true);
     setQuiz([]);
     setQuizUser([]);
     setQuizResult(null);
     animateRobot();
+
     try {
       const res = await fetch(`${API_URL}/repondre`, {
         method: "POST",
@@ -51,33 +56,52 @@ const API_URL =
         body: JSON.stringify({ question }),
       });
       const data = await res.json();
-      setReponse(data.reponse);
+      const txt = (data?.reponse || "")
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .trim();
+      setReponse(txt || "Je n’ai pas pu générer de réponse.");
     } catch (err) {
-      setReponse("Erreur de connexion au serveur Professeur IA. Vérifie que le backend Python est bien lancé.");
+      setReponse(
+        "Erreur de connexion au serveur Professeur IA. Vérifie que le backend Python est bien lancé."
+      );
     }
     setChargement(false);
   };
 
-  // Reformulation intelligente (déclenchée par le bouton "Reformuler")
+  // Reformulation intelligente
   const reformuler = async () => {
+    if (!question.trim() && !reponse) return;
     setChargement(true);
     animateRobot();
     try {
       const res = await fetch(`${API_URL}/repondre`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: question + " Reformule ou explique autrement.", previous: reponse })
+        body: JSON.stringify({
+          question:
+            (question || "").trim() +
+            " Reformule ou explique autrement en gardant une mise en forme claire avec des retours à la ligne.",
+          previous: reponse,
+        }),
       });
       const data = await res.json();
-      setReponse(data.reponse);
+      const txt = (data?.reponse || "")
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .trim();
+      setReponse(txt || "Je n’ai pas pu reformuler.");
     } catch (err) {
-      setReponse("Erreur de connexion au serveur Professeur IA pour la reformulation.");
+      setReponse(
+        "Erreur de connexion au serveur Professeur IA pour la reformulation."
+      );
     }
     setChargement(false);
   };
 
-  // Génère quiz dynamique depuis le backend
+  // Génère quiz depuis le backend
   const lancerQuiz = async () => {
+    if (!question.trim()) return;
     setQuiz([]);
     setQuizUser([]);
     setQuizResult(null);
@@ -89,7 +113,7 @@ const API_URL =
         body: JSON.stringify({ question }),
       });
       const data = await res.json();
-      const quizGen = (data && data.quiz && data.quiz.length > 0) ? data.quiz : [];
+      const quizGen = data?.quiz?.length ? data.quiz : [];
       setQuiz(quizGen);
       setQuizUser(Array(quizGen.length).fill(null));
       setQuizResult(null);
@@ -97,7 +121,9 @@ const API_URL =
       setQuiz([]);
       setQuizUser([]);
       setQuizResult(null);
-      setReponse("Impossible de générer un quiz : le backend n'est pas accessible.");
+      setReponse(
+        "Impossible de générer un quiz : le backend n'est pas accessible."
+      );
     }
   };
 
@@ -118,24 +144,34 @@ const API_URL =
   // Export PDF (police petite)
   const exportPDF = () => {
     const doc = new jsPDF();
-    doc.setFontSize(11); // Police plus petite
+    doc.setFontSize(11);
     doc.text("Quiz Professeur IA SCALES", 10, 15);
     let y = 30;
     quiz.forEach((q, i) => {
       doc.setFont("helvetica", "bold");
-      doc.text(`Q${i+1}. ${q.q}`, 10, y);
+      doc.text(`Q${i + 1}. ${q.q}`, 10, y);
       y += 7;
       doc.setFont("helvetica", "normal");
       q.a.forEach((rep, idx) => {
-        const selected = (quizUser[i] === idx) ? " [X]" : "";
-        doc.text(`  (${String.fromCharCode(65+idx)}) ${rep}${selected}`, 12, y);
+        const selected = quizUser[i] === idx ? " [X]" : "";
+        doc.text(`  (${String.fromCharCode(65 + idx)}) ${rep}${selected}`, 12, y);
         y += 6;
       });
-      doc.text(`Bonne réponse : (${String.fromCharCode(65+q.correct)}) ${q.a[q.correct]}`, 12, y);
+      doc.text(
+        `Bonne réponse : (${String.fromCharCode(65 + q.correct)}) ${
+          q.a[q.correct]
+        }`,
+        12,
+        y
+      );
       y += 8;
     });
     doc.setFont("helvetica", "bold");
-    doc.text(`Score obtenu : ${quizResult?.score}/${quizResult?.total}`, 10, y+2);
+    doc.text(
+      `Score obtenu : ${quizResult?.score}/${quizResult?.total}`,
+      10,
+      y + 2
+    );
     doc.save("quiz_resultat.pdf");
   };
 
@@ -145,7 +181,7 @@ const API_URL =
         backgroundImage: `url(${fondUM6P})`,
         backgroundSize: "cover",
         minHeight: "100vh",
-        fontFamily: "Segoe UI, Arial, sans-serif"
+        fontFamily: "Segoe UI, Arial, sans-serif",
       }}
     >
       <header
@@ -154,19 +190,20 @@ const API_URL =
           justifyContent: "space-between",
           alignItems: "center",
           background: "rgba(18,22,40,0.98)",
-          padding: "14px 38px 12px 38px"
+          padding: "14px 38px 12px 38px",
         }}
       >
         <img src={logoUM6P} alt="UM6P" style={{ height: 42 }} />
         <img src={logoScales} alt="SCALES" style={{ height: 38 }} />
       </header>
+
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           minHeight: "75vh",
-          justifyContent: "center"
+          justifyContent: "center",
         }}
       >
         <div
@@ -179,92 +216,161 @@ const API_URL =
             minWidth: 520,
             margin: "38px 0 16px 0",
             boxShadow: "0 8px 60px #0004",
-            position: "relative"
+            position: "relative",
           }}
         >
-          <div style={{display:"flex", alignItems:"flex-start", gap:24, marginBottom:18}}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 24,
+              marginBottom: 18,
+            }}
+          >
             <img
               src={robotIA}
               alt="Professeur IA"
               style={{
-                height:74,
-                width:74,
-                borderRadius:"50%",
-                boxShadow:"0 2px 14px #333",
-                objectFit:"cover",
+                height: 74,
+                width: 74,
+                borderRadius: "50%",
+                objectFit: "cover",
                 background: "#111",
                 transition: "transform 0.4s, box-shadow 0.3s",
                 transform: robotAnim ? "rotate(14deg) scale(1.09)" : "none",
-                boxShadow: robotAnim ? "0 0 30px 7px #ff8800,0 2px 14px #333" : "0 2px 14px #333"
+                boxShadow: robotAnim
+                  ? "0 0 30px 7px #ff8800,0 2px 14px #333"
+                  : "0 2px 14px #333",
               }}
             />
             <div>
-              <h1 style={{
-                color: "#fff",
-                textAlign: "left",
-                margin: 0,
-                fontSize: 38,
-                fontWeight: 700,
-                letterSpacing: 0.5
-              }}>
-                Bienvenue sur Professeur IA – <span style={{color:"#ff8800"}}>SCALES</span>
+              <h1
+                style={{
+                  color: "#fff",
+                  textAlign: "left",
+                  margin: 0,
+                  fontSize: 38,
+                  fontWeight: 700,
+                  letterSpacing: 0.5,
+                }}
+              >
+                Bienvenue sur Professeur IA –{" "}
+                <span style={{ color: "#ff8800" }}>SCALES</span>
               </h1>
-              <div style={{
-                background:"rgba(255,255,255,0.13)",
-                borderRadius:16, padding:"15px 26px",
-                marginTop:10, fontSize:19, fontWeight:500,
-                boxShadow:"0 2px 10px #2222"
-              }}>
-                <span style={{ color: "#fff", fontWeight:600 }}>
-                  <b>Professeur IA :</b> {reponse}
+
+              {/* Zone de réponse (multi-lignes, format propre) */}
+              <div
+                style={{
+                  background: "rgba(255,255,255,0.13)",
+                  borderRadius: 16,
+                  padding: "15px 26px",
+                  marginTop: 10,
+                  fontSize: 19,
+                  fontWeight: 500,
+                  boxShadow: "0 2px 10px #2222",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#fff",
+                    fontWeight: 600,
+                    whiteSpace: "pre-wrap", // retours à la ligne respectés
+                    wordBreak: "break-word",
+                    overflowWrap: "anywhere",
+                    lineHeight: 1.35,
+                  }}
+                >
+                  <b>Professeur IA :</b>{" "}
+                  {chargement ? "⏳ Je réfléchis..." : reponse}
                 </span>
               </div>
             </div>
           </div>
+
           <form
-            style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}
-            onSubmit={e => { e.preventDefault(); poserQuestion(); }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              marginBottom: 12,
+            }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              poserQuestion();
+            }}
           >
             <input
               style={{
-                width: '100%',
+                width: "100%",
                 padding: 12,
                 borderRadius: 9,
                 border: "none",
                 fontSize: 18,
-                background:"#fff",
+                background: "#fff",
                 color: "#222",
-                fontWeight:500
+                fontWeight: 500,
               }}
               value={question}
-              onChange={e => setQuestion(e.target.value)}
+              onChange={(e) => setQuestion(e.target.value)}
               placeholder="Posez votre question ici..."
               disabled={chargement}
             />
             <button
               type="submit"
-              style={{ background: "#ff8800", color: "white", borderRadius: 8, padding: "10px 22px", border: "none", fontWeight:"bold", fontSize:17 }}
+              style={{
+                background: "#ff8800",
+                color: "white",
+                borderRadius: 8,
+                padding: "10px 22px",
+                border: "none",
+                fontWeight: "bold",
+                fontSize: 17,
+                opacity: chargement ? 0.7 : 1,
+              }}
               disabled={chargement || question.trim() === ""}
+              title={API_URL ? `API: ${API_URL}` : "Même domaine"}
             >
-              Envoyer
+              {chargement ? "En cours..." : "Envoyer"}
             </button>
             <button
               type="button"
-              style={{ background: "#3a98ff", color: "#fff", borderRadius: 8, padding: "10px 14px", border: "none", fontWeight:"bold", fontSize:17 }}
+              style={{
+                background: "#3a98ff",
+                color: "#fff",
+                borderRadius: 8,
+                padding: "10px 14px",
+                border: "none",
+                fontWeight: "bold",
+                fontSize: 17,
+              }}
               onClick={() => speak(reponse)}
-              disabled={!reponse}
+              disabled={!reponse || chargement}
+              title="Écouter la réponse"
             >
-              <span role="img" aria-label="Ecouter">🔊</span>
+              <span role="img" aria-label="Ecouter">
+                🔊
+              </span>
             </button>
             <button
               type="button"
-              style={{ background: "#ff8800", color: "#fff", borderRadius: 8, padding: "10px 14px", border: "none", fontWeight:"bold", fontSize:17 }}
+              style={{
+                background: "#ff8800",
+                color: "#fff",
+                borderRadius: 8,
+                padding: "10px 14px",
+                border: "none",
+                fontWeight: "bold",
+                fontSize: 17,
+              }}
               onClick={reformuler}
+              disabled={chargement}
+              title="Reformuler la réponse"
             >
               Reformuler
             </button>
           </form>
         </div>
+
         {/* Quiz généré */}
         <div
           style={{
@@ -275,13 +381,24 @@ const API_URL =
             width: "88%",
             maxWidth: 820,
             boxShadow: "0 4px 28px #0002",
-            color: "#fff"
+            color: "#fff",
           }}
         >
-          <h2 style={{ color: "#fff", fontWeight:700, fontSize:22, marginBottom:10 }}>Quiz Généré :</h2>
+          <h2 style={{ color: "#fff", fontWeight: 700, fontSize: 22, marginBottom: 10 }}>
+            Quiz Généré :
+          </h2>
           <div style={{ display: "flex", gap: 14, marginBottom: 12 }}>
             <button
-              style={{ background: "#ff8800", color: "#fff", borderRadius: 8, padding: "10px 24px", border: "none", fontWeight:"bold", fontSize:17 }}
+              style={{
+                background: "#ff8800",
+                color: "#fff",
+                borderRadius: 8,
+                padding: "10px 24px",
+                border: "none",
+                fontWeight: "bold",
+                fontSize: 17,
+                opacity: chargement ? 0.7 : 1,
+              }}
               onClick={lancerQuiz}
               disabled={chargement || !question}
             >
@@ -289,49 +406,83 @@ const API_URL =
             </button>
             {quizResult && (
               <button
-                style={{ background: "#ff8800", color: "#fff", borderRadius: 8, padding: "10px 24px", border: "none", fontWeight:"bold", fontSize:17 }}
+                style={{
+                  background: "#ff8800",
+                  color: "#fff",
+                  borderRadius: 8,
+                  padding: "10px 24px",
+                  border: "none",
+                  fontWeight: "bold",
+                  fontSize: 17,
+                }}
                 onClick={exportPDF}
               >
                 Exporter PDF
               </button>
             )}
           </div>
+
           {quiz.length > 0 && (
             <div style={{ marginTop: 7 }}>
               {quiz.map((q, idx) => (
                 <div key={idx} style={{ marginBottom: 13 }}>
-                  <b style={{fontSize:17, color:"#fff"}}>{`Q${idx + 1}. ${q.q}`}</b>
+                  <b style={{ fontSize: 17, color: "#fff" }}>{`Q${idx + 1}. ${q.q}`}</b>
                   <div>
                     {q.a.map((rep, repIdx) => (
-                      <label key={repIdx} style={{
-                        display: "block",
-                        marginLeft: 18,
-                        fontSize: 16,
-                        color: "#fff",
-                        background: quizUser[idx] === repIdx ? "#ff8800" : "transparent",
-                        padding: "2px 6px",
-                        borderRadius: 6,
-                        cursor: "pointer"
-                      }}>
+                      <label
+                        key={repIdx}
+                        style={{
+                          display: "block",
+                          marginLeft: 18,
+                          fontSize: 16,
+                          color: "#fff",
+                          background:
+                            quizUser[idx] === repIdx ? "#ff8800" : "transparent",
+                          padding: "2px 6px",
+                          borderRadius: 6,
+                          cursor: "pointer",
+                        }}
+                      >
                         <input
                           type="radio"
                           checked={quizUser[idx] === repIdx}
                           onChange={() => handleSelect(idx, repIdx)}
                           name={`quiz_q${idx}`}
                           style={{ marginRight: 7 }}
-                        /> {`${String.fromCharCode(65 + repIdx)}) ${rep}`}
+                        />{" "}
+                        {`${String.fromCharCode(65 + repIdx)}) ${rep}`}
                       </label>
                     ))}
                   </div>
                 </div>
               ))}
               {!quizResult && (
-                <button style={{ background: "#ff8800", color: "white", borderRadius: 8, padding: 10, border: "none", fontWeight: "bold", fontSize: 16, marginTop:8 }} onClick={validerQuiz}>
+                <button
+                  style={{
+                    background: "#ff8800",
+                    color: "white",
+                    borderRadius: 8,
+                    padding: 10,
+                    border: "none",
+                    fontWeight: "bold",
+                    fontSize: 16,
+                    marginTop: 8,
+                  }}
+                  onClick={validerQuiz}
+                >
                   Valider mes réponses
                 </button>
               )}
               {quizResult && (
-                <div style={{ marginTop: 10, textAlign: "center", fontWeight: "bold", fontSize: 18, color:"#fff" }}>
+                <div
+                  style={{
+                    marginTop: 10,
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    fontSize: 18,
+                    color: "#fff",
+                  }}
+                >
                   Score : {quizResult.score}/{quizResult.total}
                 </div>
               )}
@@ -344,4 +495,3 @@ const API_URL =
 }
 
 export default App;
-
