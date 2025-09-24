@@ -6,7 +6,7 @@ import logoUM6P from "./assets/logo_um6p.png";
 import robotIA from "./assets/robot_ia.png";
 
 function App() {
-  // URL de l’API (détecte Vite ou CRA, sinon même host)
+  // URL de l’API (Vite -> VITE_API_URL, CRA -> REACT_APP_API_URL, sinon même domaine)
   const API_URL =
     (typeof import !== "undefined" &&
       typeof import.meta !== "undefined" &&
@@ -22,13 +22,37 @@ function App() {
   const [chargement, setChargement] = useState(false);
   const [robotAnim, setRobotAnim] = useState(false);
 
+  // ------ FORMATTAGE RÉPONSE (insère des retours à la ligne sans changer le design) ------
+  const formatAnswer = (s) => {
+    if (!s) return "";
+    // normaliser fins de lignes
+    let t = s.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+    // Transformer des "###" en sauts de ligne (titres)
+    t = t.replace(/#{2,}/g, "\n\n");
+
+    // Mettre un saut de ligne + puce quand on a des " - " (ou " – ")
+    // Cas 1: après une ponctuation
+    t = t.replace(/([.:!?])\s*[-–]\s+/g, "$1\n• ");
+    // Cas 2: partout où on a " - " en tant que séparateur
+    t = t.replace(/\s[-–]\s+/g, "\n• ");
+
+    // Saut de ligne après un point suivi d’une majuscule si c’est clairement une nouvelle phrase sans retour
+    t = t.replace(/([a-zàâçéèêëîïôûùüÿñ])\.\s+([A-ZÉÈÊÂÎÔÛÀÇ])/g, "$1.\n$2");
+
+    // Nettoyage des multiples lignes vides
+    t = t.replace(/\n{3,}/g, "\n\n");
+
+    return t.trim();
+  };
+
   // Animation robot
   const animateRobot = () => {
     setRobotAnim(true);
     setTimeout(() => setRobotAnim(false), 600);
   };
 
-  // Lecture de la réponse (TTS)
+  // Lecture (TTS)
   const speak = (text) => {
     if ("speechSynthesis" in window) {
       const synth = window.speechSynthesis;
@@ -56,10 +80,7 @@ function App() {
         body: JSON.stringify({ question }),
       });
       const data = await res.json();
-      const txt = (data?.reponse || "")
-        .replace(/\r\n/g, "\n")
-        .replace(/\r/g, "\n")
-        .trim();
+      const txt = formatAnswer(data?.reponse || "");
       setReponse(txt || "Je n’ai pas pu générer de réponse.");
     } catch (err) {
       setReponse(
@@ -86,10 +107,7 @@ function App() {
         }),
       });
       const data = await res.json();
-      const txt = (data?.reponse || "")
-        .replace(/\r\n/g, "\n")
-        .replace(/\r/g, "\n")
-        .trim();
+      const txt = formatAnswer(data?.reponse || "");
       setReponse(txt || "Je n’ai pas pu reformuler.");
     } catch (err) {
       setReponse(
@@ -99,7 +117,7 @@ function App() {
     setChargement(false);
   };
 
-  // Génère quiz depuis le backend
+  // Génère quiz
   const lancerQuiz = async () => {
     if (!question.trim()) return;
     setQuiz([]);
@@ -141,7 +159,7 @@ function App() {
     setQuizResult({ score, total: quiz.length });
   };
 
-  // Export PDF (police petite)
+  // Export PDF
   const exportPDF = () => {
     const doc = new jsPDF();
     doc.setFontSize(11);
@@ -258,7 +276,7 @@ function App() {
                 <span style={{ color: "#ff8800" }}>SCALES</span>
               </h1>
 
-              {/* Zone de réponse (multi-lignes, format propre) */}
+              {/* Zone de réponse : pre-wrap pour garder les retours à la ligne */}
               <div
                 style={{
                   background: "rgba(255,255,255,0.13)",
@@ -274,7 +292,7 @@ function App() {
                   style={{
                     color: "#fff",
                     fontWeight: 600,
-                    whiteSpace: "pre-wrap", // retours à la ligne respectés
+                    whiteSpace: "pre-wrap",   // <= rend les \n visibles
                     wordBreak: "break-word",
                     overflowWrap: "anywhere",
                     lineHeight: 1.35,
