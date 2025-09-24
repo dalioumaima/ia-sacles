@@ -10,47 +10,7 @@ from openai import OpenAI
 import numpy as np
 client = OpenAI()
 
-# Encoder toutes les questions de la BD une seule fois
-bd_questions = [item["question"] for item in base]
-bd_embeddings = embedder.encode(bd_questions, convert_to_tensor=True)
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-def _autopatch_js_remove_localhost():
-    root = os.path.dirname(__file__)
-    # on remplace toutes ces formes:
-    patterns = (
-        "http://127.0.0.1:5001",
-        "https://127.0.0.1:5001",
-        "http://localhost:5001",
-        "https://localhost:5001",
-    )
-    patched = 0
-    patched_files = []
 
-    for dirpath, _, filenames in os.walk(root):
-        for name in filenames:
-            if name.endswith(".js"):  # <-- plus large que "main.*.js"
-                path = os.path.join(dirpath, name)
-                try:
-                    with io.open(path, "r", encoding="utf-8", errors="ignore") as f:
-                        s = f.read()
-                    orig = s
-                    for p in patterns:
-                        s = s.replace(p, "")
-                    if s != orig:
-                        with io.open(path, "w", encoding="utf-8", errors="ignore") as f:
-                            f.write(s)
-                        patched += 1
-                        patched_files.append(os.path.relpath(path, root))
-                except Exception:
-                    pass
-
-    if patched:
-        print(f"[autopatch] URLs localhost supprimées dans {patched} fichier(s) .js :")
-        for pf in patched_files[:20]:
-            print("  -", pf)
-        if patched > 20:
-            print("  ... (tronqué)")
-# --- FIN AUTO-PATCH ---
 
 app = Flask(__name__, static_folder="build", static_url_path="/")
 CORS(app)
@@ -3635,7 +3595,47 @@ _THEMATIC_KB = {
         "actions": ["Clarifier la tâche", "Commencer baseline simple"]
     }
 }
+# Encoder toutes les questions de la BD une seule fois
+bd_questions = [item["question"] for item in base]
+bd_embeddings = embedder.encode(bd_questions, convert_to_tensor=True)
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+def _autopatch_js_remove_localhost():
+    root = os.path.dirname(__file__)
+    # on remplace toutes ces formes:
+    patterns = (
+        "http://127.0.0.1:5001",
+        "https://127.0.0.1:5001",
+        "http://localhost:5001",
+        "https://localhost:5001",
+    )
+    patched = 0
+    patched_files = []
 
+    for dirpath, _, filenames in os.walk(root):
+        for name in filenames:
+            if name.endswith(".js"):  # <-- plus large que "main.*.js"
+                path = os.path.join(dirpath, name)
+                try:
+                    with io.open(path, "r", encoding="utf-8", errors="ignore") as f:
+                        s = f.read()
+                    orig = s
+                    for p in patterns:
+                        s = s.replace(p, "")
+                    if s != orig:
+                        with io.open(path, "w", encoding="utf-8", errors="ignore") as f:
+                            f.write(s)
+                        patched += 1
+                        patched_files.append(os.path.relpath(path, root))
+                except Exception:
+                    pass
+
+    if patched:
+        print(f"[autopatch] URLs localhost supprimées dans {patched} fichier(s) .js :")
+        for pf in patched_files[:20]:
+            print("  -", pf)
+        if patched > 20:
+            print("  ... (tronqué)")
+# --- FIN AUTO-PATCH ---
 def _generate_thematic_answer(question: str) -> str:
     t_norm = _detect_theme_norm(question)
     # map clé
@@ -3954,6 +3954,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
