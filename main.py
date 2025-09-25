@@ -3427,7 +3427,6 @@ base = [
     "theme": "personnel scales",
     "type": "definition"
   },
-
   {
     "question": "Qui est responsable du programme Study Skills ?",
     "reponse": "Ikrame Ennabil est Junior Operation Officer en charge de Study Skills.",
@@ -3439,7 +3438,42 @@ base = [
     "reponse": "Ikrame Ennabil est Junior Operation Officer en charge de Study Skills.",
     "theme": "personnel scales",
     "type": "definition"
-  },
+  },{ "question": "Donne la liste de la Companion Team.", "reponse": "La Companion Team comprend : Adnane Hrioua, Ayoub Loutfi, Aziz Qaissi, Chaima Touloun, Fatima-Zahrae El Baou et Mariam Maazouz.", "theme": "personnel scales", "type": "definition" },
+{ "question": "Qui est Adnane Hrioua ?", "reponse": "Adnane Hrioua fait partie de la Companion Team SCALES.", "theme": "personnel scales", "type": "definition" },
+  { "question": "Qui est Ayoub Loutfi ?", "reponse": "Ayoub Loutfi fait partie de la Companion Team SCALES.", "theme": "personnel scales", "type": "definition" },
+  { "question": "Qui est Aziz Qaissi ?", "reponse": "Aziz Qaissi fait partie de la Companion Team SCALES.", "theme": "personnel scales", "type": "definition" },
+  { "question": "Qui est Chaima Touloun ?", "reponse": "Chaima Touloun fait partie de la Companion Team SCALES.", "theme": "personnel scales", "type": "definition" },
+  { "question": "Qui est Fatima-Zahrae El Baou ?", "reponse": "Fatima-Zahrae El Baou fait partie de la Companion Team SCALES.", "theme": "personnel scales", "type": "definition" },
+  { "question": "Qui est Mariam Maazouz ?", "reponse": "Mariam Maazouz fait partie de la Companion Team SCALES.", "theme": "personnel scales", "type": "definition" },
+
+  { "question": "Qui est en charge du programme des langues ?", "reponse": "Badreddine Sandid est en charge de LAPEX et WORC.", "theme": "personnel scales", "type": "definition" },
+  { "question": "Qui est responsable des langues ?", "reponse": "Badreddine Sandid est en charge de LAPEX et WORC.", "theme": "personnel scales", "type": "definition" },
+
+  { "question": "C’est quoi la FGSES (UM6P Rabat) ?", "reponse": "La FGSES est la Faculté de Gouvernance, Sciences Économiques et Sociales de l’UM6P (Rabat). Elle propose des formations académiques et des dispositifs d’appui aux compétences transversales.", "theme": "généralités et questions fréquentes", "type": "definition" },
+  { "question": "Qu’est-ce que la FGSES ?", "reponse": "La FGSES est la Faculté de Gouvernance, Sciences Économiques et Sociales de l’UM6P (Rabat). Elle propose des formations académiques et des dispositifs d’appui aux compétences transversales.", "theme": "généralités et questions fréquentes", "type": "definition" },
+
+  { "question": "Qu’est-ce que SCALES à la FGSES ?", "reponse": "SCALES (Skills Cluster for Agile Learning in Economics and Social Sciences) est le pôle de développement de compétences transversales : langues, writing & oratory skills, study skills, WORC, LAPEX et accompagnements.", "theme": "scales", "type": "definition" },
+  { "question": "C’est quoi SCALES ?", "reponse": "SCALES (Skills Cluster for Agile Learning in Economics and Social Sciences) est le pôle de développement de compétences transversales : langues, writing & oratory skills, study skills, WORC, LAPEX et accompagnements.", "theme": "scales", "type": "definition" },
+
+  { "question": "En quoi consiste l’accompagnement SCALES ?", "reponse": "L’accompagnement SCALES aide les étudiants sur les langues, l’expression écrite & orale, la méthodologie d’étude, la recherche de stage/emploi (WORC) et LAPEX. Il inclut ateliers, coaching et ressources pratiques.", "theme": "scales", "type": "definition" },
+  { "question": "Quel accompagnement propose SCALES ?", "reponse": "L’accompagnement SCALES aide les étudiants sur les langues, l’expression écrite & orale, la méthodologie d’étude, la recherche de stage/emploi (WORC) et LAPEX. Il inclut ateliers, coaching et ressources pratiques.", "theme": "scales", "type": "definition" },
+
+  { "question": "Qui est Saber El Asri ?", "reponse": "Saber El Asri est enseignant d’anglais.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Anas Laalou ?", "reponse": "Anas Laalou est enseignant d’anglais.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Jamal Bahmad ?", "reponse": "Jamal Bahmad est enseignant d’anglais.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Jamal Akabli ?", "reponse": "Jamal Akabli est enseignant d’anglais.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Emma Steinheimer ?", "reponse": "Emma Steinheimer est enseignante d’anglais.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Laura Wagner ?", "reponse": "Laura Wagner est enseignante d’anglais.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Hafida El Amrani ?", "reponse": "Hafida El Amrani est enseignante de français.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Karima Tounsi ?", "reponse": "Karima Tounsi est enseignante de français.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Soraya Sbihi ?", "reponse": "Soraya Sbihi est enseignante de français.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Abdelmajid Azouine ?", "reponse": "Abdelmajid Azouine est enseignant de français.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Racha Loutfi ?", "reponse": "Racha Loutfi est enseignante d’arabe.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Ali Ait Hmad ?", "reponse": "Ali Ait Hmad est enseignant d’arabe.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Mouhssin Zekri ?", "reponse": "Mouhssin Zekri est enseignant d’arabe.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Abdelmoumenin Bounou ?", "reponse": "Abdelmoumenin Bounou est enseignant d’espagnol.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Ting Ji ?", "reponse": "Ting Ji est enseignante de mandarin.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Salah Ziri ?", "reponse": "Salah Ziri est enseignant d’allemand.", "theme": "langues", "type": "definition" },
   {
     "question": "Qui s’occupe du programme Study Skills ?",
     "reponse": "Ikrame Ennabil est Junior Operation Officer en charge de Study Skills.",
@@ -3455,7 +3489,7 @@ THEMES = {
     "intelligence artificielle": ["intelligence artificielle", "ia", "ai", "artificielle", "machine learning", "inteligence artif", "IA", "AI"],
     "soft skills": ["soft skill", "softskills", "soft-skills", "compétence douce", "soft", "softs", "compétences", "adaptabilité", "communication", "esprit d'équipe", "organisation", "autonomie"],
     "communication": ["communication", "communiquer", "comm", "rapport", "rapport académique", "bibliographie", "article"],
-    "langues": ["langues", "langage", "anglais", "français", "espagnol", "allemand"],
+    "langues": ["langues", "langage", "prof de langue", "enseignant de langue","anglais", "english", "français", "french", "espagnol", "spanish","allemand", "german", "arabe", "arabic", "mandarin", "chinois","saber el asri", "anas laalou", "jamal bahmad", "jamal akabli","emma steinheimer", "laura wagner","hafida el amrani", "karima tounsi", "soraya sbihi", "abdelmajid azouine","racha loutfi", "ali ait hmad", "mouhssin zekri","abdelmoumenin bounou", "ting ji", "salah ziri"],
     "cv": ["cv", "curriculum", "curriculum vitae", "c.v.", "rédaction", "rubrique", "section", "formation", "expérience", "expériences", "compétence", "compétences", "photo", "structure", "résumé", "profil", "trou dans le cv", "erreur cv", "modèle cv"],
     "entretien": ["entretien", "recrutement", "oral", "interview", "questions entretien", "présentation", "préparer entretien", "parlez-moi de vous", "difficile", "simulateur", "recruteur", "questions difficiles", "présentez-vous", "simulation entretien", "entretien technique"],
     "lettre de motivation": ["lettre motivation", "motivation", "Lettre de motivation", "normes de lettre de motivation", "titre de lettre", "bullet", "signature", "conclure", "outils lettre", "cover letter"],
@@ -3466,7 +3500,7 @@ THEMES = {
     "python": ["python", "py", "pyhton", "piton"],
     "r": ["r", "langage r"],
     "data mining": ["data mining", "datamining", "mining", "extraction données"],
-    "scales": ["scales", "SCALES", "Bootcamps", "Study Skills", "module Writing and Oratory Skills", "plagiat"],
+    "scales": ["scales", "SCALES", "Bootcamps", "Study Skills", "module Writing and Oratory Skills", "plagiat","skills cluster", "accompagnement", "atelier", "coaching","writing and oratory skills","skills portfolio","orientation","méthodologie", "apprentissage", "compétences transversales"],
     "mill": ["MILL", "mill"],
     "worc": ["Worc", "WORC", "worc"],
     "STADAC": ["STADAC", "stadac", "Stadac", "outil de programmation"],
@@ -3481,8 +3515,8 @@ THEMES = {
     "événements professionnels": ["meet & greet", "événement", "intervenant", "agenda", "calendrier", "timide", "observer", "plateforme événement", "Meet & Greet", "Meet&Greet", "Meet and Greet"],
     "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
     "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
-    "personnel scales": ["personnel", "staff", "responsable", "manager", "academic advisor", "program officer", "operation officer", "qui est", "responsable de", "en charge de", "dirige", "encadre", "programme Study Skills", "programme Lapex", "lapex", "worc", "study skills", "stadac", "langues", "programme des langues", "LAPEX", "qui t'as crée", "programmé"],
-    "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités"]
+    "personnel scales": ["personnel", "staff", "responsable", "manager", "academic advisor", "program officer", "operation officer", "qui est", "responsable de", "en charge de", "dirige", "encadre", "programme Study Skills", "programme Lapex", "lapex", "worc", "study skills", "stadac", "langues", "programme des langues", "LAPEX", "qui t'as crée", "programmé","personnel", "staff", "équipe", "companion team", "team","responsable", "en charge de", "qui est", "qui dirige", "manager","program officer", "operation officer", "academic advisor","adnane hrioua", "ayoub loutfi", "aziz qaissi","chaima touloun", "fatima-zahrae el baou", "mariam maazouz","badreddine sandid", "lapex", "worc", "study skills", "writing and oratory skills"],
+    "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités","fgses", "um6p", "rabat", "faculté de gouvernance","mohammed vi", "université mohammed vi polytechnique","c’est quoi la fgses", "présentation fgses", "qu’est-ce que la fgses","campus", "présentation école", "à propos de la fgses"]
 }
 
 _THEMATIC_KB = {
@@ -3834,4 +3868,5 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
