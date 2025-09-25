@@ -3473,7 +3473,73 @@ base = [
   { "question": "Qui est Mouhssin Zekri ?", "reponse": "Mouhssin Zekri est enseignant d’arabe.", "theme": "langues", "type": "definition" },
   { "question": "Qui est Abdelmoumenin Bounou ?", "reponse": "Abdelmoumenin Bounou est enseignant d’espagnol.", "theme": "langues", "type": "definition" },
   { "question": "Qui est Ting Ji ?", "reponse": "Ting Ji est enseignante de mandarin.", "theme": "langues", "type": "definition" },
-  { "question": "Qui est Salah Ziri ?", "reponse": "Salah Ziri est enseignant d’allemand.", "theme": "langues", "type": "definition" },
+  { "question": "Qui est Salah Ziri ?", "reponse": "Salah Ziri est enseignant d’allemand.", "theme": "langues", "type": "definition" },{ "question": "À quoi sert le règlement des stages ?", "reponse": "Il fixe les règles et le cadre des stages pour les étudiants FGSES.", "theme": "stages", "type": "definition" },
+  { "question": "Pourquoi la FGSES encourage les stages ?", "reponse": "Ils s’inscrivent dans le learn by doing et développent autonomie, leadership, travail en équipe et communication.", "theme": "stages", "type": "definition" },
+
+  { "question": "Qui peut faire un stage certifié par la FGSES ?", "reponse": "Les étudiants L2 éligibles à L3 et les M1 éligibles à M2.", "theme": "stages", "type": "definition" },
+  { "question": "Le stage est-il obligatoire pour tous ?", "reponse": "Non, il n’est pas obligatoire mais fortement recommandé.", "theme": "stages", "type": "definition" },
+  { "question": "À quels niveaux s’adresse la certification de stage ?", "reponse": "Aux L2 (éligibles L3) et M1 (éligibles M2).", "theme": "stages", "type": "definition" },
+
+  { "question": "Quels sont les types de stage possibles ?", "reponse": "Stage administratif et stage de recherche.", "theme": "stages", "type": "definition" },
+  { "question": "Qu’est-ce qu’un stage administratif ?", "reponse": "Un stage professionnel axé sur des missions d’ordre administratif au sein de l’organisme d’accueil.", "theme": "stages", "type": "definition" },
+  { "question": "Qu’est-ce qu’un stage de recherche ?", "reponse": "Un stage centré sur des travaux de recherche liés à l’environnement de l’organisme d’accueil.", "theme": "stages", "type": "definition" },
+
+  { "question": "Quelle est la durée du stage en M1 ?", "reponse": "10 semaines environ (dans une seule institution).", "theme": "stages", "type": "definition" },
+  { "question": "Quelle est la durée du stage en L2 ?", "reponse": "8 semaines environ (dans une seule institution).", "theme": "stages", "type": "definition" },
+  { "question": "Peut-on diviser la durée du stage entre plusieurs organismes ?", "reponse": "Non, la durée doit être accomplie dans une seule institution.", "theme": "stages", "type": "definition" },
+
+  { "question": "Comment postuler à une offre SCALES ?", "reponse": "Via la préinscription en ligne sur la plateforme dédiée aux stages du programme IP.", "theme": "stages", "type": "process" },
+  { "question": "Comment se fait l’affectation aux offres SCALES ?", "reponse": "Par ordre de mérite selon le dossier (cohérence filière, CV, lettre) et les places disponibles.", "theme": "stages", "type": "process" },
+  { "question": "Quels critères comptent pour l’affectation ?", "reponse": "Cohérence avec la filière, CV, lettre de motivation et disponibilité des places.", "theme": "stages", "type": "process" },
+  { "question": "Que faire si je suis sur liste d’attente ?", "reponse": "SCALES peut proposer la place à la liste d’attente en cas de désistement, sinon chercher une opportunité alternative.", "theme": "stages", "type": "process" },
+
+  { "question": "Comment valider un stage trouvé par moi-même ?", "reponse": "Contacter SCALES pour validation/certification ; l’inscription sur la plateforme n’est pas requise.", "theme": "stages", "type": "process" },
+  { "question": "SCALES signe-t-il toutes les conventions externes ?", "reponse": "SCALES se réserve le droit de signer ou non la convention de l’organisme choisi.", "theme": "stages", "type": "definition" },
+
+  { "question": "Quelles formalités avant le début du stage ?", "reponse": "Souscrire une assurance stagiaire et définir les missions avant la signature de la convention, en accord avec le bureau des stages.", "theme": "stages", "type": "process" },
+  { "question": "Les missions doivent-elles être en lien avec ma formation ?", "reponse": "Oui, elles doivent permettre de mettre en pratique des compétences en cohérence avec ton projet professionnel.", "theme": "stages", "type": "definition" },
+  { "question": "La convention de stage est-elle obligatoire ?", "reponse": "Oui, la convention encadre légalement le stage et précise les responsabilités de chaque partie.", "theme": "stages", "type": "definition" },
+
+  { "question": "Qui signe la convention de stage ?", "reponse": "L’étudiant, l’organisme d’accueil (tuteur) et la FGSES (SCALES/bureau des stages).", "theme": "stages", "type": "definition" },
+  { "question": "Quel est le rôle du tuteur dans l’organisme d’accueil ?", "reponse": "Suivre le stagiaire, garantir le respect des modalités et alerter en cas de difficulté.", "theme": "stages", "type": "definition" },
+  { "question": "Quel est le rôle de SCALES pendant le stage ?", "reponse": "Accompagner et répondre aux questions/difficultés ; assurer le suivi institutionnel du stagiaire FGSES.", "theme": "stages", "type": "definition" },
+
+  { "question": "Quelles sont les obligations du stagiaire ?", "reponse": "Assiduité, ponctualité, respect du règlement intérieur, hygiène/sécurité, honnêteté intellectuelle.", "theme": "stages", "type": "definition" },
+  { "question": "Quelles sont les règles de confidentialité à respecter ?", "reponse": "Devoir de réserve ; ne pas publier/communiquer d’informations sans accord (y compris le rapport).", "theme": "stages", "type": "definition" },
+  { "question": "Qui peut sanctionner un stagiaire ?", "reponse": "Seul l’établissement d’enseignement prononce des sanctions disciplinaires ; l’organisme peut rompre le stage en cas de manquement grave.", "theme": "stages", "type": "definition" },
+
+  { "question": "Comment est évalué mon stage ?", "reponse": "Par un rapport final et un formulaire d’évaluation globale en ligne.", "theme": "stages", "type": "process" },
+  { "question": "Que dois-je remettre à la fin du stage ?", "reponse": "Un rapport de stage et un formulaire d’évaluation complété.", "theme": "stages", "type": "process" },
+  { "question": "Qui valide la réussite du stage ?", "reponse": "Un comité se prononce sur l’atteinte des objectifs au vu du rapport et des évaluations.", "theme": "stages", "type": "definition" },
+
+  { "question": "Qui délivre l’attestation de stage ?", "reponse": "SCALES émet l’attestation après validation ; le certificat de stage est sollicité auprès de l’organisme d’accueil.", "theme": "stages", "type": "definition" },
+  { "question": "Quand est-ce que l’attestation est délivrée ?", "reponse": "Après dépôt du rapport, complétion des évaluations et validation par le comité.", "theme": "stages", "type": "process" },
+
+  { "question": "Existe-t-il une aide financière pour le stage ?", "reponse": "Oui, une aide peut couvrir partiellement transport, restauration et logement selon des critères d’excellence.", "theme": "stages", "type": "definition" },
+  { "question": "Comment est versée l’aide financière ?", "reponse": "Généralement en deux tranches : après démarrage effectif puis à l’issue du stage sous réserve du rapport validé.", "theme": "stages", "type": "process" },
+  { "question": "Peut-on cumuler plusieurs aides ?", "reponse": "Non, le cumul n’est pas autorisé ; l’aide peut être suspendue en cas de non-respect des règles.", "theme": "stages", "type": "definition" },
+
+  { "question": "Faut-il une approbation éthique pour les enquêtes de terrain ?", "reponse": "Oui, un avis préalable du Comité d’éthique de l’AIRESS est nécessaire pour les recherches impliquant des personnes/terrain.", "theme": "stages", "type": "process" },
+  { "question": "Qui valide les recherches de terrain ?", "reponse": "Le Comité d’éthique de l’AIRESS selon les modalités en vigueur.", "theme": "stages", "type": "definition" },
+
+  { "question": "Que se passe-t-il si je me rétracte après affectation SCALES ?", "reponse": "Tu ne pourras plus postuler aux offres futures sur la plateforme et tu devras chercher par tes propres moyens ; la place est proposée à la liste d’attente.", "theme": "stages", "type": "definition" },
+  { "question": "Pourquoi la rétractation est-elle encadrée ?", "reponse": "Pour assurer l’équité du processus et la fiabilité de l’engagement des étudiants.", "theme": "stages", "type": "definition" },
+
+  { "question": "Qu’est-ce qu’une faute grave en stage ?", "reponse": "Non-respect des règles de l’organisme, manquements répétés, ou abandon sans motif valable.", "theme": "stages", "type": "definition" },
+  { "question": "Que risque-t-on en cas d’abandon du stage ?", "reponse": "Convocation devant la Commission de discipline et remboursement intégral de l’aide perçue le cas échéant.", "theme": "stages", "type": "definition" },
+
+  { "question": "Dois-je signer quelque chose avant le stage ?", "reponse": "Oui, lire/signer le règlement des stages et signer la convention tripartite.", "theme": "stages", "type": "process" },
+  { "question": "Le télétravail est-il possible en stage ?", "reponse": "Il dépend des règles de l’organisme d’accueil ; l’essentiel est le respect des missions et du suivi.", "theme": "stages", "type": "definition" },
+  { "question": "Comment gérer une difficulté pendant le stage ?", "reponse": "Informer le tuteur et contacter SCALES/bureau des stages pour accompagnement.", "theme": "stages", "type": "process" },
+  { "question": "Peut-on prolonger la durée du stage ?", "reponse": "Une prolongation est envisageable si l’organisme et la FGSES l’acceptent, avec avenant si besoin.", "theme": "stages", "type": "definition" },
+  { "question": "Dois-je pointer ma présence ?", "reponse": "Suis les modalités de l’organisme (feuilles de présence/rapports hebdomadaires) et conserve des preuves d’assiduité.", "theme": "stages", "type": "definition" },
+  { "question": "Que faire si l’organisme change mes missions ?", "reponse": "Vérifier la cohérence avec ta formation et informer SCALES pour ajuster si nécessaire.", "theme": "stages", "type": "process" },
+  { "question": "Qui contacter pour une attestation ou une question ?", "reponse": "Le bureau des stages/SCALES ; ton tuteur côté organisme pour les aspects opérationnels.", "theme": "stages", "type": "definition" },
+  { "question": "Quels documents clôturent le stage ?", "reponse": "Rapport final, évaluations en ligne, attestation et, si fourni, certificat de l’organisme.", "theme": "stages", "type": "process" },
+  { "question": "Comment formuler mes objectifs de stage ?", "reponse": "Les aligner avec ta filière/projet pro et les faire valider par l’organisme et SCALES avant la signature.", "theme": "stages", "type": "process" },
+  { "question": "Puis-je refuser une offre après affectation ?", "reponse": "Évite la rétractation après affectation ; sinon tu perds l’accès aux offres et dois chercher seul.", "theme": "stages", "type": "definition" },
+  { "question": "Que se passe-t-il si je ne respecte pas la confidentialité ?", "reponse": "C’est un manquement grave pouvant mener à une rupture de stage et à des sanctions académiques.", "theme": "stages", "type": "definition" },
+  { "question": "Le rapport de stage peut-il être confidentiel ?", "reponse": "Oui, une restriction de diffusion peut être prévue selon les règles de l’organisme et de la FGSES.", "theme": "stages", "type": "definition" },
   {
     "question": "Qui s’occupe du programme Study Skills ?",
     "reponse": "Ikrame Ennabil est Junior Operation Officer en charge de Study Skills.",
@@ -3516,6 +3582,7 @@ THEMES = {
     "valorisation des expériences": ["valoriser", "expériences internationales", "doctorat", "projet académique", "engagement associatif", "compétence transférable"],
     "préparation personnelle": ["préparer", "se sentir prêt", "présentation personnelle", "se présenter", "mentalement"],
     "personnel scales": ["personnel", "staff", "responsable", "manager", "academic advisor", "program officer", "operation officer", "qui est", "responsable de", "en charge de", "dirige", "encadre", "programme Study Skills", "programme Lapex", "lapex", "worc", "study skills", "stadac", "langues", "programme des langues", "LAPEX", "qui t'as crée", "programmé","personnel", "staff", "équipe", "companion team", "team","responsable", "en charge de", "qui est", "qui dirige", "manager","program officer", "operation officer", "academic advisor","adnane hrioua", "ayoub loutfi", "aziz qaissi","chaima touloun", "fatima-zahrae el baou", "mariam maazouz","badreddine sandid", "lapex", "worc", "study skills", "writing and oratory skills"],
+    "stages": ["stage", "stages", "règlement des stages", "convention de stage", "bureau des stages","affectation", "préinscription", "plateforme IP", "validation stage", "certification stage","durée stage", "L2", "M1", "éligible", "éligibilité", "organisme d’accueil","tuteur", "missions", "objectifs", "rapport de stage", "évaluation", "attestation","aide financière", "bourse stage", "déplacement", "logement", "restauration","confidentialité", "devoir de réserve", "sanctions", "discipline", "abandon","rétractation", "liste d’attente", "approuvé", "AIRESS", "comité d’éthique","learn by doing", "assiduité", "ponctualité", "hygiène", "sécurité"],
     "généralités et questions fréquentes": ["fin d'études", "taille entreprise", "questions fréquentes", "généralités","fgses", "um6p", "rabat", "faculté de gouvernance","mohammed vi", "université mohammed vi polytechnique","c’est quoi la fgses", "présentation fgses", "qu’est-ce que la fgses","campus", "présentation école", "à propos de la fgses"]
 }
 
@@ -3868,5 +3935,6 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
