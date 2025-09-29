@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os, io, re, unicodedata, random, math
 import numpy as np
 import requests
@@ -4052,6 +4051,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
