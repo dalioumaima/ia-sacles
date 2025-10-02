@@ -4036,27 +4036,6 @@ def _no_cache_for_static(resp):
         resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
         resp.headers["Pragma"] = "no-cache"
     return resp
-const [loading, setLoading] = useState(false);
-
-const handleSend = async () => {
-  if (!message) return;
-  setLoading(true); // Active l'indicateur
-
-  try {
-    const response = await fetch("http://localhost:8000/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: message }),
-    });
-    const data = await response.json();
-    setMessages([...messages, { sender: "user", text: message }, { sender: "bot", text: data.answer }]);
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setLoading(false); // Désactive l’indicateur après réponse
-  }
-};
-
 # ======================
 # 10) SERVE REACT BUILD
 # ======================
@@ -4071,6 +4050,7 @@ def serve_react(path):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
